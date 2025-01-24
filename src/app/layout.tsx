@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[url('/images/website-standard/HiddenLeafBackground.jpg')] bg-cover bg-center overflow-hidden flex flex-col min-h-screen">
+      <body className="bg-[url('/images/website-standard/HiddenLeafBackground.jpg')] bg-cover bg-center flex flex-col min-h-screen">
         <Header/>
-          <main className="h-[70dvh] lg:h-[70vh] flex-grow">{children}</main>
+          <main className="min-h-[70dvh] lg:min-h-[70vh] flex-grow">{children}</main>
         <Footer/>
       </body>
     </html>

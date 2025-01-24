@@ -13,7 +13,7 @@
 @layer base {
   
   html{
-    @apply text-[16px] overflow-y-scroll
+    @apply text-[16px]
   }
   
   *, *::before, *::after{
@@ -21,7 +21,7 @@
   }
   
   body {
-    @apply min-h-full m-0 p-0 antialiased
+    @apply min-h-full m-0 p-0 antialiased overflow-y-scroll overflow-x-hidden
   }
   
   img {
@@ -32,4 +32,12 @@
     left: -600rem;
     position: absolute;
   }
+}
+
+.text-stroke-title {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75)
+}
+
+.text-stroke {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.1)
 }

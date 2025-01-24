@@ -32,7 +32,7 @@ export default {
         },
       },
       textShadow: {
-        'letter-border': '1px 0px 0px rgba(0, 0, 0, 0.5)',
+        'letter-border': '1px 0px 0px rgba(0, 0, 0, 1)',
       },
       screens: {
         'landscape-sm': { raw: '(orientation: landscape) and (min-width: 640px)' },
