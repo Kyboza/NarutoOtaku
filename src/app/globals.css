@@ -1,21 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Noto+Sans+JP:wght@100..900&family=Rock+Salt&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  
+  html{
+    @apply text-[16px] overflow-y-scroll
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  
+  *, *::before, *::after{
+    @apply m-0 p-0 box-border
+  }
+  
+  body {
+    @apply min-h-full m-0 p-0 antialiased
+  }
+  
+  img {
+    @apply block h-auto max-w-full
+  }
+  
+  .offscreen {
+    left: -600rem;
+    position: absolute;
+  }
 }
