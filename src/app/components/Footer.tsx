@@ -6,7 +6,7 @@ import { SiCrunchyroll } from "react-icons/si";
 
 export default function Footer() {
   return (
-    <footer className="relative bottom-0 z-1 flex flex-row justify-between items-center h-[15dvh] lg:h-[15vh] bg-[#D48900] border-t border-t-black border-opacity-[25%] shadow-[0px_-20px_13px_rgba(0,0,0,0.03)] landscape-sm:mt-2 landscape-md:mt-4 landscape-xl:mt-0">
+    <footer className="relative bottom-0 z-1 flex flex-row justify-between items-center h-[15dvh] lg:h-[15vh] bg-[#D48900] border-t border-t-black border-opacity-[25%] shadow-[0px_-20px_13px_rgba(0,0,0,0.03)] landscape-sm:mt-2 landscape-md:mt-4 landscape-xl:mt-0 mt-4">
       <div className="flex flex-col w-[70%] h-[15vh]">
         <div className="flex items-center h-[7.5vh] ml-2">
           <p className="font-bold font-notojp text-xs md:text-2xl lg:text-4xl text-white text-shadow-letter-border landscape-sm:text-xs landscape-md:text-xs landscape-xl:text-2xl">

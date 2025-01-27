@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-[url('/images/website-standard/HiddenLeafBackground.jpg')] bg-cover bg-center flex flex-col min-h-screen">
         <Header/>
-          <main className="min-h-[70dvh] lg:min-h-[70vh] flex-grow">{children}</main>
+          <main className="flex-grow flex h-full justify-center items-center">{children}</main>
         <Footer/>
       </body>
     </html>

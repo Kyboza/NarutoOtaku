@@ -6,14 +6,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  min-height: 100vh;
-}
 
 @layer base {
   
   html{
-    @apply text-[16px]
+    @apply text-[16px] min-h-screen
   }
   
   *, *::before, *::after{
@@ -27,6 +24,12 @@
   img {
     @apply block h-auto max-w-full
   }
+
+  main {
+    @apply h-screen
+  }
+
+
   
   .offscreen {
     left: -600rem;
