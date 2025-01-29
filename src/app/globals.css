@@ -25,9 +25,6 @@
     @apply block h-auto max-w-full
   }
 
-  main {
-    @apply h-screen
-  }
 
 
   

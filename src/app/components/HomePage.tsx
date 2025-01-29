@@ -2,8 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 
 export default function HomePage() {
+
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center">
       <section className="relative w-screen h-[25vh] border border-black bg-[url('/images/favchar/BackgroundChar.png')] bg-cover bg-top flex justify-center items-end">
         <div className='absolute w-full h-[25vh] inset-0 flex justify-evenly items-center'>
           <div className='relative w-[15vw] pb-[15vw] border rounded-full overflow-hidden landscape-md:w-[8vw] landscape-md:pb-[8vw]'>
@@ -32,9 +33,9 @@ export default function HomePage() {
       </section>
 
       <section className="mt-4 landscape-lg:mt-6 w-[90vw] sm:w-[75vw] xl:w-[50vw] p-4 flex flex-col items-center bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md">
-        <h2 className="mb-2 mt-2 text-xl md:text-3xl font-rock text-white text-stroke-title text-shadow-xl">
+        <h1 className="mb-2 mt-2 text-2xl md:text-3xl font-rock text-white text-stroke-title text-shadow-xl">
           Welcome
-        </h2>
+        </h1>
         <p className="p-2 text-sm md:text-xl font-notojp text-white text-stroke leading-5 text-shadow-xl">
           Welcome to our Naruto fan site, where you can immerse yourself in the world of ninjas! 
           Explore our shop for unique Naruto-themed items, interact with fellow fans in the forum to discuss episodes, 

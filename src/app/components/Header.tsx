@@ -39,6 +39,7 @@ export default function Header() {
           alt="Naruto Otaku Website Logo"
           width={250}
           height={100}
+          priority
         />
         <figcaption className="offscreen">Naruto Website Logo</figcaption>
       </figure>
