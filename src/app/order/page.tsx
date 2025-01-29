@@ -1,4 +1,18 @@
 import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Order Complete - Naruto Otaku Shop",
+    description: "Thank you for your purchase! Your Naruto Otaku Shop order has been successfully processed. We hope you enjoy your new anime collectibles!",
+    keywords: "Naruto, Otaku, Anime, Order, Complete, Purchase, Thank you, Order Confirmation, Collectibles",
+    openGraph: {
+      title: "Order Success - Naruto Otaku Shop",
+      description: "Your Naruto Otaku Shop order has been successfully completed. We appreciate your business and hope you enjoy your collectibles!",
+      url: "http://localhost:3000/order", // Update this to your live domain
+      type: "website",
+      siteName: "Naruto Otaku Shop",
+    },
+};
 
 export default function OrderSuccess() {
   return (
