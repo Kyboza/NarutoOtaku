@@ -6,6 +6,11 @@ export interface ICharacter extends Document {
   description: string;
   image: string;
   likes: number;
+  gender: string,
+  age: number,
+  weight: number,
+  style: string,
+  content: string
 }
 
 // Define the schema for characters
@@ -13,7 +18,12 @@ const characterSchema = new Schema<ICharacter>({
   name: { type: String, required: true },
   description: { type: String, required: true },
   image: { type: String, required: true },
-  likes: { type: Number, default: 0 }
+  likes: { type: Number, default: 0 },
+  gender: {type: String, required: true},
+  age: {type: Number, required: true},
+  weight: {type: Number, required: true},
+  style: {type: String, required: true},
+  content: {type: String,  required: true}
 });
 
 // Add an instance method to increment likes

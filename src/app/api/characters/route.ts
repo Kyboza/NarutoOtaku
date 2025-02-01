@@ -18,3 +18,4 @@ export async function GET() {
     return new NextResponse(JSON.stringify({ error: 'Failed to fetch characters' }), { status: 500 });
   }
 }
+

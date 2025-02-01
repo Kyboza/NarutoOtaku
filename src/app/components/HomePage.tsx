@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 export default function HomePage() {
-
+//LÄS!! Lägg till metadata på ind char pages och fixa in dem beroende på vilken man klickar på på indpage. Fixa även substring på text character page för olika sizes och lägg till mer text i description på mongodb.
   return (
     <div className="flex flex-col items-center">
       <section className="relative w-screen h-[25vh] border border-black bg-[url('/images/favchar/BackgroundChar.png')] bg-cover bg-top flex justify-center items-end">
