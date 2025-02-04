@@ -9,13 +9,10 @@ export async function GET() {
     if (characters.length === 0) {
         console.log('No characters found in the database.');
     }
-    return new NextResponse(JSON.stringify(characters), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json((characters), {status: 200, headers: { 'Content-Type': 'application/json' }});
   } catch (error) {
     console.error('Failed to fetch characters:', error);
-    return new NextResponse(JSON.stringify({ error: 'Failed to fetch characters' }), { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch characters' }, { status: 500 });
   }
 }
 
