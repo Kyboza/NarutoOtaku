@@ -3,28 +3,33 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface ICharacter {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
-  gender: string;
-  age: number;
-  weight: number;
-  style: string;
+ interface ICharacter {
+  _id: string,
+  name: string,
+  description: string,
+  image: string,
+  gender: string,
+  likes: number,
+  age: number,
+  weight: number,
+  style: string,
   content: string;
 }
 
-const CharactersPage = () => {
+const CharactersPage:React.FC = () => {
   const [characters, setCharacters] = useState<ICharacter[]>([]);
 
   // Fetch characters from API
   useEffect(() => {
     const fetchCharacters = async () => {
       const response = await fetch('/api/characters');
-      const data = await response.json();
-      console.log('Fetched characters:', data);
-      setCharacters(data);
+      if(response.ok){
+        const data = await response.json();
+        console.log('Fetched characters:', data);
+        setCharacters(data);
+      } else {
+        console.error("Error fetching data", response.status, response.statusText)
+      }
     };
 
     fetchCharacters();

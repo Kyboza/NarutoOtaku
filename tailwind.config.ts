@@ -14,6 +14,9 @@ export default {
         rock: ['Rock Salt', 'cursive'],
         notojp: ['Noto Sans JP', 'sans-serif'],
       },
+      fontSize: {
+        "xxs": "0.65rem"
+      },
       blur: {
         'custom': '3px',
       },

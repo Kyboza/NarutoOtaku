@@ -3,20 +3,22 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';  // Use useParams from next/navigation
 import Image from 'next/image';
 
+
 interface ICharacter {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
-  likes: number;
-  gender: string;
-  age: number;
-  weight: number;
-  style: string;
+  _id: string,
+  name: string,
+  description: string,
+  image: string,
+  gender: string,
+  age: number,
+  likes: number,
+  weight: number,
+  style: string,
   content: string;
 }
 
-const CharacterAbout = () => {
+
+const CharacterAbout: React.FC = () => {
   const [character, setCharacter] = useState<ICharacter | null>(null);
   const params = useParams();  // Get dynamic route parameters
   const id = params?.id; // Extract the `id` parameter from URL
@@ -27,20 +29,15 @@ const CharacterAbout = () => {
     if (!id) return; // Don't fetch if ID is undefined or empty
   
     const fetchChar = async () => {
-      console.log("Fetching character with ID:", id); // Log the ID being used in the request
-      
       const response = await fetch(`/api/characters/${id}`);
-      console.log("API Response:", response); // Log the full API response object
-  
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched character data:", data); // Log the fetched data
         setCharacter(data);
       } else {
-        console.error("Error fetching character:", response.statusText);
+        console.error("Error fetching character:", response.status, response.statusText);
       }
     };
-  
     fetchChar();
   }, [id]);
   
