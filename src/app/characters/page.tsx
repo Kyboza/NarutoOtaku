@@ -16,7 +16,7 @@ import Link from 'next/link';
   content: string;
 }
 
-const CharactersPage:React.FC = () => {
+export default function CharactersPage() {
   const [characters, setCharacters] = useState<ICharacter[]>([]);
 
   // Fetch characters from API
@@ -80,5 +80,3 @@ const CharactersPage:React.FC = () => {
     </div>
   );
 };
-
-export default CharactersPage;

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   }
 }
 
-export const Shop:React.FC = () => {
+export default function Shop() {
   return (
     <div className="flex flex-col h-full items-center">
     <h1 className="mt-4 mb-4 text-2xl md:text-3xl font-rock text-white text-stroke-title text-shadow-xl">Store</h1>

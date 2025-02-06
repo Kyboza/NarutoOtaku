@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     },
 };
 
-export const OrderSuccess:React.FC = () => {
+export default function OrderSuccess() {
   return (
     <div className='flex flex-col h-full items-center'>
       {/* Title */}

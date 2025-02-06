@@ -7,6 +7,13 @@ if (!MONGODB_URI) {
 }
 
 export async function connectToDatabase() {
-  await mongoose.connect(MONGODB_URI, { dbName: 'NarutoDatabase' });
-  console.log('Successfully connected to MongoDB!');
+  try {
+    await mongoose.connect(MONGODB_URI, { dbName: 'NarutoDatabase' });
+    console.log('Successfully connected to MongoDB!');
+    return { success: true, message: "Connected" };
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    return { success: false, message: "Failed to connect to database" };
+  }
 }
+

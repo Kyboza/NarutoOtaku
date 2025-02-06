@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 
-export const Details:React.FC = () => {
+export default function Details() {
   return (
     <div className='flex flex-col items-center'>
       <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl landscape-lg:text-4xl landscape-xl:text-5xl 

@@ -18,7 +18,7 @@ interface ICharacter {
 }
 
 
-const CharacterAbout: React.FC = () => {
+export default function CharacterAbout() {
   const [character, setCharacter] = useState<ICharacter | null>(null);
   const params = useParams();  // Get dynamic route parameters
   const id = params?.id; // Extract the `id` parameter from URL
@@ -95,5 +95,3 @@ const CharacterAbout: React.FC = () => {
     </div>
   );
 };
-
-export default CharacterAbout;

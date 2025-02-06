@@ -1,11 +1,12 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, ObjectId } from 'mongoose';
 
 // Interface for TypeScript to help with typing (optional but recommended)
 export interface ICharacter extends Document {
-  name: string;
-  description: string;
-  image: string;
-  likes: number;
+  _id: ObjectId,
+  name: string,
+  description: string,
+  image: string,
+  likes: number,
   gender: string,
   age: number,
   weight: number,
@@ -24,7 +25,7 @@ const characterSchema = new Schema<ICharacter>({
   weight: {type: Number, required: true},
   style: {type: String, required: true},
   content: {type: String,  required: true}
-});
+}, {_id: true});
 
 // Add an instance method to increment likes
 characterSchema.methods.incrementLikes = function() {
