@@ -4,7 +4,7 @@ import Character from '@/app/models/Character'; // Assuming you have a Character
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
 
   // Check if ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
