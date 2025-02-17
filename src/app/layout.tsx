@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[url('/images/website-standard/HiddenLeafBackground.jpg')] bg-cover bg-center flex flex-col min-h-screen">
+      <body className="bg-[url('/images/website-standard/HiddenLeafBackground.webp')] bg-cover bg-center flex flex-col min-h-screen">
         <Header/>
           <main className="flex justify-center h-full flex-grow">{children}</main>
         <Footer/>

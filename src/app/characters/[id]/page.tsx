@@ -50,10 +50,10 @@ export default function CharacterAbout() {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-4xl lg:text-6xl landscape-md:text-xl landscape-lg:text-4xl landscape-xl:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
+      <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-4xl lg:text-6xl font-rock text-white text-stroke-title text-shadow-xl">
         Character Info
       </h1>
-      <section className='flex flex-col h-auto w-full max-w-[90vw] landscape-xl:max-w-[900px] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mb-4'>
+      <section className='flex flex-col h-auto w-full max-w-[90vw] lg:max-w-[900px] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mb-4'>
         <div className='flex flex-row h-auto w-full border-b border-black'>
           {/* Character Image */}
           <div className='flex items-center justify-center w-[40%] mb-2'>
@@ -67,14 +67,14 @@ export default function CharacterAbout() {
             <h2 className='font-bold text-xl landscape-sm:text-lg sm:text-2xl md:text-4xl landscape-md:text-3xl lg:text-4xl font-notojp text-white text-shadow-xl self-start'>
               {character.name}
             </h2>
-            <p className='font-notojp text-white text-xs landscape-sm:text-sm sm:text-sm md:text-2xl landscape-md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Gender: {character.gender}</p>
-            <p className='font-notojp text-white text-xs landscape-sm:text-sm sm:text-sm md:text-2xl landscape-md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Age: {character.age}</p>
-            <p className='font-notojp text-white text-xs landscape-sm:text-sm sm:text-sm md:text-2xl landscape-md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Weight: {character.weight}</p>
-            <p className='font-notojp text-white text-xs landscape-sm:text-sm sm:text-sm md:text-2xl landscape-md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Fighting Style: {character.style}</p>
+            <p className='font-notojp text-white text-xs sm:text-sm  md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Gender: {character.gender}</p>
+            <p className='font-notojp text-white text-xs sm:text-sm  md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Age: {character.age}</p>
+            <p className='font-notojp text-white text-xs sm:text-sm  md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Weight: {character.weight}</p>
+            <p className='font-notojp text-white text-xs sm:text-sm  md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Fighting Style: {character.style}</p>
           </div>
 
           <div className='flex items-center justify-center mb-1 mr-1 w-[20%]'>
-          <button className='flex flex-row items-center bg-[#737373] h-[33%] sm:h-[50%] md:h-[25%] landscape-sm:h-[30%] landscape-xl:h-[25%] border border-black rounded-md p-1'>
+          <button className='flex flex-row items-center bg-[#737373] h-[33%] sm:h-[50%] md:h-[25%] xl:h-[25%] border border-black rounded-md p-1'>
                   <p className='text-shadow-lg mr-0.5 text-sm sm:text-sm md:text-xl lg:text-3xl'>
                     &#10084;&#65039;
                   </p>
@@ -87,7 +87,7 @@ export default function CharacterAbout() {
 
         {/* Character Content */}
         <article className='w-full p-4 overflow-hidden'>
-          <p className='font-notojp text-white text-xs landscape-sm:text-xs sm:text-sm md:text-xl landscape-md:text-xl lg:text-2xl xl:text-xl leading-6 text-stroke text-shadow-lg'>
+          <p className='font-notojp text-white text-xs sm:text-xs md:text-xl lg:text-2xl xl:text-xl leading-6 text-stroke text-shadow-lg'>
             {character.content}
           </p>
         </article>

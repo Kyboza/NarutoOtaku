@@ -8,49 +8,48 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="relative top-0 z-1 h-[10vh] lg:h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-b-black border-opacity-[25%] drop-shadow-xl">
+    <header className="relative top-0 z-10 h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-black border-opacity-25 drop-shadow-xl">
       {/* Hamburger Button */}
       <button
-        className="relative flex items-center justify-center h-[4vh] lg:h-[5vh] w-[20vw] ml-1 :hovercursor-pointer"
+        className="relative flex items-center justify-center h-[4vh] sm:h-[6vh] lg:h-[7.5vh] w-[20vw] ml-1 cursor-pointer z-20"
         onClick={() => setIsOpen((prev) => !prev)}
+
       >
         <div
-          className={`absolute top-[25%] h-[0.5vh] w-[3vh] bg-white rounded-md transition-all landscape-md:h-[0.75vh] landscape-md:w-[6vh] landscape-xl:h-[0.75vh] landscape-xl:w-[6vh] ${
-            isOpen ? "animate-hamanimation" : "animate-hamanimationReverse"
+          className={`absolute top-[25%] h-[0.5vh] w-[3vh] xl:w-[5vh] bg-white rounded-md transition-all ${
+            isOpen ? "animate-hamburgerOpen" : "animate-hamburgerClose"
           }`}
         ></div>
         <div
-          className={`absolute top-[50%] h-[0.5vh] w-[3vh] bg-white rounded-md transition-all landscape-md:h-[0.75vh] landscape-md:w-[6vh] landscape-xl:h-[0.75vh] landscape-xl:w-[6vh] ${
-            isOpen ? "animate-hamanimation" : "animate-hamanimationReverse"
+          className={`absolute top-[50%] h-[0.5vh] w-[3vh] xl:w-[5vh] bg-white rounded-md transition-all ${
+            isOpen ? "animate-hamburgerOpen" : "animate-hamburgerClose"
           }`}
         ></div>
         <div
-          className={`absolute top-[75%] h-[0.5vh] w-[3vh] bg-white rounded-md transition-all landscape-md:h-[0.75vh] landscape-md:w-[6vh] landscape-xl:h-[0.75vh] landscape-xl:w-[6vh] ${
-            isOpen ? "animate-hamanimation" : "animate-hamanimationReverse"
+          className={`absolute top-[75%] h-[0.5vh] w-[3vh] xl:w-[5vh] bg-white rounded-md transition-all ${
+            isOpen ? "animate-hamburgerOpen" : "animate-hamburgerClose"
           }`}
         ></div>
       </button>
 
       {/* Logo Section */}
-      <figure className="flex justify-center items-center h-[10vh] w-[60vw]">
+      <figure className="flex justify-center items-center w-[60vw] sm:w-[40vw] md:w-[30vw] lg:w-[25vw]">
         <Image
-          className="object-contain w-[75%] h-full"
+          className="object-contain"
           src="/images/website-standard/NarutoLogo.svg"
           alt="Naruto Otaku Website Logo"
-          width={250}
-          height={100}
           priority
+          fill
         />
-        <figcaption className="offscreen">Naruto Website Logo</figcaption>
+        <figcaption className="sr-only">Naruto Website Logo</figcaption>
       </figure>
 
       {/* Icons Section */}
-      <div className="flex items-center justify-center flex-row gap-2 w-[20vw] mr-1">
-        <FaShoppingCart className="text-white text-2xl md:text-3xl landscape-md:text-2xl lg:text-3xl landscape-lg:text-4xl drop-shadow-xl" />
-        <FaUserAlt className="text-white text-2xl md:text-3xl landscape-md:text-2xl lg:text-3xl landscape-lg:text-4xl drop-shadow-xl" />
-        <IoGlobeOutline className="text-white text-2xl md:text-3xl landscape-md:text-2xl lg:text-3xl landscape-lg:text-4xl drop-shadow-xl" />
+      <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
+        <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
+        <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
+        <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
       </div>
     </header>
   );
 }
-

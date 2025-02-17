@@ -6,33 +6,32 @@ import { SiCrunchyroll } from "react-icons/si";
 
 export default function Footer() {
   return (
-    <footer className="relative bottom-0 z-1 flex flex-row justify-between items-center h-[10vh] lg:h-[10vh] bg-[#D48900] border-t border-t-black border-opacity-[25%] shadow-[0px_-20px_13px_rgba(0,0,0,0.03)] landscape-sm:mt-2 landscape-md:mt-4 landscape-xl:mt-0 mt-4">
-      <div className="flex flex-col w-[70%] h-[10vh]">
-        <div className="flex items-center h-[7.5vh] ml-2">
-          <p className="font-bold font-notojp text-xs md:text-2xl lg:text-4xl text-white text-shadow-letter-border landscape-sm:text-xs landscape-md:text-xs landscape-xl:text-2xl">
-            @Copyright 2025 Naruto Otaku.
-          </p>
-        </div>
-        
-        <div className="flex flex-row items-center gap-3 h-[7.5vh] ml-2">
-          <FaXTwitter className="text-white text-2xl md:text-5xl lg:text-7xl drop-shadow-xl landscape-sm:text-sm landscape-md:text-sm landscape-lg:text-2xl landscape-xl:text-4xl :hover cursor-pointer" />
-          <FaYoutube className="text-white text-2xl md:text-5xl lg:text-7xl drop-shadow-xl landscape-sm:text-sm landscape-md:text-sm landscape-lg:text-2xl landscape-xl:text-4xl :hover cursor-pointer" />
-          <FaInstagram className="text-white text-2xl md:text-5xl lg:text-7xl drop-shadow-xl landscape-sm:text-sm landscape-md:text-sm landscape-lg:text-2xl landscape-xl:text-4xl :hover cursor-pointer" />
-          <SiCrunchyroll className="text-white text-2xl md:text-5xl lg:text-7xl drop-shadow-xl landscape-sm:text-sm landscape-md:text-sm landscape-lg:text-2xl landscape-xl:text-4xl :hover cursor-pointer" />
+    <footer className="relative bottom-0 z-10 flex flex-row justify-between items-start bg-[#D48900] border-t border-black border-opacity-25 shadow-[0px_-10px_8px_rgba(0,0,0,0.03)] py-2 px-4 mt-2">
+      {/* Left Column: Copyright & Social Icons */}
+      <div className="w-1/2 flex flex-col items-start">
+        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border">
+          © 2025 Naruto Otaku.
+        </p>
+        <div className="flex flex-row items-center gap-2 mt-1">
+          <FaXTwitter className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
+          <FaYoutube className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
+          <FaInstagram className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
+          <SiCrunchyroll className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center w-[30%] h-[10vh] landscape-sm:flex-row landscape-md:flex-row landscape-sm:h-[5vh] landscape-md:h-[5vh]">
-        <p className="font-bold font-notojp text-white text-xs md:text-xl lg:text-4xl text-shadow-letter-border landscape-sm:text-xs landscape-sm:mr-3 landscape-xl:text-2xl :hover cursor-pointer">
+      {/* Right Column: Navigation Links */}
+      <div className="w-1/2 flex flex-row items-center justify-end gap-3">
+        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Shop
         </p>
-        <p className="font-bold font-notojp text-white text-xs md:text-xl lg:text-4xl text-shadow-letter-border landscape-sm:text-xs landscape-sm:mr-3 landscape-xl:text-2xl :hover cursor-pointer">
+        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Forum
         </p>
-        <p className="font-bold font-notojp text-white text-xs md:text-xl lg:text-4xl text-shadow-letter-border landscape-sm:text-xs landscape-sm:mr-3 landscape-xl:text-2xl :hover cursor-pointer">
+        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Contact
         </p>
-        <p className="font-bold font-notojp text-white text-xs md:text-xl lg:text-4xl text-shadow-letter-border landscape-sm:text-xs landscape-sm:mr-3 landscape-xl:text-2xl :hover cursor-pointer">
+        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Popular
         </p>
       </div>

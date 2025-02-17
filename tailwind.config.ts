@@ -21,15 +21,15 @@ export default {
         'custom': '3px',
       },
       animation: {
-        'hamanimation': 'hamanimation 0.3s ease forwards',
-        'hamanimationReverse': 'hamanimationReverse 0.3s ease forwards',
+        'hamburgerOpen': 'hamburgerOpen 0.3s ease forwards',
+        'hamburgerClose': 'hamburgerClose 0.3s ease forwards',
       },
       keyframes: {
-        hamanimation: {
+        hamburgerOpen: {
           '0%': { transform: 'scaleX(1)', transformOrigin: 'center' }, // Start at normal width
           '100%': { transform: 'scaleX(0.1)', transformOrigin: 'center' }, // Shrink to 0 width
         },
-        hamanimationReverse: {
+        hamburgerClose: {
           '0%': { transform: 'scaleX(0.1)', transformOrigin: 'center' }, // Start at normal width
           '100%': { transform: 'scaleX(1)', transformOrigin: 'center' }, // Shrink to 0 width
         },
