@@ -50,7 +50,7 @@ export default function CharacterAbout() {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-4xl lg:text-6xl font-rock text-white text-stroke-title text-shadow-xl">
+      <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
         Character Info
       </h1>
       <section className='flex flex-col h-auto w-full max-w-[90vw] lg:max-w-[900px] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mb-4'>

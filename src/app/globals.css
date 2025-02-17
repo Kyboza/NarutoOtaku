@@ -24,9 +24,6 @@
   img {
     @apply block h-auto max-w-full
   }
-
-
-
   
   .offscreen {
     left: -600rem;

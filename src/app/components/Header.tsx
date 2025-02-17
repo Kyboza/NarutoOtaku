@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +34,7 @@ export default function Header() {
       </button>
 
       {/* Logo Section */}
+      <Link href="/">
       <figure className="flex justify-center items-center w-[60vw] sm:w-[40vw] md:w-[30vw] lg:w-[25vw]">
         <Image
           className="object-contain"
@@ -43,6 +45,7 @@ export default function Header() {
         />
         <figcaption className="sr-only">Naruto Website Logo</figcaption>
       </figure>
+      </Link>
 
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
