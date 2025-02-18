@@ -33,6 +33,11 @@ characterSchema.methods.incrementLikes = function() {
   return this.save();
 };
 
+characterSchema.methods.decrementLikes = function() {
+  this.likes -= 1;
+  return this.save()
+}
+
 // Create a model from the schema
 const Character = mongoose.models.Character || mongoose.model<ICharacter>('Character', characterSchema, 'characters');
 
