@@ -27,6 +27,7 @@ const likesSlice = createSlice({
         state.toggleStatus = 'increment';
       }
     },
+    
     // Lägg till andra actions om du behöver
   }
 });

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 //import Link from 'next/link'
 import Image from 'next/image'
+import axiosAPI from '@/app/lib/axios'
 
 export default function Post() {
   const params = useParams()
@@ -24,15 +25,19 @@ const [post, setPost] = useState<IPost | null>(null)
 
 useEffect(() => {
   const fetchPost = async() => {
-    const response = await fetch(`/api/forum/${postId}/${postId}`)
-    if(response.ok){
-      const data = await response.json()
+    try {
+    const response = await axiosAPI.get(`/api/forum/${postId}/${postId}`)
+    if(response.status === 200){
+      const data = response.data
       console.log("Fetched Post")
       setPost(data)
     } else {
       console.log("Could not fetch post", response.status, response.statusText)
     }
+  } catch(error) {
+    console.error("Could not get the specific post", error)
   }
+}
   fetchPost()
 }, [postId])
 

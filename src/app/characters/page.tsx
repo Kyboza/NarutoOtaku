@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import axiosAPI from '../lib/axios';
 
  interface ICharacter {
   _id: string,
@@ -22,18 +23,22 @@ export default function CharactersPage() {
   // Fetch characters from API
   useEffect(() => {
     const fetchCharacters = async () => {
-      const response = await fetch('/api/characters');
-      if(response.ok){
-        const data = await response.json();
-        console.log('Fetched characters:', data);
-        setCharacters(data);
-      } else {
-        console.error("Error fetching data", response.status, response.statusText)
+      try {
+        const response = await axiosAPI.get('/api/characters');
+        if (response.status === 200) {
+          console.log('Fetched characters:', response.data);
+          setCharacters(response.data);
+        } else {
+          console.error("Error fetching data", response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error("Failed to fetch characters:", error);
       }
     };
-
+  
     fetchCharacters();
   }, []);
+  
 
   return (
     <div className='flex flex-col items-center mb-4'>

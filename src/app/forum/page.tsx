@@ -2,6 +2,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import axiosAPI from '../lib/axios';
 
 export default function Forum() {
 
@@ -19,13 +20,18 @@ export default function Forum() {
 
   useEffect(() => {
     const fetchForum = async() => {
-      const response = await fetch('api/forum');
-      if(response.ok){
-        const data = await response.json()
-        console.log("Fetched Data")
-        setForumData(data)
-      } else {
-        console.log("Problem fetching data from Forum API")
+      try{
+        const response = await axiosAPI.get('api/forum');
+        if(response.status === 200){
+          const data = response.data
+          console.log("Fetched Data")
+          setForumData(data)
+        }
+        else {
+          console.log("Problem fetching data from Forum API")
+        }
+      } catch(error){
+        console.error("Failed to fetch forums sections", error)
       }
     }
     fetchForum()

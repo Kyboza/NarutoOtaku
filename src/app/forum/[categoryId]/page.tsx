@@ -3,6 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import axiosAPI from '@/app/lib/axios';
 
 export default function SpecificForum() {
 
@@ -26,14 +27,18 @@ export default function SpecificForum() {
   useEffect(() => {
     if(!categoryId) return;
     const fetchSpecificForum = async() => {
-    console.log("Fetching data for ID:", categoryId);
-      const response = await fetch(`/api/forum/${categoryId}`);
-      if(response.ok){
-        const data = await response.json()
+      try{
+      const response = await axiosAPI.get(`/api/forum/${categoryId}`);
+      if(response.status === 200){
+        const data = response.data
         console.log("Fetched Data")
         setSpecificForumData(data)
       } else {
         console.log("Problem fetching data from Forum API", response.status, response.statusText)
+      }
+      }
+      catch(error){
+        console.error("Could not fetch specific forum section", error)
       }
     }
     fetchSpecificForum()

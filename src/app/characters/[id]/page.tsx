@@ -1,89 +1,82 @@
 "use client"
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'next/navigation'; // Use useParams from next/navigation
+import React, {useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { toggleLike } from '../../store/likesSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/app/store/store';
+import { fetchCharacters } from '@/app/store/characterSlice';
+import { RootState, AppDispatch } from '@/app/store/store';
+import { incrementLike, decrementLike } from '@/app/store/characterSlice';
 import axiosAPI from '@/app/lib/axios';
 
-interface ICharacter {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
-  gender: string;
-  age: number;
-  likes: number;
-  weight: number;
-  style: string;
-  content: string;
-}
 
 export default function CharacterAbout() {
-  const [character, setCharacter] = useState<ICharacter | null>(null);
-  const { likedCharacters, toggleStatus } = useSelector((state: RootState) => state.likes);
-  const dispatch = useDispatch();
+
+  const dispatch = useDispatch<AppDispatch>();
   const params = useParams();
   const id = params?.id;
-  console.log(id);
 
-  const fetchCharacter = useCallback(async () => {
-    if (!id || typeof id !== "string") return; 
+  const { likedCharacters} = useSelector((state: RootState) => state.likes);
+  const {characters, loading, error} = useSelector((state:RootState) => state.character);
 
-    try {
-      const response = await axiosAPI.get(`/api/characters/${id}`);
-      if (response.status === 200) {
-        const data = await response.data
-        console.log("Fetched character data:", data);
-        setCharacter(data);
-      } else {
-        console.error("Error fetching character:", response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching character:", error);
-    }
-  }, [id]);
 
   useEffect(() => {
-    fetchCharacter();
-  }, [fetchCharacter]);
+    dispatch(fetchCharacters());
+  }, [dispatch]);
+
+
+  const character = characters.find((char) => char._id === id);
+
 
 
   const handleLikeClick = async (id: string) => {
-    if (typeof id !== 'string') return console.error("Invalid id format");
+    if (typeof id !== "string") return console.error("Invalid id format");
 
+    const isLiked = likedCharacters.includes(id);
+
+    if (isLiked) {
+      dispatch(decrementLike(id)); 
+    } else {
+      dispatch(incrementLike(id));
+    }
     dispatch(toggleLike(id));
 
-    const action = toggleStatus === 'increment' ? 'increment' : 'decrement';
-    const result = await updateLikes(id, action);
+    try {
+      const updatedToggleStatus = isLiked ? "decrement" : "increment";
+      const result = await updateLikes(id, updatedToggleStatus);
 
-    if (result) {
-      await fetchCharacter();
-    } else {
-      console.error("Could not update likes");
+      if (!result) {
+        throw new Error("Failed to update likes on server");
+      }
+    } catch (error) {
+      console.error("Failed to update likes", error);
+
+      dispatch(toggleLike(id));
+      if (isLiked) {
+        dispatch(incrementLike(id));
+      } else {
+        dispatch(decrementLike(id));
+      }
     }
   };
+  
 
   const updateLikes = async (id: string, action: 'increment' | 'decrement') => {
     try {
       const response = await axiosAPI.put(`/api/characters/${id}/likes`, { action });
-      if (response.status === 200) {
-        console.log('Likes updated successfully:', response.data);
-        return true;
-      } else {
-        console.error('Failed to update likes:', response.data);
-        return false;
-      }
+      return response.status === 200;
     } catch (error) {
       console.error('Error updating likes:', error);
       return false;
     }
   };
 
-  if (!character) {
-    return <p>No character data found.</p>;
-  }
+
+
+  if (!character) return <p>No character data found.</p>;
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>No Character Found</p>
+  
 
   return (
     <div className='flex flex-col justify-center items-center'>
