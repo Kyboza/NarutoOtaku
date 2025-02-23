@@ -1,8 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-//import { notFound } from 'next/navigation'
 
-export default function Users() {
+export default function User() {
   return (
     <div className="flex flex-col items-center px-4">
       {/* Profile Section */}

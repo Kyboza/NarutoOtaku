@@ -22,7 +22,7 @@ export default {
       },
       animation: {
         'hamburgerOpen': 'hamburgerOpen 0.3s ease forwards',
-        'hamburgerClose': 'hamburgerClose 0.3s ease forwards',
+        'hamburgerClose': 'hamburgerClose 0.3s ease forwards'
       },
       keyframes: {
         hamburgerOpen: {

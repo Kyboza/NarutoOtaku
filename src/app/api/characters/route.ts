@@ -1,5 +1,5 @@
 import { connectToDatabase } from '../../lib/mongodb';
-import Character from '../../models/Character'; // Correct model for characters
+import Character from '@/app/models/Character';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

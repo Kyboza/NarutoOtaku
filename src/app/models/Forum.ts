@@ -20,6 +20,6 @@ const forumSchema = new Schema<IForum> ({
     latest: {type: String, required: true},
 }, {id: true})
 
-const Forum = mongoose.models.forum || mongoose.model<IForum>("Forum", forumSchema, "forum")
+const Forum = mongoose.models.Forum || mongoose.model<IForum>("Forum", forumSchema, "forum")
 
 export default Forum;

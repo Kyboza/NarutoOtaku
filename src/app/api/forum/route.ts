@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     const connection = await connectToDatabase()
+    console.log(connection)
     if(!connection.success){
         console.error("Could not connect to Database")
         return NextResponse.json({message: connection.message}, {status: 500})

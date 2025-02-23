@@ -5,16 +5,16 @@ interface IPost extends Document {
     postId: number,
     title: string,
     content: string
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
 }
 
 interface IComment extends Document {
     commentId: number,
     userId: ObjectId,
     content: string,
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
 }
 
 interface IUser extends Document {
@@ -63,6 +63,6 @@ const userSchema = new Schema<IUser>({
 
 })
 
-const User = mongoose.models.users || mongoose.model("users", userSchema, "users")
+const User = mongoose.models.Users || mongoose.model("users", userSchema, "users")
 
 export default User;
