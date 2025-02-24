@@ -1,10 +1,12 @@
 "use client"
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation';
 import { IoIosArrowDown } from "react-icons/io";
 import axiosAPI from '@/app/lib/axios'
 
 export default function CreatePost() {
+  const router = useRouter()
 
   interface IForum{
       _id: string,
@@ -18,7 +20,8 @@ export default function CreatePost() {
 
   const [collectedData, setCollectedData] = useState<IForum[]>([])
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categoryTitle, setCategoryTitle] = useState('');
+  const [categoryId, setCategoryId] = useState('')
   const [postTitle, setPostTitle] = useState('')
   const [postContent, setPostContent] = useState('')
 
@@ -29,6 +32,7 @@ export default function CreatePost() {
         if(response.status === 200) {
           const data = response.data;
           setCollectedData(data)
+          console.log(data)
         } else {
           console.log("Forum categories received:", response.data);
         }
@@ -40,23 +44,31 @@ export default function CreatePost() {
   }, [])
 
 
-  const menuChange = (title: string) => {
+  const menuChange = (id: string, title: string) => {
     setIsOpen((prev) => !prev)
-    setSelectedCategory(title)
+    setCategoryId(id)
+    setCategoryTitle(title)
   }
 
-  const postHandler = async() => {
+  const postHandler = async(e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('test')
     try{
-      if(selectedCategory.length === 0 || postTitle.length === 0 || postContent.length === 0){
+      if(categoryTitle.trim() === ''|| categoryId.trim() === '' || postTitle.trim() === ''|| postContent.trim() === ''){
         console.log('Insufficient info for post')
         return
       }
 
-      const data = {selectedCategory, postTitle, postContent}
+      const data = {categoryId, postTitle, postContent}
 
       const response = await axiosAPI.post('api/forum/submit-post', data)
       if(response.status === 200){
         console.log("Post successfully uploaded to the Forum")
+        router.push('/')
+        setCategoryTitle('')
+        setCategoryId('')
+        setPostTitle('')
+        setPostContent('')
       } else {
         console.log("Could not upload post")
         return
@@ -70,12 +82,12 @@ export default function CreatePost() {
   return (
     <div className='flex flex-col items-center w-full max-w-[80%] xl:max-w-[50%] gap-4'>
         <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">Create A Post</h1>
-        <form onSubmit={postHandler} className='flex flex-col items-center w-full bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-4 gap-4'>
+        <form onSubmit={(e) => postHandler(e)} className='flex flex-col items-center w-full bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-4 gap-4'>
            
 
             <section className='w-[90%] flex relative items-start'>
               <div onClick={() => setIsOpen(prev => !prev)} className='flex flex-row justify-between w-full border border-black bg-transparent outline-none p-2 rounded-md text-white text-stroke text-shadow-lg'>
-                <p>{selectedCategory ? `${selectedCategory}` : "Select Post Category"}</p>
+                <p>{categoryTitle ? `${categoryTitle}` : "Select Post Category"}</p>
                 <IoIosArrowDown />
               </div>
 
@@ -83,7 +95,7 @@ export default function CreatePost() {
                 {collectedData.map((col) => (
                   <li
                     key={col._id}
-                    onClick={() => menuChange(col.title)}
+                    onClick={() => menuChange(col._id, col.title)}
                     className="text-white text-stroke text-shadow-lg min-h-[5vh] border-b border-black p-2 cursor-pointer hover:bg-[#E19B1A] first-of-type:rounded-tl-md first-of-type:rounded-tr-md last-of-type:rounded-br-md last-of-type:rounded-bl-md last-of-type:border-b-0"
                   >
                     {col.title}
@@ -124,10 +136,10 @@ export default function CreatePost() {
                     value={postContent}
                     onChange={(e) => setPostContent(e.target.value)}
                     ></textarea>
+                  <div className='w-[90%] flex justify-end'>
+                  <button type='submit' className='flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] w-1/4'>Submit</button>
+                  </div>
         </form>
-        <div className='w-full flex justify-end'>
-          <button type='submit' className='flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] w-1/4'>Submit</button>
-        </div>
     </div>
   )
 }
