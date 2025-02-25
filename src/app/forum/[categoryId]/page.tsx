@@ -13,10 +13,21 @@ export default function SpecificForum() {
       title: string,
       content: string,
       by: string,
-      posted: string,
+      createdAt: Date
       replies: number,
-      latest: string,
+      updatedAt: Date,
       categoryId: string
+  }
+
+  const formatDate = (date: Date) => {
+    const formattedDate = new Date(date).toLocaleDateString(navigator.language, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    return formattedDate;
   }
 
   const [specificForumData, setSpecificForumData] = useState<IForumSpecific[]>([])
@@ -31,7 +42,8 @@ export default function SpecificForum() {
       const response = await axiosAPI.get(`/api/forum/${categoryId}`);
       if(response.status === 200){
         const data = response.data
-        console.log("Fetched Data")
+        console.log("Fetched Data", data)
+        console.log(data.posted)
         setSpecificForumData(data)
       } else {
         console.log("Problem fetching data from Forum API", response.status, response.statusText)
@@ -74,13 +86,13 @@ export default function SpecificForum() {
                   By: {forum.by}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
-                  Posted: {forum.posted}
+                  Posted: {formatDate(forum.createdAt)}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
                   Replies: {forum.replies}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
-                  Latest Reply: {forum.latest}
+                  Latest Reply: {forum.updatedAt ? formatDate(forum.updatedAt) : ''}
                 </p>
               </div>
   

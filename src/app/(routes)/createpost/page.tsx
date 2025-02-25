@@ -53,13 +53,13 @@ export default function CreatePost() {
   const postHandler = async(e: React.FormEvent) => {
     e.preventDefault()
     console.log('test')
+    const data = {categoryId, postTitle, postContent}
     try{
-      if(categoryTitle.trim() === ''|| categoryId.trim() === '' || postTitle.trim() === ''|| postContent.trim() === ''){
+      if(Object.values(data).some(value => value.trim() === '')){
         console.log('Insufficient info for post')
         return
       }
 
-      const data = {categoryId, postTitle, postContent}
 
       const response = await axiosAPI.post('api/forum/submit-post', data)
       if(response.status === 200){
@@ -121,14 +121,14 @@ export default function CreatePost() {
                 />
                 <label htmlFor='postContent' className='sr-only'>Post Content</label>
                 <textarea
-                    className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl resize-none text-white text-stroke text-shadow-lg'
+                    className='w-[90%] xl:min-h-[40vh] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl resize-none text-white text-stroke text-shadow-lg'
                     typeof='text'
                     name="postContent" 
                     id="postContent"
                     placeholder='Enter Post Content'
                     required
                     autoComplete='off'
-                    minLength={100}
+                    minLength={10}
                     maxLength={300}
                     aria-label='Post Content'
                     aria-required="true"
@@ -137,7 +137,7 @@ export default function CreatePost() {
                     onChange={(e) => setPostContent(e.target.value)}
                     ></textarea>
                   <div className='w-[90%] flex justify-end'>
-                  <button type='submit' className='flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] w-1/4'>Submit</button>
+                    <button type='submit' className='flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] w-1/4 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Submit</button>
                   </div>
         </form>
     </div>

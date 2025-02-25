@@ -50,7 +50,7 @@ export default function Header() {
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
         <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
-        <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
+        <Link href='/login'><FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" /></Link>
         <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
       </div>
     </header>

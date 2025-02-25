@@ -26,9 +26,7 @@ export async function POST(req: NextRequest){
             title: postTitle,
             content: postContent,
             by: "Kyboz",
-            posted: "01/21 - 16:51",
             replies: 8,
-            latest: "01/21 - 16:51",
             categoryId: categoryId
         })
 

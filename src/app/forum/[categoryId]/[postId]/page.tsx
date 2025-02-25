@@ -54,7 +54,7 @@ return (
     </h1>
 
     {/* Forum Inlägg */}
-    <article className='w-[80vw] h-[80vh] md:h-[60vh] lg:h-[40vh] xl:h-[60vh] flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md'>
+    <article className='w-[80vw] h-auto flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md'>
       
       {/* Profil & Namn */}
       <div className='h-[15vh] w-full flex flex-row justify-evenly items-center border-b border-[#505050]'>
@@ -68,7 +68,7 @@ return (
 
       {/* Innehåll */}
       <div className='h-full w-full overflow-y-scroll scrollbar-hide'>
-        <p className='p-2 mt-1 text-sm md:text-xl font-notojp text-white text-stroke leading-5 text-shadow-xl whitespace-pre-line'>
+        <p className='p-2 mt-1 text-sm md:text-xl font-notojp text-white text-stroke leading-5 text-shadow-xl whitespace-pre-line break-words'>
           {post.content}
         </p>
       </div>
