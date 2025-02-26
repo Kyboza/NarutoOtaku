@@ -4,50 +4,65 @@ import Link from 'next/link'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
 import { useRouter } from 'next/navigation'
+import { AxiosError } from 'axios'
 
 export default function Register() {
     const router = useRouter()
 
+    type ApiErrorMessage = {message: string}
+
+    const isAxiosError = (error: unknown): error is AxiosError<ApiErrorMessage> => typeof error === 'object' && error !== null && 'isAxiosError' in error;
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/
-    const usernameRegex = /^[a-zA-Z0-9._%+-]{5,20}$/
+    const usernameRegex = /^[a-zA-Z0-9._%+-]{5,30}$/
     const passwordRegex = /^[a-zA-Z0-9._%+!-]{15,}$/
 
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const registerUser = async(e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-        const regexSuccess = emailRegex.test(email) && usernameRegex.test(username) && passwordRegex.test(password)
-        if(regexSuccess){
-            const data = {email, username, password};
-
-            if(Object.values(data).some(value => value.trim() === '')) {
-                console.error("Please fill in all required fields")
-            }
-
-            const response = await axiosAPI.post('/api/register', data)
-            if(response.status === 200) {
-                console.log("Successfully created user")
-                router.push('/')
-                setEmail('')
-                setUsername('')
-                setPassword('')
-
-            } else {
-                console.error("Could not create user")
-                return
-            }
-        } else {
-            console.error('Some characters not allowed in email, username or password')
-            return
+    const registerUser = async (e: React.FormEvent) => {
+        e.preventDefault();
+    
+        // Kontrollera om fälten är tomma
+        if (!email.trim() || !username.trim() || !password.trim()) {
+            console.error("Please fill in all required fields");
+            return;
         }
-    }
-        catch(error) {
-            console.error("Error recieving a valid response or connecting to db", error)
-        } 
-    }
+    
+        // Kontrollera regex
+        if (!emailRegex.test(email) || !usernameRegex.test(username) || !passwordRegex.test(password)) {
+            console.error("Some characters not allowed in email, username or password");
+            return;
+        }
+    
+        try {
+            const data = { email, username, password };
+            const response = await axiosAPI.post('/api/register', data);
+    
+            if (response.status === 200) {
+                console.log("Successfully created user");
+    
+                // Rensa fälten efter lyckad registrering
+                setEmail('');
+                setUsername('');
+                setPassword('');
+                
+                router.push('/');
+            } else {
+                console.error("Could not create user");
+            }
+        } catch (error: unknown) {
+            if (isAxiosError(error)) {
+                console.error("Axios Error:", error.response?.data?.message || "Unknown API Error");
+            } else if (error instanceof Error) {
+                console.error("Unexpected Error:", error.message);
+            } else {
+                console.error("Unknown error", error);
+            }
+        }
+    };
+    
 
   return (
     <div className='flex flex-col items-center'>
@@ -91,7 +106,7 @@ export default function Register() {
                 name='registerPassword'
                 required
                 placeholder='Enter Password'
-                minLength={5}
+                minLength={15}
                 autoComplete='off'
                 spellCheck={false}
                 value={password}

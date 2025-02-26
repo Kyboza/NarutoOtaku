@@ -30,6 +30,8 @@ interface IUser extends Document {
     followers: number,
     following: number,
     about: string,
+    lastLogin: Date,
+    isActive: boolean,
     posts: IPost[]
     comments: IComment[]
 }
@@ -47,10 +49,10 @@ const commentSchema = new Schema<IComment>({
 }, {timestamps: true})
 
 const userSchema = new Schema<IUser>({
-    email: {type: String, required: true },
-    username: {type: String, required: true },
-    password: {type: String, required: true},
-    refreshToken: {type: String, default: ''},
+    email: {type: String, required: true, unique: true },
+    username: {type: String, required: true, unique: true },
+    password: {type: String, required: true, select: false},
+    refreshToken: {type: String, default: '', select: false},
     gender: {type: String},
     weight: {type: Number},
     age: {type: Number},
@@ -58,6 +60,8 @@ const userSchema = new Schema<IUser>({
     followers: {type: Number, default: 0},
     following: {type: Number, default: 0},
     about: {type: String},
+    lastLogin: {type: Date, default: null},
+    isActive: {type: Boolean, default: false},
     posts: [postSchema],
     comments: [commentSchema]
 
