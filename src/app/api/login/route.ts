@@ -7,8 +7,10 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET as string;
-const ACCESS_SECRET = process.env.ACCESS_SECRET as string;
+const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
+const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
+
+if(!REFRESH_SECRET || ACCESS_SECRET ) throw new Error("One SECRET is not set in environment variables");
 
 export async function POST(req: NextRequest){
     const body = await req.json()
@@ -39,6 +41,7 @@ export async function POST(req: NextRequest){
         const refreshToken = jwt.sign(payload, REFRESH_SECRET, {expiresIn: '7d'});
 
         existingUser.refreshToken = refreshToken;
+        existingUser.isActive = true;
         await existingUser.save()
 
         const response = NextResponse.json({message: 'User Authenticated'}, {status: 200})
