@@ -7,16 +7,14 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-interface JwtPayload {
-    userId: string;
-}
-
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
-if(!REFRESH_SECRET) throw new Error("REFRESH_SECRET is not set in environment variables");
+if(!REFRESH_SECRET){
+    console.error('REFRESH_SECRET is not set in environment variables')
+    throw new Error("REFRESH_SECRET is not set in environment variables");
+} 
 
 export async function POST() {
     const storedCookie = cookies()
-    if(!storedCookie) return NextResponse.json({message: 'Could not find stored cookie'}, {status: 400})
 
     const refreshToken = (await storedCookie).get('refreshToken')?.value;
     if(!refreshToken) return NextResponse.json({message: 'No refreshtoken found or it has expired'}, {status: 400});
@@ -25,8 +23,8 @@ export async function POST() {
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
 
     try {
-        const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as JwtPayload;
-        if(!decoded || !decoded.userId) return NextResponse.json({ message: "Invalid refresh token" }, { status: 403 });
+        const decoded = jwt.verify(refreshToken, REFRESH_SECRET)
+        if(typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) return NextResponse.json({ message: "Invalid refresh token" }, { status: 401 });
 
         const user = await User.findById(decoded.userId).select('+refreshToken')
         if(!user) return NextResponse.json({message: 'User is not logged in or does not exist'}, {status: 400});
@@ -40,6 +38,13 @@ export async function POST() {
         const response = NextResponse.json({message: 'User logged out successfully'}, {status: 204})
 
         response.cookies.set('refreshToken', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            expires: new Date(0)
+        })
+
+        response.cookies.set('accessToken', '', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

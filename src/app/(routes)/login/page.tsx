@@ -1,12 +1,16 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
 import { useRouter } from 'next/navigation'
-import { AxiosError } from 'axios'
+import { fetchUserStatus } from '@/app/store/statusSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from '@/app/store/store';
+import { toggleStatus } from '@/app/store/statusSlice'
 
 export default function Login() {
+    const dispatch = useDispatch<AppDispatch>()
     const router = useRouter()
 
     const usernameRegex = /^[a-zA-Z0-9._%+-]{5,30}$/
@@ -15,9 +19,6 @@ export default function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    type ApiErrorResponse = {message: string};
-
-    const isAxiosError = (error: unknown): error is AxiosError<ApiErrorResponse> =>  typeof error === 'object' && error !== null && 'isAxiosError' in error;
 
     const loginUser = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,20 +40,31 @@ export default function Login() {
                 console.log("Successfully logged in");
                 setUsername('');
                 setPassword('');
+                
+                // 🔥 Sätter Redux state till inloggad
+                dispatch(toggleStatus(true)); 
+                
                 router.push('/');
             } else {
                 console.error("Login failed. Unexpected response status:", response.status);
             }
-        } catch (error: unknown) { // unknown är bättre än "any" för att tvinga typkontroll
-            if (isAxiosError(error)) {
-                console.error("Axios error:", error.response?.data?.message || "Unknown API Error");
-            } else if(error instanceof Error) {
-                console.error("An unknown error occurred", error.message);
-            } else {
-                console.error('An unknown error occured', error)
-            }
+        } catch (error) {
+            console.error('Could not log in user', error);
         }
     };
+    
+
+    const { active, loading, error } = useSelector((state: RootState) => state.status); // Läser Redux state
+
+    useEffect(() => {
+        if (!active) { // Endast hämta status om användaren inte redan är inloggad
+            dispatch(fetchUserStatus());
+        }
+    }, [dispatch, active]);
+
+    if (loading) return <p>Loading...</p>
+    if (error) return <p>No Character Found</p>
+
 
   return (
     <div className='flex flex-col items-center'>

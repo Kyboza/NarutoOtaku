@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import likesReducer from './likesSlice'
 import characterReducer from './characterSlice'
+import statusReducer from './statusSlice'
 
 
 const store = configureStore({
     reducer: {
         likes: likesReducer,
-        character: characterReducer
+        character: characterReducer,
+        status: statusReducer
     }
 })
 

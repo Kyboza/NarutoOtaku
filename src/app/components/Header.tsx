@@ -1,12 +1,46 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
+// import axiosAPI from "../lib/axios";
+// import { AxiosError } from "axios";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  // const [isOnline, setIsOnline] = useState(false)
+
+  // type ApiErrorResponse = {
+  //   message: string
+  // }
+
+  // const userOnlineCheck = useCallback(async () => {
+  //   const isAxiosError = (error: unknown):error is AxiosError<ApiErrorResponse> => typeof error === 'object' && error !== null && 'isAxiosError' in error
+  //   try {
+  //     const response = await axiosAPI.get('/api/status')
+  //     if(response.status === 200) {
+  //       console.log('true')
+  //       setIsOnline(true)
+  //     } else {
+  //       setIsOnline(false)
+  //       console.log('false')
+  //     }
+  //   }
+  //   catch(error: unknown) {
+  //     if(isAxiosError(error)){
+  //       console.error('Axios Error', error.response?.data?.message || 'Unkown axios error')
+  //     } else if(error instanceof Error){
+  //       console.error('Unkown error occured', error)
+  //     } else {
+  //       console.error('Unkown error occured', error)
+  //     }
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+  //   userOnlineCheck();
+  // }, [userOnlineCheck])
 
   return (
     <header className="relative top-0 z-10 h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-black border-opacity-25 drop-shadow-xl">
