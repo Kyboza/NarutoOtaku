@@ -10,7 +10,7 @@ dotenv.config()
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
 const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
 
-if(!REFRESH_SECRET || ACCESS_SECRET ) throw new Error("One SECRET is not set in environment variables");
+if(!REFRESH_SECRET || !ACCESS_SECRET ) throw new Error("One SECRET is not set in environment variables");
 
 export async function POST(req: NextRequest){
     const body = await req.json()

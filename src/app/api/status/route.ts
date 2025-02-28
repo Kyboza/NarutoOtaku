@@ -18,7 +18,7 @@ export async function GET(){
     const storedCookies = cookies()
 
     const refreshToken = (await storedCookies).get('refreshToken')?.value;
-    if(!refreshToken) return NextResponse.json({message:'Cookies does not contain refreshToken'}, {status: 401});
+    if(!refreshToken) return NextResponse.json({message:'Cookies does not contain refreshToken'});
 
     const connection = await connectToDatabase()
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
