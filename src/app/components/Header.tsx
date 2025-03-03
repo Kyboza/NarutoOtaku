@@ -1,22 +1,63 @@
 "use client";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchUserStatus } from "../store/statusSlice";
+import { fetchUserStatus, toggleStatus } from "../store/statusSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
+import axiosAPI from "../lib/axios";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter()
+  const listRef = useRef<HTMLUListElement>(null)
   const dispatch = useDispatch<AppDispatch>()
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const {active} = useSelector((state: RootState) => state.status)
 
+  const logoutUser = async(e: React.MouseEvent<HTMLLIElement>) => {
+    e.preventDefault()
+    console.log("Sending logout request...");
+    try {
+      const response = await axiosAPI.post('/api/logout')
+      console.log("Response:", response);
+      if(response.status === 200){
+        console.log('User Successfully logged out')
+        dispatch(toggleStatus(false))
+        router.push('/')
+      } else {
+        console.log('Could not logout user but sent request to api route')
+      }
+    } 
+    catch(error){
+      console.error('Could not logout user', error)
+    }
+  }
+
   useEffect(() => {
-    dispatch(fetchUserStatus())
-  }, [dispatch])
+    if(!active){
+      dispatch(fetchUserStatus())
+    }
+  }, [dispatch, active])
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if(isOpen && listRef.current && !listRef.current.contains(e.target as Node) || listRef.current?.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('click', handleOutsideClick);
+
+    return() => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [isOpen])
+
+  
 
   return (
     <header className="relative top-0 z-10 h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-black border-opacity-25 drop-shadow-xl">
@@ -59,13 +100,13 @@ export default function Header() {
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
         <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
-        <Link href="/login">
+        <Link href={active ? '/' : '/login'}>
           <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
         </Link>
         <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
       </div>
 
-          <ul className={`flex flex-col justify-evenly items-center bg-[#A5A5A5] bg-opacity-90 border border-black rounded-md rounded-tl-none rounded-tr-none absolute top-[100%] left-0 w-screen h-auto min-h[25vh] transition-all duration-800 ease-in-out  ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+          <ul ref={listRef} className={`flex flex-col justify-evenly items-center bg-[#A5A5A5] bg-opacity-90 border border-black rounded-md rounded-tl-none rounded-tr-none absolute top-[100%] left-0 w-screen h-auto min-h[25vh] transition-all duration-800 ease-in-out  ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
             <Link className="w-full border-b border-b-black" href='/forum'><li className="flex justify-center font-notojp text-white text-stroke leading-5 text-shadow-xl p-2 md:text-lg lg:text-xl">
               Forum
             </li></Link>
@@ -80,7 +121,7 @@ export default function Header() {
             <li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
               Profile
             </li>
-            <li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
+            <li onClick={(e) => logoutUser(e)} className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
               Logout
             </li>
             </>

@@ -31,7 +31,7 @@ export async function GET(){
         if(!userStatus) return NextResponse.json({message: 'User not found'}, {status: 401});
         
         const statusState = userStatus.isActive
-        if(!statusState) return NextResponse.json({message: 'User not logged in'}, {status: 401});
+        if(!statusState) return NextResponse.json({message: 'User not logged in'});
 
         return NextResponse.json({message: 'User is logged in', statusState}, {status: 200})
     } 

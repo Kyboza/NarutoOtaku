@@ -1,10 +1,9 @@
 "use client"
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
 import { useRouter } from 'next/navigation'
-import { fetchUserStatus } from '@/app/store/statusSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '@/app/store/store';
 import { toggleStatus } from '@/app/store/statusSlice'
@@ -41,10 +40,7 @@ export default function Login() {
                 setUsername('');
                 setPassword('');
                 
-                // 🔥 Sätter Redux state till inloggad
                 dispatch(toggleStatus(true)); 
-                
-                router.push('/');
             } else {
                 console.error("Login failed. Unexpected response status:", response.status);
             }
@@ -56,12 +52,7 @@ export default function Login() {
 
     const { active, loading, error } = useSelector((state: RootState) => state.status); // Läser Redux state
 
-    useEffect(() => {
-        if (!active) { // Endast hämta status om användaren inte redan är inloggad
-            dispatch(fetchUserStatus());
-        }
-    }, [dispatch, active]);
-
+    if (active){router.push('/')}
     if (loading) return <p>Loading...</p>
     if (error) return <p>No Character Found</p>
 

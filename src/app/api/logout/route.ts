@@ -11,7 +11,7 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
 if(!REFRESH_SECRET){
     console.error('REFRESH_SECRET is not set in environment variables')
     throw new Error("REFRESH_SECRET is not set in environment variables");
-} 
+}
 
 export async function POST() {
     const storedCookie = cookies()
@@ -35,7 +35,7 @@ export async function POST() {
         user.isActive = false;
         await user.save()
 
-        const response = NextResponse.json({message: 'User logged out successfully'}, {status: 204})
+        const response = NextResponse.json({message: 'User logged out successfully'}, {status: 200})
 
         response.cookies.set('refreshToken', '', {
             httpOnly: true,
