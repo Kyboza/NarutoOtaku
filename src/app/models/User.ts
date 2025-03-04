@@ -32,7 +32,10 @@ interface IUser extends Document {
     about: string,
     lastLogin: Date,
     isActive: boolean,
-    posts: IPost[]
+    resetCode: string,
+    resetCodeExpires: Date,
+    verifiedCode: boolean,
+    posts: IPost[],
     comments: IComment[]
 }
 
@@ -62,6 +65,9 @@ const userSchema = new Schema<IUser>({
     about: {type: String},
     lastLogin: {type: Date, default: null},
     isActive: {type: Boolean, default: false},
+    resetCode: {type: String, default: ''},
+    resetCodeExpires: {type: Date},
+    verifiedCode: {type: Boolean, default: false},
     posts: [postSchema],
     comments: [commentSchema]
 
