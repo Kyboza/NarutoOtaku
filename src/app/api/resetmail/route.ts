@@ -26,7 +26,7 @@ export async function POST(req: NextRequest){
         const hashedCode = await bcrypt.hash(veriCode, 10);
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-        const user = await User.findOne({$or: [{email: email}, {username: username}]});
+        const user = await User.findOne({$and: [{email: email}, {username: username}]});
         if(!user) return NextResponse.json({message: 'No user found in database with that email or username'}, {status: 400});
 
         user.resetCode = hashedCode;

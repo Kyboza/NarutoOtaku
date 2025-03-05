@@ -28,7 +28,7 @@ export async function GET(){
         if(typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) return NextResponse.json({message: 'Invalid refreshToken or no id connected to it'}, {status: 401});
 
         const userStatus = await User.findById(decoded.userId).select('isActive');
-        if(!userStatus) return NextResponse.json({message: 'User not found'}, {status: 401});
+        if(!userStatus) return NextResponse.json({message: 'User not found'});
         
         const statusState = userStatus.isActive
         if(!statusState) return NextResponse.json({message: 'User not logged in'});

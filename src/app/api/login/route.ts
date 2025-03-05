@@ -44,7 +44,7 @@ export async function POST(req: NextRequest){
         existingUser.isActive = true;
         await existingUser.save()
 
-        const response = NextResponse.json({message: 'User Authenticated'}, {status: 200})
+        const response = NextResponse.json({message: 'User Authenticated', userId: existingUser._id}, {status: 200})
 
         response.cookies.set('accessToken', accessToken, {
             httpOnly: true,

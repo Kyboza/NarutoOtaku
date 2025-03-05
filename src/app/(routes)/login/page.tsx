@@ -6,7 +6,7 @@ import axiosAPI from '@/app/lib/axios'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '@/app/store/store';
-import { toggleStatus } from '@/app/store/statusSlice'
+import { toggleStatus, getUserId } from '@/app/store/statusSlice'
 
 export default function Login() {
     const dispatch = useDispatch<AppDispatch>()
@@ -39,8 +39,9 @@ export default function Login() {
                 console.log("Successfully logged in");
                 setUsername('');
                 setPassword('');
-                
-                dispatch(toggleStatus(true)); 
+                const userId = response.data.userId
+                dispatch(toggleStatus(true));
+                dispatch(getUserId(userId))
             } else {
                 console.error("Login failed. Unexpected response status:", response.status);
             }

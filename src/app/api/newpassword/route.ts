@@ -4,9 +4,9 @@ import User from "@/app/models/User";
 import bcrypt from 'bcrypt';
 
 export async function POST(req: NextRequest) {
-    const { email, newPassword } = await req.json();
+    const { email, username, newPassword } = await req.json();
 
-    if (!email || !newPassword) {
+    if (!email || !username || !newPassword) {
         return NextResponse.json({ message: "Missing email or password" }, { status: 400 });
     }
 
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({$and: [{email: email}, {username: username}]});
         if (!user) {
             return NextResponse.json({ message: "No user found with that email" }, { status: 400 });
         }
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
         user.password = await bcrypt.hash(newPassword, 10);
         user.resetCode = "";
         user.verifiedCode = false;
+        user.resetCodeExpires = new Date(0)
         await user.save();
 
         return NextResponse.json({ message: "Successfully updated password" }, { status: 200 });

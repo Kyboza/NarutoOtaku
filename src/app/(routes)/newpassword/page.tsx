@@ -1,25 +1,27 @@
+"use client"
 import React from 'react'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 
 export default function NewPassword() {
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const email = searchParams.get('email') ?? '';
+  const username = searchParams.get('username') ?? ''
 
-  const [email, setEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/
   const passwordRegex = /^[a-zA-Z0-9._%+!-]{15,}$/
 
 
 
-  const updatePassword = async(e:React.FormEvent, email: string, newPassword: string, confirmNewPassword: string) => {
+  const updatePassword = async(e:React.FormEvent) => {
     e.preventDefault()
-    const isValidInput = emailRegex.test(email) && passwordRegex.test(newPassword) && newPassword === confirmNewPassword;
+    const isValidInput = passwordRegex.test(newPassword) && newPassword === confirmNewPassword;
 
     if (!isValidInput) {
         console.error('Check for invalid characters or make sure that both passwords are the same');
@@ -27,11 +29,10 @@ export default function NewPassword() {
     }
 
     try{
-        const data = {email, newPassword}
+        const data = {email, username, newPassword}
         const response = await axiosAPI.post('/api/newpassword', data);
         if(response.status === 200){
           console.log('Password has been updated for user')
-          setEmail('')
           setNewPassword('')
           setConfirmNewPassword('')
           router.push('/')
@@ -53,22 +54,7 @@ export default function NewPassword() {
   return (
     <div className='flex flex-col items-center'>
     <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl'>New Password</h1>
-    <form onSubmit={(e) => updatePassword(e, email, newPassword, confirmNewPassword)} className='flex flex-col items-center h-auto w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-4 mb-2'>
-        <label htmlFor="newPasswordEmail" className='sr-only'>New Password Email</label>
-        <input
-            className='border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl'
-            type="email"
-            id='newPasswordEmail'
-            name='newPasswordEmail'
-            required
-            placeholder='Enter Email'
-            minLength={10}
-            maxLength={30}
-            autoComplete='off'
-            spellCheck={false}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            />
+    <form onSubmit={(e) => updatePassword(e)} className='flex flex-col items-center h-auto w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-4 mb-2'>
         <label htmlFor="newPassword" className='sr-only'>New Password</label>
         <input
             className='border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl'

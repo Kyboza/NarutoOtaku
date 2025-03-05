@@ -4,15 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt'
 
 export async function POST(req: NextRequest){
-    const {code} = await req.json()
-    //Fel här och fixa även så att den inte kan skicka koden till fel mail kolla så mail och username matchar.
-    if(!code) return NextResponse.json({message: 'No code provided'}, {status: 400});
+    const {email, username, code} = await req.json()
+    if(!email || !username || !code) return NextResponse.json({message: 'No code, email or username is missing'}, {status: 400});
 
     const connection = await connectToDatabase()
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
 
     try {
-        const user = await User.findOne({resetCode: code});
+        const user = await User.findOne({$and: [{email: email}, {username: username}]});
         if(!user) return NextResponse.json({message: 'Could not find a user with that code'}, {status: 400})
         const dbCode = user.resetCode;
         

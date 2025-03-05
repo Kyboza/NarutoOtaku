@@ -3,10 +3,14 @@ import React, { FormEvent } from 'react'
 import { useState, useRef } from 'react'
 import axiosAPI from '@/app/lib/axios'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function Verification() {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const email = searchParams.get('email') ?? '';
+    const username = searchParams.get('username') ?? '';
+
     const inputsRef = useRef<(HTMLInputElement | null)[]>([])
     const [code, setCode] = useState('')
     const codeRegex = /^[a-z0-9]{4}$/
@@ -29,15 +33,16 @@ export default function Verification() {
         }
     }
 
-    const submitCode = async (e:FormEvent, code:string) => {
+    const submitCode = async (e:FormEvent) => {
         e.preventDefault()
         try{
             if(codeRegex.test(code)){
-                const response = await axiosAPI.post('/api/verifycode', code);
+                const data = {email, username, code}
+                const response = await axiosAPI.post('/api/verifycode', data);
                 if(response.status === 200){
                     setCode('')
                     console.log('Code is correct')
-                    router.push('/newpassword')
+                    router.push(`/newpassword?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`)
                 }
             } else{
                 console.log('Please provide 4 characters for the Code')
@@ -56,15 +61,15 @@ export default function Verification() {
   return (
     <div className='flex flex-col items-center'>
         <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl'>Verification Code</h1>
-        <form onSubmit={(e) => submitCode(e, code)} className='flex flex-col justify-between items-center h-auto min-h-[30vh] w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-6 mb-2'>
-        <div className='flex flex-row justify-around w-full max-h-14 flex-grow gap-12'>
+        <form onSubmit={(e) => submitCode(e)} className='flex flex-col justify-between items-center h-auto min-h-[20vh] max-w-[90vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-6 mb-2'>
+        <div className='flex flex-row justify-around w-full max-h-14 gap-12'>
             {[0, 1, 2, 3].map((_, index) => (
                 <div key={index} className="flex flex-col items-center">
                 <label htmlFor={`enterVerificationCode-${index}`} className='sr-only'>
                     Enter Verification Code
                 </label>
                 <input
-                    className='text-center border border-black outline-none w-[50%] rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl sm:p-3 text-shadow-xl text-stroke'
+                    className='text-center border border-black outline-none w-[90%] min-h-10 rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl sm:p-3 text-shadow-xl text-stroke'
                     type='text'
                     id={`enterVerificationCode-${index}`}
                     name='enterVerificationCode'

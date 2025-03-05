@@ -11,7 +11,6 @@ export default function Reset() {
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/
     const usernameRegex = /^[a-zA-Z0-9._%+-]{5,30}$/
-    // const passwordRegex = /^[a-zA-Z0-9._%+!-]{15,}$/
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('')
@@ -31,7 +30,7 @@ export default function Reset() {
                 setEmail('')
                 setUsername('')
                 console.log('Mail sent successfully')
-                router.push('/verification')
+                router.push(`/verification?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`)
             }
         } 
         catch(error){
@@ -79,30 +78,6 @@ export default function Reset() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 />
-            {/* <label htmlFor="resetNewPassword" className='sr-only'>Reset - Old Password</label>
-            <input
-                className='border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl'
-                type="password"
-                id='resetNewPassword'
-                name='resetNewPassword'
-                required
-                placeholder='Enter New Password'
-                minLength={15}
-                autoComplete='off'
-                spellCheck={false}
-                />
-            <label htmlFor="resetNewPasswordCheck" className='sr-only'>Reset - New Password</label>
-            <input
-                className='border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:font-notojp placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl'
-                type="password"
-                id='resetNewPasswordCheck'
-                name='resetNewPasswordCheck'
-                required
-                placeholder='New Password Again'
-                minLength={15}
-                autoComplete='off'
-                spellCheck={false}
-                /> */}
             <div className='flex flex-col items-center w-full gap-1'>
                 <Link href='/login'><p className='font-notojp text-white opacity-75 text-xs sm:text-sm text-shadow-xl'>Login</p></Link>
                 <Link href='/register'><p className='font-notojp text-white opacity-75 text-xs sm:text-sm text-shadow-xl'>Register</p></Link>

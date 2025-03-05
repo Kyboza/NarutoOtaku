@@ -4,7 +4,7 @@ import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchUserStatus, toggleStatus } from "../store/statusSlice";
+import { fetchUserStatus, toggleStatus} from "../store/statusSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import axiosAPI from "../lib/axios";
@@ -17,7 +17,8 @@ export default function Header() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const {active} = useSelector((state: RootState) => state.status)
+  const {active, userId} = useSelector((state: RootState) => state.status)
+
 
   const logoutUser = async(e: React.MouseEvent<HTMLLIElement>) => {
     e.preventDefault()
@@ -100,7 +101,7 @@ export default function Header() {
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
         <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
-        <Link href={active ? '/' : '/login'}>
+        <Link href={active ? `/users/${userId}` : '/login'}>
           <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
         </Link>
         <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />

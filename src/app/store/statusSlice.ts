@@ -7,12 +7,14 @@ type activeState = {
     active: boolean,
     loading: boolean,
     error: null | string;
+    userId: string
 }
 
 const initialState: activeState = {
     active: false,
     loading: false,
-    error: null
+    error: null,
+    userId: ''
 }
 
 export const fetchUserStatus = createAsyncThunk('status/fetchUserStatus', async (_, {rejectWithValue}) => {
@@ -46,6 +48,9 @@ const statusSlice = createSlice({
     reducers: {
         toggleStatus: (state, action:PayloadAction<boolean>) => {
             state.active = action.payload
+        },
+        getUserId: (state, action: PayloadAction<string>) => {
+            state.userId = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -66,5 +71,5 @@ const statusSlice = createSlice({
 
     }
 })
-export const {toggleStatus} = statusSlice.actions
+export const {toggleStatus, getUserId} = statusSlice.actions
 export default statusSlice.reducer
