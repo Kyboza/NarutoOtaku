@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
@@ -39,9 +39,10 @@ export default function Login() {
                 console.log("Successfully logged in");
                 setUsername('');
                 setPassword('');
-                const userId = response.data.userId
+                const userName = response.data.userName
                 dispatch(toggleStatus(true));
-                dispatch(getUserId(userId))
+                dispatch(getUserId(userName))
+                router.push('/')
             } else {
                 console.error("Login failed. Unexpected response status:", response.status);
             }
@@ -53,7 +54,12 @@ export default function Login() {
 
     const { active, loading, error } = useSelector((state: RootState) => state.status); // Läser Redux state
 
-    if (active){router.push('/')}
+    useEffect(() => {
+        if(active){
+            router.push('/')
+        }
+    }, [active, router])
+    
     if (loading) return <p>Loading...</p>
     if (error) return <p>No Character Found</p>
 

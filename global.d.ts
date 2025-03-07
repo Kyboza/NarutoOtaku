@@ -9,4 +9,6 @@ declare global {
     conn: mongoose.Connection | null;
     promise: Promise<mongoose.Connection> | null;
   } | undefined;
+
+  function handleError(err: unknown): void;
 }

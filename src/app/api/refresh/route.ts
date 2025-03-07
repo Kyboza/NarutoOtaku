@@ -33,7 +33,7 @@ export async function GET(){
             userId: user._id
         }
 
-        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5m'})
+        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5h'})
 
         const response = NextResponse.json({message: 'Successfully updated accessToken'}, {status: 200});
 
@@ -41,7 +41,7 @@ export async function GET(){
             httpOnly: true,
             sameSite: 'strict',
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 5 * 60
+            maxAge: 5 * 60 * 60
         })
 
         return response

@@ -17,7 +17,7 @@ export default function Header() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const {active, userId} = useSelector((state: RootState) => state.status)
+  const {active, userName} = useSelector((state: RootState) => state.status)
 
 
   const logoutUser = async(e: React.MouseEvent<HTMLLIElement>) => {
@@ -101,7 +101,7 @@ export default function Header() {
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
         <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
-        <Link href={active ? `/users/${userId}` : '/login'}>
+        <Link href={active ? `/users/${userName}` : '/login'}>
           <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
         </Link>
         <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
@@ -119,9 +119,12 @@ export default function Header() {
             </li></Link>
             {active &&
             <>
-            <li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
-              Profile
-            </li>
+            <Link className="w-full border-b border-b-black" href={`/users/${userName}`}><li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl p-2 md:text-lg lg:text-xl">
+              My Profile
+            </li></Link> 
+            <Link className="w-full border-b border-b-black" href='/edit'><li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl p-2 md:text-lg lg:text-xl">
+              Edit Profile
+            </li></Link>
             <li onClick={(e) => logoutUser(e)} className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
               Logout
             </li>

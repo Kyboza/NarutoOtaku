@@ -17,19 +17,20 @@ interface IComment extends Document {
     updatedAt?: Date
 }
 
-interface IUser extends Document {
+export interface IUser extends Document {
     _id: ObjectId,
     email: string,
     username: string,
     password: string,
     refreshToken: string,
     gender: string,
-    weight: number,
-    age: number,
+    weight: string,
+    age: string,
     style: string,
     followers: number,
     following: number,
     about: string,
+    // image: string,
     lastLogin: Date,
     isActive: boolean,
     resetCode: string,
@@ -57,8 +58,8 @@ const userSchema = new Schema<IUser>({
     password: {type: String, required: true, select: false},
     refreshToken: {type: String, default: '', select: false},
     gender: {type: String},
-    weight: {type: Number},
-    age: {type: Number},
+    weight: {type: String},
+    age: {type: String},
     style: {type: String},
     followers: {type: Number, default: 0},
     following: {type: Number, default: 0},

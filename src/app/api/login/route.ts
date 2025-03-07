@@ -36,7 +36,7 @@ export async function POST(req: NextRequest){
             userId: existingUser._id
         }
 
-        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5m'});
+        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5h'});
 
         const refreshToken = jwt.sign(payload, REFRESH_SECRET, {expiresIn: '7d'});
 
@@ -44,13 +44,13 @@ export async function POST(req: NextRequest){
         existingUser.isActive = true;
         await existingUser.save()
 
-        const response = NextResponse.json({message: 'User Authenticated', userId: existingUser._id}, {status: 200})
+        const response = NextResponse.json({message: 'User Authenticated', userName: existingUser.username}, {status: 200})
 
         response.cookies.set('accessToken', accessToken, {
             httpOnly: true,
             sameSite: "strict",
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 5 * 60
+            maxAge: 5 * 60 * 60
         });
 
         response.cookies.set('refreshToken', refreshToken, {
