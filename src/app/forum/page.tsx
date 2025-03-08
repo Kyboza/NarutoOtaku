@@ -1,42 +1,24 @@
-"use client"
 import React from 'react';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import axiosAPI from '../lib/axios';
+import { fetchFrontForum } from '../actions/userActions';
 
-export default function Forum() {
+interface IForum {
+  _id: string
+  title: string,
+  content: string,
+  amount: number,
+  active: number,
+  perday: number,
+  latest: string,
+}
 
-  interface IForum {
-      _id: string
-      title: string,
-      content: string,
-      amount: number,
-      active: number,
-      perday: number,
-      latest: string,
-  }
-
-  const [forumData, setForumData] = useState<IForum[]>([])
-
-  useEffect(() => {
-    const fetchForum = async() => {
-      try{
-        const response = await axiosAPI.get('api/forum');
-        if(response.status === 200){
-          const data = response.data
-          console.log("Fetched Data")
-          setForumData(data)
-        }
-        else {
-          console.log("Problem fetching data from Forum API")
-        }
-      } catch(error){
-        console.error("Failed to fetch forums sections", error)
-      }
-    }
-    fetchForum()
-  }, [])
-
+export default async function Forum() {
+  const forumData: IForum[] | undefined = await fetchFrontForum()
+  if(!forumData) {
+    return <p>Loading..</p>
+   } else if(forumData.length === 0){
+    return <p>No Forum Categories Found</p>
+   }
 
   return (
     <div className='flex flex-col items-center h-full'>

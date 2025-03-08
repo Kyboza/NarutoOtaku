@@ -1,44 +1,29 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import axiosAPI from '../lib/axios';
+import { fetchCharacters } from '../actions/userActions';
 
- interface ICharacter {
-  _id: string,
-  name: string,
-  description: string,
-  image: string,
-  gender: string,
-  likes: number,
-  age: number,
-  weight: number,
-  style: string,
+interface ICharacter {
+  _id: string;
+  name: string;
+  description: string;
+  image: string;
+  gender: string;
+  age: number;
+  likes: number;
+  weight: number;
+  style: string;
   content: string;
 }
 
-export default function CharactersPage() {
-  const [characters, setCharacters] = useState<ICharacter[]>([]);
 
-  // Fetch characters from API
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await axiosAPI.get('/api/characters');
-        if (response.status === 200) {
-          console.log('Fetched characters:', response.data);
-          setCharacters(response.data);
-        } else {
-          console.error("Error fetching data", response.status, response.statusText);
-        }
-      } catch (error) {
-        console.error("Failed to fetch characters:", error);
-      }
-    };
-  
-    fetchCharacters();
-  }, []);
-  
+export default async function CharactersPage() {
+ const characters: ICharacter[] | undefined = await fetchCharacters()
+ if(!characters) {
+  return <p>Loading..</p>
+ } else if(characters.length === 0){
+  return <p>No Characters Found</p>
+ }
 
   return (
     <div className='flex flex-col items-center mb-4'>

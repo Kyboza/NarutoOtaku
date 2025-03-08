@@ -1,49 +1,24 @@
-"use client"
 import React from 'react'
-import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
-//import Link from 'next/link'
 import Image from 'next/image'
-import axiosAPI from '@/app/lib/axios'
+import { fetchSpecificPost } from '@/app/actions/userActions'
 
-export default function Post() {
-  const params = useParams()
-  const postId = params?.postId
-
-  interface IPost {
-    _id: string
-    title: string,
-    content: string,
-    by: string,
-    posted: string,
-    replies: number,
-    latest: string,
-    categoryId: string
+interface IPost {
+  _id: string
+  title: string,
+  content: string,
+  by: string,
+  posted: string,
+  replies: number,
+  latest: string,
+  categoryId: string
 }
 
-const [post, setPost] = useState<IPost | null>(null)
-
-useEffect(() => {
-  const fetchPost = async() => {
-    try {
-    const response = await axiosAPI.get(`/api/forum/${postId}/${postId}`)
-    if(response.status === 200){
-      const data = response.data
-      console.log("Fetched Post")
-      setPost(data)
-    } else {
-      console.log("Could not fetch post", response.status, response.statusText)
-    }
-  } catch(error) {
-    console.error("Could not get the specific post", error)
+export default async function Post({params}: {params: {postId: string}}) {
+  const {postId} = await params
+  const post: IPost | undefined = await fetchSpecificPost(postId)
+  if (!post) {
+    return <p>No Post data found.</p>;
   }
-}
-  fetchPost()
-}, [postId])
-
-if (!post) {
-  return <p>No character data found.</p>;
-}
 
 return (
   <div className='flex flex-col items-center justify-top h-screen overflow-y-scroll scrollbar-hide'>

@@ -1,23 +1,28 @@
-"use client"
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import axiosAPI from '@/app/lib/axios';
+import { fetchSpecificForum } from '@/app/actions/userActions';
 
-export default function SpecificForum() {
+interface IForumSpecific {
+  _id: string
+  pagetitle: string,
+  title: string,
+  content: string,
+  by: string,
+  createdAt: Date
+  replies: number,
+  updatedAt: Date,
+  categoryId: string
+}
 
-  interface IForumSpecific {
-      _id: string
-      pagetitle: string,
-      title: string,
-      content: string,
-      by: string,
-      createdAt: Date
-      replies: number,
-      updatedAt: Date,
-      categoryId: string
-  }
+export default async function SpecificForum({params}: {params: {categoryId: string}}) {
+    const {categoryId} = await params
+    const specificForumData: IForumSpecific[] | undefined = await fetchSpecificForum(categoryId)
+    if(!specificForumData){
+      return <p>Loading...</p>
+    } else if(specificForumData.length === 0) {
+      return <p>No Specific Forums Exist</p>
+    }
+
 
   const formatDate = (date: Date) => {
     const formattedDate = new Date(date).toLocaleDateString(navigator.language, {
@@ -30,33 +35,7 @@ export default function SpecificForum() {
     return formattedDate;
   }
 
-  const [specificForumData, setSpecificForumData] = useState<IForumSpecific[]>([])
-  const params = useParams();
-  const categoryId = params?.categoryId
 
-
-  useEffect(() => {
-    if(!categoryId) return;
-    const fetchSpecificForum = async() => {
-      try{
-      const response = await axiosAPI.get(`/api/forum/${categoryId}`);
-      if(response.status === 200){
-        const data = response.data
-        console.log("Fetched Data", data)
-        console.log(data.posted)
-        setSpecificForumData(data)
-      } else {
-        console.log("Problem fetching data from Forum API", response.status, response.statusText)
-      }
-      }
-      catch(error){
-        console.error("Could not fetch specific forum section", error)
-      }
-    }
-    fetchSpecificForum()
-  }, [categoryId])
-
-  if(!specificForumData) return <div>Loading...</div>
 
 
   return (

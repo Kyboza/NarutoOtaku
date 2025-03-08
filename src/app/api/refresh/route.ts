@@ -35,16 +35,7 @@ export async function GET(){
 
         const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5h'})
 
-        const response = NextResponse.json({message: 'Successfully updated accessToken'}, {status: 200});
-
-        response.cookies.set('accessToken', accessToken, {
-            httpOnly: true,
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 5 * 60 * 60
-        })
-
-        return response
+        return NextResponse.json({message: 'Successfully updated accessToken', accessToken}, {status: 200});
 
 
     } catch(error){

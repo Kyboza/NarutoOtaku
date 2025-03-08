@@ -16,7 +16,7 @@ const specificForumSchema = new Schema<ISpecificForum>({
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'forum', required: true},
 }, {timestamps: true})
 
-const SpecificForum = mongoose.models.Specificforum || mongoose.model<ISpecificForum>("specificforum", specificForumSchema, "specificforum")
+const SpecificForum = mongoose.models.specificforum || mongoose.model<ISpecificForum>("specificforum", specificForumSchema, "specificforum")
 
 
 export default SpecificForum;

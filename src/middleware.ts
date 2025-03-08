@@ -1,7 +1,6 @@
-import axiosAPI from './app/lib/axios'
+
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import axios from "axios";
 
 export async function middleware(req: NextRequest){
     const storedCookies = cookies();
@@ -14,21 +13,28 @@ export async function middleware(req: NextRequest){
 
     if(!accessToken && refreshToken){
         try{
-            const response = await axiosAPI.get('/api/refresh');
-            if(response.status === 200){
-                console.log('Got new access token')
-                return NextResponse.next()
+            const response = await fetch('http://localhost:3000/api/refresh', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if(response.ok){
+                const data = await response.json()
+                const newAccessToken = data.accessToken
+                if(newAccessToken){
+                    const res = NextResponse.next()
+                    res.headers.set(
+                        "Set-Cookie",
+                        `accessToken=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${5 * 60 * 60}`
+                    )
+                    
+                    return response
+                }
             } else {
                 console.log('Could not get a new accessToken from our api')
             }
         } catch(error: unknown){
-            if(axios.isAxiosError(error)){
-                console.log(error.response?.data?.message || 'Unkown Axios Error')
-            } else if(error instanceof Error){
-                console.log('Unkown Error of type Error', error)
-            } else {
-                console.log('Unknown Error and type')
-            }
+            console.log('Error getting a new accessToken occured', error)
             return NextResponse.redirect(new URL('/', req.url));
         }
     }
@@ -36,5 +42,5 @@ export async function middleware(req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/createpost', '/users/:id*', '/edit']
+    matcher: ['/createpost', '/edit']
 }

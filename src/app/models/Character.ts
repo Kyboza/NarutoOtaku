@@ -1,8 +1,8 @@
-import mongoose, { Schema, Document, ObjectId } from 'mongoose';
+import mongoose, { Schema, Document} from 'mongoose';
 
 // Interface for TypeScript to help with typing (optional but recommended)
-interface ICharacter extends Document {
-  _id: ObjectId,
+export interface ICharacter extends Document {
+  _id: string,
   name: string,
   description: string,
   image: string,
