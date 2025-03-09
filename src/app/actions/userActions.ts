@@ -2,12 +2,15 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import fs from 'fs/promises';
+import path from 'path'
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import { cookies } from "next/headers";
 import Character from '../models/Character';
 import Forum from '../models/Forum';
 import SpecificForum from '../models/SpecificForum';
+
 
 dotenv.config();
 
@@ -52,9 +55,9 @@ export async function getUserFromToken() {
 
 
 //Edit
-export async function updateUserInfo(updatedData: {gender: string; fighting: string; age: string; weight: string; about: string}) {
+export async function updateUserInfo(updatedData: {gender: string; fighting: string; age: string; weight: string; about: string, imageFile: File, imagePath: string}) {
     if(!updatedData) throw new Error('Did not recieve all information needed to update')
-    const {gender, fighting, age, weight, about} = updatedData
+    const {gender, fighting, age, weight, about, imageFile, imagePath} = updatedData;
 
     const storedCookies = cookies()
 
@@ -78,10 +81,17 @@ export async function updateUserInfo(updatedData: {gender: string; fighting: str
     try {
         const user = await User.findById(decoded.userId)
         if(!user) throw new Error('Could not find user in database');
+
+        const uploadDir = path.join(process.cwd(), 'public/images/profilepic');
+        const filePath = path.join(uploadDir, imageFile.name);
+        const fileBuffer = await imageFile.arrayBuffer()
+        await fs.writeFile(filePath, Buffer.from(fileBuffer))
+
+        user.imgPath = imagePath;
         user.gender = gender;
         user.style = fighting;
         user.weight = weight;
-        user.age = age
+        user.age = age;
         user.about = about;
         await user.save()
         const data = user.username
@@ -120,6 +130,20 @@ export async function fetchFrontForum(){
     try{
         const forum = await Forum.find()
         if(!forum || forum.length === 0) throw new Error('No forum sections found in database');
+         await Promise.all(forum.map(async (forumSection) => {
+            // Hitta alla specifika forum som har categoryId som matchar forumSection._id
+            const specificForumPosts = await SpecificForum.find({ categoryId: forumSection._id });
+
+            // Räkna antalet specifika inlägg (posts) för forumSection
+            const postCount = specificForumPosts.length;
+
+            // Lägg till postCount till forumSection
+            forumSection.amount = postCount;
+
+            // Spara tillbaka den uppdaterade forumsektionen (valfritt, beroende på behov)
+            await forumSection.save();
+        }));
+
         return forum;
     } catch(error){
         handleError(error)

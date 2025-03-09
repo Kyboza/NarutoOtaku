@@ -125,7 +125,7 @@ export default function Header() {
             <Link className="w-full border-b border-b-black" href='/edit'><li className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl p-2 md:text-lg lg:text-xl">
               Edit Profile
             </li></Link>
-            <li onClick={(e) => logoutUser(e)} className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl">
+            <li onClick={(e) => logoutUser(e)} className="flex justify-center w-full font-notojp text-white text-stroke leading-5 text-shadow-xl border-b border-b-black p-2 md:text-lg lg:text-xl cursor-pointer">
               Logout
             </li>
             </>

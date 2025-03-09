@@ -42,9 +42,6 @@ export default async function Forum() {
                   Posts: {forum.amount}
                 </p>
                 <p className=' font-notojp text-white text-stroke text-shadow-xl text-xxs md:text-md lg:text-lg sm:text-xs'>
-                  Active Users: {forum.active}
-                </p>
-                <p className=' font-notojp text-white text-stroke text-shadow-xl text-xxs md:text-md lg:text-lg sm:text-xs'>
                   Posts/Day: {forum.perday}
                 </p>
                 <p className=' font-notojp text-white text-stroke text-shadow-xl text-xxs md:text-md lg:text-lg sm:text-xs'>

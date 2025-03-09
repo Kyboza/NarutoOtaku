@@ -1,5 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { ObjectId } from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 interface IPost extends Document {
     postId: number,
@@ -30,7 +29,7 @@ export interface IUser extends Document {
     followers: number,
     following: number,
     about: string,
-    // image: string,
+    imgPath: string,
     lastLogin: Date,
     isActive: boolean,
     resetCode: string,
@@ -64,6 +63,7 @@ const userSchema = new Schema<IUser>({
     followers: {type: Number, default: 0},
     following: {type: Number, default: 0},
     about: {type: String},
+    imgPath: {type: String, default: null},
     lastLogin: {type: Date, default: null},
     isActive: {type: Boolean, default: false},
     resetCode: {type: String, default: ''},
@@ -71,8 +71,7 @@ const userSchema = new Schema<IUser>({
     verifiedCode: {type: Boolean, default: false},
     posts: [postSchema],
     comments: [commentSchema]
-
-})
+}, {versionKey: false})
 
 const User = mongoose.models.Users || mongoose.model<IUser>("Users", userSchema, "users")
 

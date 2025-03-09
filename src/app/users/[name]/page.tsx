@@ -28,7 +28,7 @@ export default async function UserPage({params}: {params: {name: string}}) {
         <div className="w-full md:w-1/3 flex justify-center items-center p-4">
           <div className="relative w-40 h-40 border rounded-md border-black">
             <Image
-              src="/images/profilepic/Obito.webp"
+              src={user.imgPath}
               alt="Profile Picture"
               className="object-cover rounded-md"
               fill
@@ -68,7 +68,7 @@ export default async function UserPage({params}: {params: {name: string}}) {
       {/* About Me Section */}
       <section className="w-full max-w-[90vw] p-4 bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md mt-4 mb-6 max-h-[40vh] overflow-y-auto scrollbar-hide">
         <h2 className="text-2xl md:text-3xl font-notojp text-white drop-shadow mb-2 text-stroke">About Me</h2>
-        <p className="text-sm md:text-base text-white font-notojp whitespace-pre-line">
+        <p className="text-sm md:text-base text-white font-notojp break-words">
           {user.about ? user.about : 'No Content Yet'}
         </p>
       </section>
