@@ -20,6 +20,17 @@ export default async function Forum() {
     return <p>No Forum Categories Found</p>
    }
 
+  const formatDate = (date: Date) => {
+    const formattedDate = new Date(date).toLocaleString(navigator.language,{
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    })
+    return formattedDate
+  }
+
   return (
     <div className='flex flex-col items-center h-full'>
       <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">Forum</h1>
@@ -45,7 +56,7 @@ export default async function Forum() {
                   Posts/Day: {forum.perday}
                 </p>
                 <p className=' font-notojp text-white text-stroke text-shadow-xl text-xxs md:text-md lg:text-lg sm:text-xs'>
-                  Latest Post: {forum.latest}
+                  Latest Post: {formatDate(new Date(forum.latest))}
                 </p>
               </div>
             </li>

@@ -132,14 +132,33 @@ export async function fetchFrontForum(){
         if(!forum || forum.length === 0) throw new Error('No forum sections found in database');
          await Promise.all(forum.map(async (forumSection) => {
             // Hitta alla specifika forum som har categoryId som matchar forumSection._id
-            const specificForumPosts = await SpecificForum.find({ categoryId: forumSection._id });
+            const specificForumPosts = await SpecificForum.find({$and: [
+                { categoryId: forumSection._id },
+                { createdAt: {$exists: true}}
+            ]});
 
             // Räkna antalet specifika inlägg (posts) för forumSection
             const postCount = specificForumPosts.length;
 
-            // Lägg till postCount till forumSection
-            forumSection.amount = postCount;
+            //Skapar datum som visas upp senaste postens datum
+            const createdAtArray = specificForumPosts.map(post => post.createdAt).filter(date => date !== undefined)
+            const latestPost = createdAtArray.sort((a, b) => b.createdAt - a.createdAt)[0]
 
+            //Räknar antalet posts inom 24 timmar
+            const todaysDate = new Date()
+            const postsToday = createdAtArray.filter(postDate => {
+                const postDateObj = new Date(postDate);
+                const timeDiff = Number(todaysDate) - Number(postDateObj);
+                const hourDiff = timeDiff / (1000 * 60 * 60)
+                return hourDiff <= 24
+            })
+            const postCountIn24 = postsToday.length
+
+
+            // Lägg till postCount och latestPost till forumSection
+            forumSection.amount = postCount;
+            forumSection.latest = latestPost;
+            forumSection.perday = postCountIn24
             // Spara tillbaka den uppdaterade forumsektionen (valfritt, beroende på behov)
             await forumSection.save();
         }));
@@ -175,6 +194,62 @@ export async function fetchSpecificPost(postId: string){
         const actualPost = await SpecificForum.findById(postId);
         if(!actualPost) throw new Error('Post with that id not found');
         return actualPost;
+    } catch(error){
+        handleError(error)
+    }
+}
+
+
+export async function postReply(postId: string, replyContent: string ){
+    if(!postId || !mongoose.Types.ObjectId.isValid(postId) || !replyContent) throw new Error('Missing id, reply or id is invalid');
+
+
+
+    const storedCookies = cookies()
+
+    const accessToken = (await storedCookies).get('accessToken')?.value;
+    if(!accessToken) throw new Error('No accessToken active');
+
+    let decoded;
+    try{
+        decoded = jwt.verify(accessToken, ACCESS_SECRET)
+    } catch(error){
+        handleError(error)
+    }
+
+    if(typeof decoded !== 'object' || decoded === null || !('userId' in decoded)){
+        throw new Error('Invalid accessToken or no id connected to it');
+    }
+
+    const connection = await connectToDatabase()
+    if(!connection.success) throw new Error(connection.message);
+
+    try {
+        const postItself = await SpecificForum.findById(postId)
+        if(!postItself) throw new Error('Could not find post with that id');
+
+        const forumForPost = await Forum.findById(postItself.categoryId)
+        if(!forumForPost) throw new Error('Could not forum section for that post');
+
+        const user = await User.findById(decoded.userId)
+        if(!user) throw new Error('Could not find user with that id');
+
+        postItself.comments.push({
+            commentUsername: replyContent,
+            commentContent: user.username
+        })
+
+        postItself.repliesAmount += 1;
+
+        user.comments.push({
+            commentOnPost: postId,
+            userId: user._id,
+            content: replyContent
+        })
+
+        await postItself.save()
+        await user.save()
+
     } catch(error){
         handleError(error)
     }

@@ -1,19 +1,15 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 interface IPost extends Document {
-    postId: number,
+    postId: string,
     title: string,
     content: string
-    createdAt?: Date
-    updatedAt?: Date
 }
 
 interface IComment extends Document {
-    commentId: number,
+    commentId: ObjectId
     userId: ObjectId,
     content: string,
-    createdAt?: Date
-    updatedAt?: Date
 }
 
 export interface IUser extends Document {
@@ -40,15 +36,15 @@ export interface IUser extends Document {
 }
 
 const postSchema = new Schema<IPost>({
-    postId: {type: Number, required: true},
+    postId: {type: String, required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
 }, {timestamps: true})
 
 const commentSchema = new Schema<IComment>({
-    commentId: {type: Number, required: true},
+    commentId: {type: mongoose.Schema.Types.ObjectId, ref: 'Comment', required: true},
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    content: {type: String, required: true},
+    content: {type: String},
 }, {timestamps: true})
 
 const userSchema = new Schema<IUser>({

@@ -15,9 +15,9 @@ const forumSchema = new Schema<IForum> ({
     title: {type: String, required: true},
     content: {type: String, required: true},
     amount: {type: Number, required: true},
-    active: {type: Number, required: true},
-    perday: {type: Number, required: true},
-    latest: {type: String, required: true},
+    active: {type: Number},
+    perday: {type: Number},
+    latest: {type: String},
 }, {id: true})
 
 const Forum = mongoose.models.Forum || mongoose.model<IForum>("Forum", forumSchema, "forum")

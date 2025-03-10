@@ -114,7 +114,7 @@ export default function CreatePost() {
                 required
                 autoComplete='off'
                 minLength={2}
-                maxLength={25}
+                maxLength={30}
                 aria-required="true"
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
@@ -122,7 +122,6 @@ export default function CreatePost() {
                 <label htmlFor='postContent' className='sr-only'>Post Content</label>
                 <textarea
                     className='w-[90%] xl:min-h-[40vh] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl resize-none text-white text-stroke text-shadow-lg'
-                    typeof='text'
                     name="postContent" 
                     id="postContent"
                     placeholder='Enter Post Content'

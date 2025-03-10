@@ -25,9 +25,8 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
 
 
   const formatDate = (date: Date) => {
-    const formattedDate = new Date(date).toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month: 'long',
+    const formattedDate = new Date(date).toLocaleString(navigator.language, {
+      month: 'numeric',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -44,10 +43,10 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
         Forum
       </h1>
   
-      <section className='flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md h-[60vh] landscape-lg:h-[80vh] landscape-xl:h-[75vh] w-[95vw] md:w-[80vw] mb-6 overflow-y-auto scrollbar-hide'>
+      <section className='flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md h-[60vh] landscape-lg:h-[80vh] landscape-xl:h-[80vh] w-[95vw] md:w-[80vw] mb-6 overflow-y-auto scrollbar-hide'>
         <ul id='forumPosts' className='h-full w-full'>
           {specificForumData.map((forum) => (
-            <li key={forum._id} className='border-b border-black h-[15vh] sm:h-[20vh] md:h-[10vh] lg:h-[13.3333vh] xl:h-[12.5vh] last:border-b-0 w-full'>
+            <li key={forum._id} className='border-b border-black h-[20vh] md:h-[10vh] lg:h-[13.3333vh] xl:h-[13.33vh] last:border-b-0 w-full'>
   
               <Link href={`/forum/${forum._id}/${forum._id}`}>
                 <div className='flex flex-col justify-start h-[50%] w-full p-2'>
