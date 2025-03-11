@@ -4,15 +4,26 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path'
+import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import { cookies } from "next/headers";
 import Character from '../models/Character';
 import Forum from '../models/Forum';
 import SpecificForum from '../models/SpecificForum';
+import Comment from '../models/Comment';
+import { handleError } from '../utils/errorHandler';
+import { ObjectId } from 'mongoose';
 
 
 dotenv.config();
+
+interface IReply {
+    _id: string; // Konverterat till en sträng
+    commentContent: string;
+    commentUsername: string;
+    commentImg: string;
+}
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? ''
@@ -200,56 +211,45 @@ export async function fetchSpecificPost(postId: string){
 }
 
 
-export async function postReply(postId: string, replyContent: string ){
-    if(!postId || !mongoose.Types.ObjectId.isValid(postId) || !replyContent) throw new Error('Missing id, reply or id is invalid');
-
-
-
-    const storedCookies = cookies()
-
-    const accessToken = (await storedCookies).get('accessToken')?.value;
-    if(!accessToken) throw new Error('No accessToken active');
-
-    let decoded;
-    try{
-        decoded = jwt.verify(accessToken, ACCESS_SECRET)
-    } catch(error){
-        handleError(error)
-    }
-
-    if(typeof decoded !== 'object' || decoded === null || !('userId' in decoded)){
-        throw new Error('Invalid accessToken or no id connected to it');
-    }
-
+export async function loadReplies(postId: string) {
     const connection = await connectToDatabase()
     if(!connection.success) throw new Error(connection.message);
 
+    try{
+        const postItself = await SpecificForum.findById(postId);
+        if (!postItself) throw new Error('Could not find post in database');
+        const replies = await Comment.find({postId: postItself._id}).populate({
+            path: 'userId',
+            select: 'username imgPath'
+          }).lean()
+
+        if(replies.length === 0) throw new Error('No replies found for this post');
+
+        const filteredReplies = replies.filter(reply => reply.userId && reply.userId.username && reply.userId.imgPath);
+        
+        if (filteredReplies.length === 0) {
+            throw new Error('Replies without valid user data');
+        }
+
+        const formattedReplies: IReply[] = replies.map((reply) => ({
+            _id: (reply._id as ObjectId).toString(),
+            commentContent: reply.commentContent,
+            commentUsername: reply.userId.username,
+            commentImg: reply.userId.imgPath || '/path/to/default/image.jpg', // Använd ett standardbild om ingen finns
+          }));
+
+        return formattedReplies
+    } catch(error){
+        handleError(error)
+    }
+}
+
+
+export async function revalidateReply(postId: string) {
+    if(!postId || !mongoose.Types.ObjectId.isValid(postId)) throw new Error('Missing id or id is invalid');
     try {
-        const postItself = await SpecificForum.findById(postId)
-        if(!postItself) throw new Error('Could not find post with that id');
-
-        const forumForPost = await Forum.findById(postItself.categoryId)
-        if(!forumForPost) throw new Error('Could not forum section for that post');
-
-        const user = await User.findById(decoded.userId)
-        if(!user) throw new Error('Could not find user with that id');
-
-        postItself.comments.push({
-            commentUsername: replyContent,
-            commentContent: user.username
-        })
-
-        postItself.repliesAmount += 1;
-
-        user.comments.push({
-            commentOnPost: postId,
-            userId: user._id,
-            content: replyContent
-        })
-
-        await postItself.save()
-        await user.save()
-
+        await revalidatePath(`/forum/${postId}/${postId}`)
+        console.log('Successfully revalidatiod path')
     } catch(error){
         handleError(error)
     }

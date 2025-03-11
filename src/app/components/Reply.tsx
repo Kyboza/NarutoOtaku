@@ -3,13 +3,14 @@ import React, { useEffect } from 'react'
 import { useState, useRef} from 'react'
 import Image from 'next/image'
 import axiosAPI from '../lib/axios'
-import { revalidatePath } from 'next/cache'
+// import { revalidateReply } from '../actions/userActions'
+import { loadReplies } from '../actions/userActions'
 
-interface IComment{
+interface IComment {
+    _id: string
+    commentContent:  string,
     commentUsername: string,
-    commentContent: string,
-    commentId: string,
-    commentImg: string,
+    commentImg: string
 }
 
 const Reply = ({postId}: {postId: string}) => {
@@ -32,8 +33,7 @@ const Reply = ({postId}: {postId: string}) => {
             const response = await axiosAPI.post("/api/forum/reply", data);
     
             if (response.status === 200) {
-                setComment(response.data.commentInfo)
-                revalidatePath(`/forum/${postId}/${postId}`);
+                // await revalidateReply(postId)
                 setReplyActive(false);
                 setReplyContent(""); // Rensa input-fältet efter lyckad postning
             } else {
@@ -45,22 +45,34 @@ const Reply = ({postId}: {postId: string}) => {
     };
 
     useEffect(() => {
-        const refHandler = (e: MouseEvent) => {
-            if(replyActive && ref.current && !ref.current.contains(e.target as Node)){
-                setReplyActive(false)
-            }
+      const loadRepliesFromAction = async () => {
+        try {
+          const replies = await loadReplies(postId); // Hämta svar från backend
+          if(replies) setComment(replies); // Sätt dem i state
+        } catch (error) {
+          console.error("Failed to load replies:", error);
         }
-        document.addEventListener('click', refHandler);
-
-        return() => {
-            document.removeEventListener('click', refHandler)
+      };
+  
+      loadRepliesFromAction();
+  
+      // Event handler för att stänga reply fönster
+      const refHandler = (e: MouseEvent) => {
+        if (replyActive && ref.current && !ref.current.contains(e.target as Node)) {
+          setReplyActive(false);
         }
-    }, [replyActive])
+      };
+      document.addEventListener("click", refHandler);
+  
+      return () => {
+        document.removeEventListener("click", refHandler);
+      };
+    }, [replyActive, postId]);
 
   return (
     <>
     <div className='flex flex-col items-center justify-top h-auto overflow-y-scroll scrollbar-hide relative'>
-      <h2 className="mb-4 mt-4 text-xl sm:text-2xl md:text-5xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
+          <h2 className="mb-4 mt-4 text-xl sm:text-2xl md:text-5xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
             Replies
           </h2>
           <article className="w-[80vw] h-auto flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mt-4 mb-4">
@@ -69,9 +81,9 @@ const Reply = ({postId}: {postId: string}) => {
                 Create a Reply
               </button>
             </div>
-            {/* Profil & Namn */}
-            {comment !== null && comment.map(comment => (
-            <div key={comment.commentId}>
+            
+            {comment ? comment !== null && comment.map(comment => (
+            <div key={comment._id}>
             <div className="h-auto w-full flex flex-row items-center">
                 <div className="relative w-[8vh] h-[8vh] aspect-square border border-[#505050] rounded-full overflow-hidden ml-2">
                   <Image className="object-cover" src={comment.commentImg} alt="Profile picture" fill />
@@ -88,7 +100,15 @@ const Reply = ({postId}: {postId: string}) => {
                 </p>
               </div>
             </div>
-            ))}
+            )): (
+              <div className='flex flex-row justify-center'>
+              <h2 className="mb-4 mt-4 ml-4 text-xl sm:text-xl md:text-4xl lg:text-4xl font-rock text-white text-stroke text-shadow-xl">
+                No Reply Yet
+              </h2>
+              </div>
+            )}
+          
+          
           </article>
           </div>
       

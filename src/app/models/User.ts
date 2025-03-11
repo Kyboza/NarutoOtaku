@@ -1,15 +1,9 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 interface IPost extends Document {
-    postId: string,
+    postId: ObjectId,
     title: string,
     content: string
-}
-
-interface IComment extends Document {
-    commentId: ObjectId
-    userId: ObjectId,
-    content: string,
 }
 
 export interface IUser extends Document {
@@ -32,19 +26,13 @@ export interface IUser extends Document {
     resetCodeExpires: Date,
     verifiedCode: boolean,
     posts: IPost[],
-    comments: IComment[]
+    comments: { commentId: ObjectId, userId: ObjectId, content: string }[];
 }
 
 const postSchema = new Schema<IPost>({
-    postId: {type: String, required: true},
+    postId: {type: mongoose.Schema.Types.ObjectId, required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
-}, {timestamps: true})
-
-const commentSchema = new Schema<IComment>({
-    commentId: {type: mongoose.Schema.Types.ObjectId, ref: 'Comment', required: true},
-    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    content: {type: String},
 }, {timestamps: true})
 
 const userSchema = new Schema<IUser>({
@@ -66,7 +54,7 @@ const userSchema = new Schema<IUser>({
     resetCodeExpires: {type: Date},
     verifiedCode: {type: Boolean, default: false},
     posts: [postSchema],
-    comments: [commentSchema]
+    comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, content: String }],
 }, {versionKey: false})
 
 const User = mongoose.models.Users || mongoose.model<IUser>("Users", userSchema, "users")

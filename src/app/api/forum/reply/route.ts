@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import Forum from "@/app/models/Forum";
 import SpecificForum from "@/app/models/SpecificForum";
+import Comment from "@/app/models/Comment";
 import User from "@/app/models/User";
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET!;
@@ -60,30 +61,29 @@ export async function POST(req: NextRequest) {
         postItself.comments = [];
     }
 
-    console.log(user._id)
-
-    postItself.comments.push({
-      commentUsername: user.username,
+    const newComment = new Comment({
       commentContent: replyContent,
-      commentId: user._id,
-      commentImg: user.imgPath
-    });
+      userId: user._id,
+      postId: postItself._id
+    })
 
+    await newComment.save()
+
+    postItself.comments.push(newComment._id)
     postItself.repliesAmount += 1;
+    await postItself.save();
+
 
     // Lägg till kommentaren i användarens kommentarer
     user.comments.push({
-    commentId: new mongoose.Types.ObjectId(),
+      commentId: newComment._id,
       userId: user._id,
       content: replyContent,
     });
 
-    const commentInfo = postItself.comments
-
-    await postItself.save();
     await user.save();
 
-    return NextResponse.json({ message: "Reply submitted successfully", commentInfo}, {status: 200});
+    return NextResponse.json({ message: "Reply submitted successfully"}, {status: 200});
   } catch (error) {
     console.error("Error submitting reply:", error);
     return NextResponse.json({ error: "Could not submit reply" }, { status: 500 });

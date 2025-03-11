@@ -9,7 +9,7 @@ interface IForumSpecific {
   content: string,
   by: string,
   createdAt: Date
-  replies: number,
+  repliesAmount: number,
   updatedAt: Date,
   categoryId: string
 }
@@ -67,7 +67,7 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
                   Posted: {formatDate(forum.createdAt)}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
-                  Replies: {forum.replies}
+                  Replies: {forum.repliesAmount}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
                   Latest Reply: {forum.updatedAt ? formatDate(forum.updatedAt) : ''}
