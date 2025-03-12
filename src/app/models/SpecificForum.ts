@@ -3,9 +3,9 @@ import mongoose, {Document, ObjectId, Schema} from "mongoose";
 interface ISpecificForum extends Document {
     title: string,
     content: string,
-    by: string,
     repliesAmount: number,
-    comments: ObjectId[]
+    comments: ObjectId[],
+    userId: ObjectId,
     categoryId: ObjectId
 }
 
@@ -13,9 +13,9 @@ interface ISpecificForum extends Document {
 const specificForumSchema = new Schema<ISpecificForum>({
     title: {type: String, required: true},
     content: {type: String, required: true},
-    by: {type: String, required: true},
     repliesAmount: {type: Number, default: 0},
-    comments: [{type: mongoose.Schema.Types.ObjectId, ref:'Comment', required: true}],
+    comments: [{type: mongoose.Schema.Types.ObjectId, ref:'Comment'}],
+    userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Forum', required: true},
 }, {timestamps: true})
 

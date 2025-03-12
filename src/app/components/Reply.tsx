@@ -2,9 +2,9 @@
 import React, { useEffect } from 'react'
 import { useState, useRef} from 'react'
 import Image from 'next/image'
-import axiosAPI from '../lib/axios'
-// import { revalidateReply } from '../actions/userActions'
-import { loadReplies } from '../actions/userActions'
+import { loadReplies, submitReply } from '../actions/userActions'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
 
 interface IComment {
     _id: string
@@ -15,6 +15,7 @@ interface IComment {
 
 const Reply = ({postId}: {postId: string}) => {
     const ref = useRef<HTMLFormElement>(null);
+    const {active} = useSelector((state: RootState) => state.status)
     const [comment, setComment] = useState<IComment[]| null>(null)
     const [replyContent, setReplyContent] = useState<string>('')
     const [replyActive, setReplyActive] = useState<boolean>(false)
@@ -28,21 +29,14 @@ const Reply = ({postId}: {postId: string}) => {
             if (!replyRegex.test(replyContent)) {
                 throw new Error("Reply content does not match required format.");
             }
-    
-            const data = { postId, replyContent };
-            const response = await axiosAPI.post("/api/forum/reply", data);
-    
-            if (response.status === 200) {
-                // await revalidateReply(postId)
+                await submitReply(postId, replyContent);
                 setReplyActive(false);
-                setReplyContent(""); // Rensa input-fältet efter lyckad postning
-            } else {
-                console.error("Failed to post comment:", response);
-            }
-        } catch (error) {
-            console.error("Failed to post comment:", error);
+                setReplyContent("");
+            } 
+            catch (error) {
+              console.error("Failed to post comment:", error);
+          }
         }
-    };
 
     useEffect(() => {
       const loadRepliesFromAction = async () => {
@@ -77,9 +71,16 @@ const Reply = ({postId}: {postId: string}) => {
           </h2>
           <article className="w-[80vw] h-auto flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mt-4 mb-4">
             <div className='h-auto w-full flex flex-row items-start border-b border-black'>
-              <button onClick={() => {setReplyActive(true)}} className='text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-1/8 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>
-                Create a Reply
-              </button>
+              {active ? (
+                <button onClick={() => {setReplyActive(true)}} className='text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-1/8 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>
+                  Create a Reply
+                </button>
+              ): (
+                <p className="mx-4 my-4 text-base sm:text-xl md:text-2xl lg:text-2xl font-rock text-white text-stroke-title text-shadow-xl">
+                  Login to create a reply
+                </p>
+              )}
+              
             </div>
             
             {comment ? comment !== null && comment.map(comment => (

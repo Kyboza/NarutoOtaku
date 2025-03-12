@@ -8,6 +8,7 @@ interface IForum extends Document {
     active: number,
     perday: number,
     latest: string
+    posts: ObjectId[]
 }
 
 
@@ -18,6 +19,7 @@ const forumSchema = new Schema<IForum> ({
     active: {type: Number},
     perday: {type: Number},
     latest: {type: String},
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'specificforum', required: true}],
 })
 
 const Forum = mongoose.models.Forum || mongoose.model<IForum>("Forum", forumSchema, "forum")

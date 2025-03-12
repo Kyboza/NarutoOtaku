@@ -1,12 +1,13 @@
 'use client'
 import React from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { updateUserInfo } from '@/app/actions/userActions'
 import { useRouter } from 'next/navigation'
 
 export default function EditSettings() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement| null>(null)
   const ageRegex = /^\d{1,3}$/
   const weightRegex = /^\d{1,3}$/
   const aboutRegex = /^[a-zA-Z0-9!-_.\s]{40,400}$/
@@ -31,6 +32,11 @@ export default function EditSettings() {
       } else {
         console.log('Problem uploading image')
       }
+    }
+
+    const triggerFileInput = () => {
+      if(fileInputRef && fileInputRef.current !== null)
+      fileInputRef.current.click()
     }
 
     const submitInfo = async (e: React.FormEvent) => {
@@ -161,17 +167,20 @@ export default function EditSettings() {
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 />
-                 <section className="w-[95%] flex relative items-start">
-                  <label htmlFor="profileImage" className="text-sm sm:text-base md:text-lg lg:text-xl text-white text-stroke text-shadow-lg p-1">Upload Profile .webp Image</label>
+                 <section className="w-[95%] flex flex-row relative justify-between items-center">
+                  <label htmlFor="profileImage" className='sr-only'>Upload Profile Picture</label>
                   <input
+                    ref={fileInputRef}
                     type="file"
                     id="profileImage"
                     name="profileImage"
                     accept="image/webp"
                     required
                     onChange={handleFileChange}
-                    className="border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl"
+                    className="hidden border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl"
                   />
+                  <button onClick={triggerFileInput} className='p-2 w-[40%] sm:w-[30%] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-xxs sm:text-sm md:text-base text-stroke text-shadow-xl transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Image</button>
+                  <p className='text-white text-sm sm:text-base md:text-lg p-2 sm:p-3 text-shadow-xl'>{imagePath ? imagePath : ''}</p>
                  </section>
 
             <div className='flex flex-row justify-end h-auto w-full'>

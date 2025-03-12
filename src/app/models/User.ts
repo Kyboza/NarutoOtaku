@@ -1,11 +1,5 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
-interface IPost extends Document {
-    postId: ObjectId,
-    title: string,
-    content: string
-}
-
 export interface IUser extends Document {
     _id: ObjectId,
     email: string,
@@ -25,15 +19,9 @@ export interface IUser extends Document {
     resetCode: string,
     resetCodeExpires: Date,
     verifiedCode: boolean,
-    posts: IPost[],
-    comments: { commentId: ObjectId, userId: ObjectId, content: string }[];
+    posts: {postId: ObjectId, userId: ObjectId, content: string}[],
+    comments: { commentId: ObjectId, content: string }[];
 }
-
-const postSchema = new Schema<IPost>({
-    postId: {type: mongoose.Schema.Types.ObjectId, required: true},
-    title: {type: String, required: true},
-    content: {type: String, required: true},
-}, {timestamps: true})
 
 const userSchema = new Schema<IUser>({
     email: {type: String, required: true, unique: true },
@@ -53,10 +41,10 @@ const userSchema = new Schema<IUser>({
     resetCode: {type: String, default: ''},
     resetCodeExpires: {type: Date},
     verifiedCode: {type: Boolean, default: false},
-    posts: [postSchema],
-    comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, content: String }],
+    posts: [{postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}, content: {type: String}}],
+    comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, content: {type: String}}],
 }, {versionKey: false})
 
-const User = mongoose.models.Users || mongoose.model<IUser>("Users", userSchema, "users")
+const User = mongoose.models.Users || mongoose.model<IUser>("User", userSchema, "users")
 
 export default User;

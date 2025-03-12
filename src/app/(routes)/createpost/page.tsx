@@ -52,7 +52,6 @@ export default function CreatePost() {
 
   const postHandler = async(e: React.FormEvent) => {
     e.preventDefault()
-    console.log('test')
     const data = {categoryId, postTitle, postContent}
     try{
       if(Object.values(data).some(value => value.trim() === '')){
@@ -114,7 +113,7 @@ export default function CreatePost() {
                 required
                 autoComplete='off'
                 minLength={2}
-                maxLength={30}
+                maxLength={35}
                 aria-required="true"
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
@@ -128,7 +127,7 @@ export default function CreatePost() {
                     required
                     autoComplete='off'
                     minLength={10}
-                    maxLength={300}
+                    maxLength={400}
                     aria-label='Post Content'
                     aria-required="true"
                     rows={10}

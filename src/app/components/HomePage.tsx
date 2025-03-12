@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center">
       {/* Hero Section */}
-      <section className="relative w-screen h-[25vh] border border-black bg-[url('/images/favchar/BackgroundChar.webp')] bg-cover bg-top flex justify-center items-end">
+      <section className="relative w-screen h-[25vh] border border-black bg-[url('/images/favchar/First.webp')] bg-cover bg-top flex justify-center items-end">
         <div className='absolute w-full h-[25vh] inset-0 flex justify-evenly items-center'>
           {/* Character Image */}
           <div className='relative w-[20vw] h-[20vw] sm:w-[10vw] sm:h-[10vw] md:w-[10vw] md:h-[10vw] border rounded-full overflow-hidden'>

@@ -202,7 +202,11 @@ export async function fetchSpecificPost(postId: string){
     if(!connection.success) throw new Error(connection.message);
 
     try {
-        const actualPost = await SpecificForum.findById(postId);
+        const actualPost = await SpecificForum.findById(postId)
+        .populate({
+            path: 'userId',
+            select: 'username imgPath'
+        });
         if(!actualPost) throw new Error('Post with that id not found');
         return actualPost;
     } catch(error){
@@ -243,6 +247,51 @@ export async function loadReplies(postId: string) {
         handleError(error)
     }
 }
+
+export async function submitReply(postId: string, replyContent: string) {
+    try {
+      if (!postId || !mongoose.Types.ObjectId.isValid(postId) || !replyContent) {
+        throw new Error("Missing ID, reply, or invalid ID");
+      }
+  
+      const storedCookies = cookies();
+      const accessToken = (await storedCookies).get("accessToken")?.value;
+      if (!accessToken) throw new Error("No accessToken active");
+  
+      const decoded = jwt.verify(accessToken, ACCESS_SECRET);
+      if (typeof decoded !== "object" || !decoded.userId) {
+        throw new Error("Invalid accessToken");
+      }
+  
+      await connectToDatabase();
+      const postItself = await SpecificForum.findById(postId);
+      if (!postItself) throw new Error("Post not found");
+  
+      const user = await User.findById(decoded.userId);
+      if (!user) throw new Error("User not found");
+  
+      const newComment = new Comment({
+        commentContent: replyContent,
+        userId: user._id,
+        postId: postItself._id,
+      });
+  
+      await newComment.save();
+      postItself.comments.push(newComment._id);
+      postItself.repliesAmount += 1;
+      await postItself.save();
+  
+      user.comments.push({
+        commentId: newComment._id,
+        content: replyContent,
+      });
+      await user.save();
+  
+    console.log('Reply created successfully');
+    } catch (error) {
+      handleError(error)
+    }
+  }
 
 
 export async function revalidateReply(postId: string) {

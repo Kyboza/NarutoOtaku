@@ -25,7 +25,7 @@ const characterSchema = new Schema<ICharacter>({
   weight: {type: Number, required: true},
   style: {type: String, required: true},
   content: {type: String,  required: true}
-}, {_id: true});
+});
 
 // Add an instance method to increment likes
 characterSchema.methods.incrementLikes = function() {

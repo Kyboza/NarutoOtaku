@@ -61,7 +61,7 @@ export default function Header() {
   
 
   return (
-    <header className="relative top-0 z-10 h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-black border-opacity-25 drop-shadow-xl">
+    <header className="w-full relative top-0 z-10 h-[10vh] flex justify-between items-center bg-[#D48900] border-b border-black border-opacity-25 drop-shadow-xl">
       {/* Hamburger Button */}
       <button
         className="relative flex items-center justify-center h-[4vh] sm:h-[6vh] lg:h-[7.5vh] w-[20vw] ml-1 cursor-pointer z-20"
