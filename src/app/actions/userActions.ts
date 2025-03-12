@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path'
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import { cookies } from "next/headers";
@@ -294,13 +294,13 @@ export async function submitReply(postId: string, replyContent: string) {
   }
 
 
-export async function revalidateReply(postId: string) {
-    if(!postId || !mongoose.Types.ObjectId.isValid(postId)) throw new Error('Missing id or id is invalid');
-    try {
-        await revalidatePath(`/forum/${postId}/${postId}`)
-        console.log('Successfully revalidatiod path')
-    } catch(error){
-        handleError(error)
-    }
-}
+// export async function revalidateReply(postId: string) {
+//     if(!postId || !mongoose.Types.ObjectId.isValid(postId)) throw new Error('Missing id or id is invalid');
+//     try {
+//         await revalidatePath(`/forum/${postId}/${postId}`)
+//         console.log('Successfully revalidatiod path')
+//     } catch(error){
+//         handleError(error)
+//     }
+// }
 

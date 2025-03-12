@@ -2,7 +2,6 @@ import mongoose, { Schema, Document} from 'mongoose';
 
 // Interface for TypeScript to help with typing (optional but recommended)
 export interface ICharacter extends Document {
-  _id: string,
   name: string,
   description: string,
   image: string,
@@ -16,15 +15,15 @@ export interface ICharacter extends Document {
 
 // Define the schema for characters
 const characterSchema = new Schema<ICharacter>({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  image: { type: String, required: true },
+  name: { type: String},
+  description: { type: String},
+  image: { type: String},
   likes: { type: Number, default: 0 },
-  gender: {type: String, required: true},
-  age: {type: Number, required: true},
-  weight: {type: Number, required: true},
-  style: {type: String, required: true},
-  content: {type: String,  required: true}
+  gender: {type: String},
+  age: {type: Number},
+  weight: {type: Number},
+  style: {type: String},
+  content: {type: String}
 });
 
 // Add an instance method to increment likes
@@ -40,5 +39,5 @@ characterSchema.methods.decrementLikes = function() {
 
 // Create a model from the schema
 const Character = mongoose.models.Character || mongoose.model<ICharacter>('Character', characterSchema, 'characters');
-
+// export type CharacterType = InferSchemaType<typeof characterSchema>;
 export default Character;
