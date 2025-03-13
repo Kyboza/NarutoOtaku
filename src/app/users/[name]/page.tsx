@@ -28,9 +28,9 @@ export default async function UserPage({params}: {params: {name: string}}) {
         <div className="w-full md:w-1/3 flex justify-center items-center p-4">
           <div className="relative w-40 h-40 border rounded-md border-black">
             <Image
-              src={user.imgPath}
+              src={user.imgPath ? user.imgPath : '/images/profilepic/default.webp'}
               alt="Profile Picture"
-              className="object-cover rounded-md"
+              className={`rounded-md ${user.imgPath ? 'object-cover' : 'object-contain'}`}
               fill
             />
           </div>
@@ -42,7 +42,7 @@ export default async function UserPage({params}: {params: {name: string}}) {
           </h1>
           <div className="flex flex-col gap-1">
             <p className="text-sm md:text-base text-white font-notojp"> {'Gender: '}
-                <span className='font-bold text-stroke'>{user.gender ? user.gender : 'Gender: ?'}</span>
+                <span className='font-bold text-stroke'>{user.gender ? user.gender: '?'}</span>
             </p>
             <p className="text-sm md:text-base text-white font-notojp">{'Age: '}
                 <span className="font-bold text-stroke">{user.age ? user.age + ' Years Old' : '?'}</span>

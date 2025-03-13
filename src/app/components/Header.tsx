@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import axiosAPI from "../lib/axios";
 import { useRouter } from "next/navigation";
+import TopRevalidation from "../hooks/TopRevalidation";
 
 export default function Header() {
   const router = useRouter()
@@ -47,7 +48,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if(isOpen && listRef.current && !listRef.current.contains(e.target as Node) || listRef.current?.contains(e.target as Node)) {
+      if(isOpen && listRef.current && !listRef.current.contains(e.target as Node) || listRef.current?.contains(e.target as Node)){
         setIsOpen(false)
       }
     }
@@ -58,6 +59,7 @@ export default function Header() {
     }
   }, [isOpen])
 
+  TopRevalidation()
   
 
   return (

@@ -42,9 +42,9 @@ const userSchema = new Schema<IUser>({
     resetCodeExpires: {type: Date},
     verifiedCode: {type: Boolean, default: false},
     posts: [{postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}, content: {type: String}}],
-    comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, content: {type: String}}],
+    comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }, content: {type: String}}],
 }, {versionKey: false})
 
-const User = mongoose.models.Users || mongoose.model<IUser>("User", userSchema, "users")
+const User = mongoose.models.Users || mongoose.model<IUser>("Users", userSchema, "users")
 
 export default User;

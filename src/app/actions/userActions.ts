@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path'
-// import { revalidatePath } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import { cookies } from "next/headers";
@@ -12,8 +12,11 @@ import Character from '../models/Character';
 import Forum from '../models/Forum';
 import SpecificForum from '../models/SpecificForum';
 import Comment from '../models/Comment';
+import Item from '../models/Item';
 import { handleError } from '../utils/errorHandler';
 import { ObjectId } from 'mongoose';
+import { ITopCharacters } from '../../../types';
+import { IItem } from '../../../types';
 
 
 dotenv.config();
@@ -263,7 +266,9 @@ export async function submitReply(postId: string, replyContent: string) {
         throw new Error("Invalid accessToken");
       }
   
-      await connectToDatabase();
+      const connection = await connectToDatabase();
+      if(!connection.success) throw new Error('Could not connect to database')
+
       const postItself = await SpecificForum.findById(postId);
       if (!postItself) throw new Error("Post not found");
   
@@ -294,13 +299,62 @@ export async function submitReply(postId: string, replyContent: string) {
   }
 
 
-// export async function revalidateReply(postId: string) {
-//     if(!postId || !mongoose.Types.ObjectId.isValid(postId)) throw new Error('Missing id or id is invalid');
-//     try {
-//         await revalidatePath(`/forum/${postId}/${postId}`)
-//         console.log('Successfully revalidatiod path')
-//     } catch(error){
-//         handleError(error)
-//     }
-// }
+  export async function favorite(){
+    try{
+        const connection = await connectToDatabase();
+        if(!connection.success) throw new Error('Could not connect to database');
 
+        const topCharacters = await Character.find({}, 'name image _id likes').sort({likes: -1}).limit(3);
+        if(!Array.isArray(topCharacters) || topCharacters.length === 0) throw new Error('Could not get characters from Database');
+        const returnObj: ITopCharacters[] = topCharacters.map(character => ({
+            name: character.name,
+            likes: character.likes,
+            image: character.image,
+            _id: (character._id as ObjectId).toString()
+        }))
+        return returnObj
+        
+    } catch(error){
+        handleError(error)
+        return null
+    }
+  }
+
+
+export async function revalidateTop() {
+    try {
+        revalidatePath(`/`)
+        console.log('Successfully revalidated top characters')
+    } catch(error){
+        handleError(error)
+    }
+}
+
+
+
+
+
+
+//Shop Related
+export async function loadShopItems(){
+    try {
+        const connection = await connectToDatabase();
+        if(!connection.success) throw new Error('Could not connect to database');
+
+        const items = await Item.find();
+        if(!Array.isArray(items) || items.length === 0) throw new Error('Could not get shop items from Database');
+
+        const returnObject: IItem[] = items.map((item) => ({
+            _id: (item._id as ObjectId).toString(),
+            name: item.name,
+            image: item.image,
+            price: item.price,
+            bgimage: item.bgimage,
+            cart: item.cart
+        }))
+        return returnObject
+
+    } catch(error){
+        handleError(error)
+    }
+}
