@@ -6,7 +6,8 @@ interface IItem extends Document {
     image: string,
     price: number
     bgimage: string
-    cart: number
+    amount: number
+    storage: number
 }
 
 const itemSchema = new Schema({
@@ -14,7 +15,8 @@ const itemSchema = new Schema({
     image: {type: String},
     price: {type: Number},
     bgimage: {type: String},
-    cart: {type: Number, default: 0}
+    amount: {type: Number, default: 0},
+    storage: {type: Number, default: 80}
 })
 
 const Item = mongoose.models.Item || mongoose.model<IItem>('Item', itemSchema, 'items')

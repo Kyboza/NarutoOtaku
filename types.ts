@@ -11,7 +11,8 @@ export interface IItem  {
       image: string,
       price: number,
       bgimage: string,
-      cart: number
+      amount: number,
+      storage: number
 }
 
 // export interface PassItem {

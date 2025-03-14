@@ -19,6 +19,8 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const {active, userName} = useSelector((state: RootState) => state.status)
+  const items = useSelector((state: RootState) => state.cart.items)
+  const itemsLength = items.filter(item => item.amount > 0).reduce((acc, curr) => acc + curr.amount, 0)
 
 
   const logoutUser = async(e: React.MouseEvent<HTMLLIElement>) => {
@@ -102,7 +104,10 @@ export default function Header() {
 
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
-        <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
+        <div className="relative">
+          <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
+          <div className={`${itemsLength? 'flex' : 'hidden'} absolute bottom-0 left-0 max-h-4 max-w-4 sm:max-h-5 sm:max-w-5 text-white text-xxs rounded-full bg-[#D72C2C] justify-center items-center p-0.5 sm:p-2 border border-white`}>{itemsLength}</div>
+        </div>
         <Link href={active ? `/users/${userName}` : '/login'}>
           <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
         </Link>

@@ -22,6 +22,7 @@ export default async function Shop() {
              className="w-full h-full object-cover"
              width={1300}
              height={1300}
+            //  priority={item.image === '/images/storeitems/GaaraFunko.webp' ? true : false} Kan vara bakgrunden och inte funko vänta på error igen
            />
            <div
             className="bg-cover bg-center cursor-pointer absolute inset-0 rounded-tl-md opacity-0 transition-opacity duration-300 hover:opacity-100"

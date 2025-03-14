@@ -350,7 +350,8 @@ export async function loadShopItems(){
             image: item.image,
             price: item.price,
             bgimage: item.bgimage,
-            cart: item.cart
+            amount: item.amount,
+            storage: item.storage
         }))
         return returnObject
 
@@ -358,3 +359,20 @@ export async function loadShopItems(){
         handleError(error)
     }
 }
+
+
+// export async function addOneCart(_id: string){
+//     try{
+//         if(!_id) throw new Error('Did not recieve an ID');
+//         const item = await Item.findOne({_id: _id});
+//         if(!item) throw new Error('Could not find item with that ID in database');
+//         if(item.amount <= 7){
+//             item.amount += 1
+//         } else {
+//             throw new Error('You can only have 8 of this item in your cart')
+//         }
+//         item.save()
+//     } catch(error){
+//         handleError(error)
+//     }
+// }
