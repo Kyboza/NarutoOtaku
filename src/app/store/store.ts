@@ -7,7 +7,6 @@ import characterReducer from './characterSlice';
 import statusReducer from './statusSlice';
 import cartReducer from './cartSlice';
 
-
 const persistConfig = {
   key: 'root',
   storage,

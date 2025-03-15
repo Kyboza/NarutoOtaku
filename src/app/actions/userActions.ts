@@ -16,7 +16,7 @@ import Item from '../models/Item';
 import { handleError } from '../utils/errorHandler';
 import { ObjectId } from 'mongoose';
 import { ITopCharacters } from '../../../types';
-import { IItem } from '../../../types';
+import { IItemCart } from '../../../types';
 
 
 dotenv.config();
@@ -321,18 +321,15 @@ export async function submitReply(postId: string, replyContent: string) {
   }
 
 
-export async function revalidateTop() {
+export async function revalidate(value: string){
     try {
-        revalidatePath(`/`)
-        console.log('Successfully revalidated top characters')
+        if(!value) throw new Error('Did not recieve info on what path to revalidate')
+        revalidatePath(value)
+        console.log('Successfully revalidated path')
     } catch(error){
         handleError(error)
     }
 }
-
-
-
-
 
 
 //Shop Related
@@ -344,7 +341,7 @@ export async function loadShopItems(){
         const items = await Item.find();
         if(!Array.isArray(items) || items.length === 0) throw new Error('Could not get shop items from Database');
 
-        const returnObject: IItem[] = items.map((item) => ({
+        const returnObject: IItemCart[] = items.map((item) => ({
             _id: (item._id as ObjectId).toString(),
             name: item.name,
             image: item.image,

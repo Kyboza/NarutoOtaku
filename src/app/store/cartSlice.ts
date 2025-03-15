@@ -1,25 +1,20 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface ICartItem {
-    _id: string,
-    name: string,
-    price: number,
-    amount: number
-}
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { IItemCart } from "../../../types";
 
 interface IStoreCart {
-    items: ICartItem[]
+    items: IItemCart[]
 }
 
 const initialState: IStoreCart = {
     items: []
 }
 
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addItem: (state, action: PayloadAction<ICartItem>) => {
+        addItem: (state, action: PayloadAction<IItemCart>) => {
             const existingItem = state.items.find(item => item._id === action.payload._id);
             if(existingItem){
                 if(existingItem.amount <= 7){
@@ -28,11 +23,19 @@ const cartSlice = createSlice({
                     console.log('Max 8 of this item')
                 }
             } else {
-                state.items.push({...action.payload, amount: 1})
+                state.items.push({...action.payload, amount: 1});
             }
         },
         removeItem: (state, action:PayloadAction<string>) => {
-            state.items = state.items.filter(item => item.name !== action.payload)
+            const existingItem = state.items.find(item => item._id === action.payload)
+            if(existingItem){
+                if(existingItem.amount > 1){
+                    existingItem.amount -=1
+                } else {
+                    state.items = state.items.filter(item => item._id !== action.payload);
+                }
+            }
+            
         },
         clearCart: (state) => {
             state.items = []

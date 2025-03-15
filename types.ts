@@ -5,7 +5,7 @@ export interface ITopCharacters {
     image: string,
   }
 
-export interface IItem  {
+export interface IItemCart  {
       _id: string,
       name: string,
       image: string,

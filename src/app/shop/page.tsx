@@ -1,11 +1,11 @@
 import Image from "next/image";
 import CartButton from "../components/CartButton";
 import { loadShopItems } from "../actions/userActions";
-import { IItem } from "../../../types";
+import { IItemCart } from "../../../types";
 
 
 export default async function Shop() {
-  const items: IItem[] = (await loadShopItems()) || []
+  const items: IItemCart[] = (await loadShopItems()) || []
   if(!items || items.length === 0) return <p>Could not get Items from Database</p>
 
   return (

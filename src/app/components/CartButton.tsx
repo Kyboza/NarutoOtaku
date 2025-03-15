@@ -2,20 +2,21 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store/store'
-import { IItem } from '../../../types'
+import { IItemCart } from '../../../types'
 import { addItem } from '../store/cartSlice'
-// import { addOneCart } from '../actions/userActions'
+import { revalidate } from '../actions/userActions'
 
 
-export default function CartButton({item}: {item: IItem}) {
+export default function CartButton({item}: {item: IItemCart}) {
     const dispatch = useDispatch<AppDispatch>()
-    const {_id, name, price, amount } = item;
+    // const {_id, name, image, price, amount } = item;
+    const path = "/cart"
 
     const updateCart = async () => {
         try {
-          dispatch(addItem({_id, name, price, amount}))
-          // await addOneCart(_id)
+          dispatch(addItem(item))
           console.log('succesfully added to cart')
+          revalidate(path)
         } catch(error){
             handleError(error)
         }
