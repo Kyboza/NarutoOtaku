@@ -1,26 +1,34 @@
 "use client";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
 import { clearCart, addItem, removeItem } from "@/app/store/cartSlice";
 import { IItemCart } from "../../../../types";
-import { persistor } from "@/app/store/store";
+import { useRouter } from "next/navigation";
+// import { persistor } from "@/app/store/store";
 
 export default function Cart() {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>();
   const items: IItemCart[] = useSelector((state: RootState) => state.cart.items);
 
   // If no items, show a message
-  if (!items || items.length === 0) return <p>Your cart is empty.</p>;
+  if (!items || items.length === 0) return (
+    <div className="w-full flex flex-col justify-center items-center p-4">
+      <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">Cart</h1>
+      <section className="w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] flex flex-col h-[50vh] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md overflow-y-auto items-center justify-center">
+        <p className="font-notojp text-white text-stroke text-shadow-xl text-base sm:text-lg md:text-xl">Cart Is Empty</p>
+      </section>
+    </div>
+  ) 
 
   const removeItemCart = (itemId: string) => {
     dispatch(removeItem(itemId));
-    persistor.flush() //tvingar direkt sync
+    // persistor.flush() //tvingar direkt sync
   }
 
-
+  const totalAmount = items.map(item => item.price * item.amount).reduce((acc, curr) => acc + curr, 0)
 
 
   return (
@@ -31,7 +39,7 @@ export default function Cart() {
       {items.map((item) => (
         <section
           key={item._id}
-          className="w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md overflow-y-auto"
+          className="w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black overflow-y-auto rounded-b-none rounded-t-none border-b-0 first-of-type:rounded-t-md"
         >
           <div className="flex flex-row items-center justify-between py-4">
             <div className="w-[25%] h-[60%] rounded-sm ml-1">
@@ -50,17 +58,17 @@ export default function Cart() {
               {item.name}
             </p>
             <p className="font-notojp text-white text-stroke text-shadow-xl text-sm sm:text-base md:text-lg">
-              {item.price}$
+              {item.price * item.amount}$
             </p>
             <div className="flex flex-row items-center">
               <button
-                className="w-[2vw] h-[4vh] bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mt-1 mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl"
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1"
                 onClick={() => removeItemCart(item._id)} // Assuming you want to remove items here
               >
                 <FaMinus className="text-xxs sm:text-sm" />
               </button>
               <button
-                className="w-[2vw] h-[4vh] bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mt-1 mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl"
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1"
                 onClick={() => dispatch(addItem(item))} // Assuming you want to add items here
               >
                 <FaPlus className="text-xxs sm:text-sm" />
@@ -69,6 +77,16 @@ export default function Cart() {
           </div>
         </section>
       ))}
+      {items && (
+      <div className='w-full flex justify-between items-center bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-b-md p-2 '>
+        <p className="w-[30%] text-white text-lg text-stroke text-shadow-xl font-notojp">{`Total: ${totalAmount} $`}</p>
+          <div className="w-[70%] flex flex-row justify-end mt-2 gap-2">
+            <button onClick={() => dispatch(clearCart())} className='w-auto flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Clear Cart</button>
+            <button onClick={() => router.push('/shipping')} className='w-auto flex justify-center text-white text-stroke text-shadow-xl py-2 px-4 border border-black rounded-md bg-[#E19B1A] transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Proceed</button>
+          </div>
+      </div>
+      )}
     </div>
+
   );
 }

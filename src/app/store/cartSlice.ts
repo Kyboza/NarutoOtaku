@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IItemCart } from "../../../types";
 
 interface IStoreCart {
@@ -39,8 +39,11 @@ const cartSlice = createSlice({
         },
         clearCart: (state) => {
             state.items = []
-        }
+        },
+        setCartItems: (state, action: PayloadAction<IItemCart[]>) => {
+            state.items = action.payload; // Replace cart with new items
+        },
     }
 })
-export const {addItem, removeItem, clearCart} = cartSlice.actions
+export const {addItem, removeItem, clearCart, setCartItems} = cartSlice.actions
 export default cartSlice.reducer
