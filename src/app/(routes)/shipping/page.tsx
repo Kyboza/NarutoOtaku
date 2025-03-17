@@ -1,6 +1,10 @@
 "use client"
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store/store'
+import axiosAPI from '@/app/lib/axios'
+import { handleErrorWithAxios } from '@/app/utils/errorHandler'
 
 interface ShippingFormData {
   shippingFirstName: string;
@@ -15,12 +19,47 @@ interface ShippingFormData {
 
 
 export default function Shipping() {
-  const {register, handleSubmit, formState: {errors},} = useForm<ShippingFormData>()
+  const {register, handleSubmit, formState: {errors}} = useForm<ShippingFormData>()
+
+  const items = useSelector((state: RootState) => state.cart.items)
+  const itemSeparation = items.map(item => ({
+    itemId: item._id,
+    name: item.name,
+    price: item.price,
+    amount: item.amount
+  }))
 
 
-  const onSubmit = (data: ShippingFormData) => {
-    //Kalla på api för köp till stripe eller något annat men glöm inte att hämta redux cart state med useSelector
+  const onSubmit = async (data: ShippingFormData) => {
+    try {
+      const response = await axiosAPI.post('/api/comparison', {itemSeparation})
+      if(response.status === 200){
+        console.log('Comparison succedded, sending to payment')
+
+        const orderResponse = await axiosAPI.post('/api/orders', {
+          items: itemSeparation,
+          shipping: data
+        });
+
+        if(orderResponse.status !== 200) throw new Error('Could not save order to database');
+
+        const orderId = orderResponse.data.id
+
+        const stripeResponse = await axiosAPI.post('/api/checkout', {itemSeparation, orderId})
+        if(stripeResponse.status === 200) {
+          console.log('Success Redirecting to payment.')
+          window.location.href = stripeResponse.data.url
+        } else {
+          throw new Error('Failed to get a session id')
+        }
+      } else {
+        throw new Error('Failed to compare cart to warehouse stock')
+      }
+    } catch(error: unknown){
+      handleErrorWithAxios(error)
+    }
   }
+
 
   return (
     <div className="w-full flex flex-col items-center p-4 h-auto">
@@ -93,12 +132,12 @@ export default function Shipping() {
             message: 'Email needs to be atleast 10 characters'
           },
           maxLength: {
-            value: 40,
+            value: 50,
             message: 'Email cannot exceed 40 characters'
           },
           pattern: {
-            value: /^[a-zA-ZåäöÅÄÖ0-9!_-]+@[a-zA-ZåäöÅÄÖ0-9!_-]+\.[a-zA-Z0-9]{2,}}$/,
-            message: 'Email: Min 2, Max 40 Characters. Only a-ö, 0-9 and !_- allowed between @ and TLD min 2 characters'
+            value: /^[a-zA-ZåäöÅÄÖ0-9!_-]+@[a-zA-ZåäöÅÄÖ0-9_-]+\.[a-zA-Z0-9]{2,10}$/,
+            message: 'Email: Min 2, Max 50 Characters. Only a-ö, 0-9 and !_- allowed between @ and TLD min 2 characters'
           }
         })}
         />

@@ -11,4 +11,5 @@ declare global {
   } | undefined;
 
   function handleError(err: unknown): void;
+  function handleErrorWithAxios(err: unknown): void;
 }
