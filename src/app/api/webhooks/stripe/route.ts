@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     switch(event.type){
         case 'checkout.session.completed':
         const session = event.data.object;
-        const orderId = session.metadata?.orderId; // ✅ Get our order ID
+        const orderId = session.metadata?.orderId;
 
         if (!orderId) {
             console.error("Order ID missing in session metadata");

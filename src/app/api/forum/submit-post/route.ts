@@ -41,16 +41,16 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Provided Id does not exist in database"}, {status: 400})
     }
 
-    const user = await User.findById(decoded.userId)
+    const user = await User.findById(decoded.userId).select('username')
     if(!user) return NextResponse.json({message: 'Could not find user in database'}, {status: 400})
 
     const newPostActual = new SpecificForum({
         title: postTitle,
         content: postContent,
+        by: user.username,
         userId: user._id,
         categoryId: categoryId
     })
-
     await newPostActual.save()
 
     const newPost = new Post({

@@ -8,7 +8,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         const connection = await connectToDatabase();
         if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500})
 
-        const { id } = params; // Get order ID from URL params
+        const { id } = await params; // Get order ID from URL params
         const body = await req.json(); // Read body ONCE
         console.log("Received request body:", body);
 

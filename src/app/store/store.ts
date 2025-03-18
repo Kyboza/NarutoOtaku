@@ -6,11 +6,12 @@ import likesReducer from './likesSlice';
 import characterReducer from './characterSlice';
 import statusReducer from './statusSlice';
 import cartReducer from './cartSlice';
+import followReducer from './followSlice'
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart'], // Only persist 'cart'
+  whitelist: ['cart']// Only persist 'cart'
 };
 
 // Explicitly handle `undefined` for each slice during hydration
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   character: characterReducer,
   status: statusReducer,
   cart: cartReducer,
+  follow: followReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

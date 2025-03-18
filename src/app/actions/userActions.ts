@@ -13,10 +13,12 @@ import Forum from '../models/Forum';
 import SpecificForum from '../models/SpecificForum';
 import Comment from '../models/Comment';
 import Item from '../models/Item';
+import Order from '../models/Order';
 import { handleError } from '../utils/errorHandler';
 import { ObjectId } from 'mongoose';
 import { ITopCharacters } from '../../../types';
 import { IItemCart } from '../../../types';
+import Stripe from 'stripe';
 
 
 dotenv.config();
@@ -30,36 +32,47 @@ interface IReply {
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? ''
+const stripe = new Stripe(process.env.STRIPE_SECRET ?? '');
 
-if (!ACCESS_SECRET || !REFRESH_SECRET) {
-  throw new Error("ACCESS_SECRET or REFRESH_SECRET is not set in environment variables");
+if (!ACCESS_SECRET || !REFRESH_SECRET || !stripe) {
+  throw new Error("ACCESS_SECRET, REFRESH_SECRET or STRIPE_SECRET is not set in environment variables");
 }
 //Hämta User Page Info
-export async function getUserFromToken() {
+export async function getUserFromParams(name: string) {
+    if(!name) throw new Error('Did not get a name from client')
 
     const storedCookies = cookies();
     
     const accessToken = (await storedCookies).get('accessToken')?.value;
-    if (!accessToken) throw new Error('No accessToken active');
+    let visitingUser = null;
+
+    if (accessToken){
+        let decoded;
+        try {
+            decoded = jwt.verify(accessToken, ACCESS_SECRET);
+
+            if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
+                throw new Error('Invalid accessToken or no id connected to it');
+            }
     
-    let decoded;
-    try {
-        decoded = jwt.verify(accessToken, ACCESS_SECRET);
-    } catch (error) {
-        handleError(error)
+            visitingUser = await User.findById(decoded.userId)
+            if(!visitingUser) throw new Error('No error with that id matching from Database');
+        } catch (error) {
+            handleError(error)
+        }
+    
+    } else {
+        console.log('No AccessToken Active')
     }
-
-    if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
-        throw new Error('Invalid accessToken or no id connected to it');
-    }
-
+    
     const connection = await connectToDatabase();
     if (!connection.success) throw new Error(connection.message);
 
+    let user = null
     try {
-        const user = await User.findById(decoded.userId);
+        user = await User.findOne({username: name})
         if (!user) throw new Error('Could not find user in database');
-        return user;  // Return the user data if found
+        return {visitingUser, user}
     } catch (error) {
         handleError(error)
     }
@@ -358,18 +371,32 @@ export async function loadShopItems(){
 }
 
 
-// export async function addOneCart(_id: string){
-//     try{
-//         if(!_id) throw new Error('Did not recieve an ID');
-//         const item = await Item.findOne({_id: _id});
-//         if(!item) throw new Error('Could not find item with that ID in database');
-//         if(item.amount <= 7){
-//             item.amount += 1
-//         } else {
-//             throw new Error('You can only have 8 of this item in your cart')
-//         }
-//         item.save()
-//     } catch(error){
-//         handleError(error)
-//     }
-// }
+
+//Completed Purchase Get Name (Last Step)
+export async function getCustomerName(session_id: string) {
+    try {
+        if(!session_id) throw new Error('Did not recieve an id from client');
+
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+
+        if(!session.metadata || !session.metadata.orderId) throw new Error('Order ID is missing in Stripe session metadata');
+
+        const orderId = session.metadata.orderId;
+
+        const connection = await connectToDatabase();
+        if(!connection.success) throw new Error('Could not connect to database');
+
+        const order = await Order.findById(orderId);
+        if(!order) throw new Error('Could not Order with that id in database');
+
+        const firstname = order.shipping.firstname;
+        console.log(firstname)
+        if(!firstname) throw new Error('Could not find name property on order');
+      
+
+        return firstname
+    } catch(error){
+        handleError(error)
+        return null
+    }
+}

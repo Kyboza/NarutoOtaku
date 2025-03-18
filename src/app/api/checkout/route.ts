@@ -35,7 +35,7 @@ export async function POST(req: NextRequest){
             line_items: lineItems,
             mode: 'payment',
             payment_method_types: ['card', 'paypal'],
-            success_url: `${SITE_URL}/?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${SITE_URL}/order?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${SITE_URL}/`,
             metadata: { orderId }
         })
