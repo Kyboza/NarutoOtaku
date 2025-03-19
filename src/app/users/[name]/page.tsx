@@ -1,7 +1,8 @@
-// app/user/page.tsx
+"// app/user/page.tsx"
 import React from 'react';
 import Image from 'next/image';
 import { getUserFromParams } from '@/app/actions/userActions';
+import FollowButton from '@/app/components/FollowButton';
 
 
 export default async function UserPage({params}: {params: {name: string}}) {
@@ -10,7 +11,7 @@ export default async function UserPage({params}: {params: {name: string}}) {
   let user = null;
   let visitingUser = null;
 
-
+   //Både visitingUser och user är hela objekt
   try {
     const response = await getUserFromParams(currentUser);
     user = response?.user
@@ -19,6 +20,8 @@ export default async function UserPage({params}: {params: {name: string}}) {
     console.error("Error fetching user data:", error);
   }
 
+  const userProp = user?.username;
+  const visitingProp = visitingUser?.username;
 
   // Om användaren inte finns, visa ett meddelande
   if (!user) {
@@ -62,10 +65,8 @@ export default async function UserPage({params}: {params: {name: string}}) {
         </div>
         {/* Follow Column */}
         <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-4">
-        {visitingUser && visitingUser.username === currentUser ? ( null ) : 
-        (<button className="w-28 h-10 border border-black text-sm md:text-base font-notojp text-white hover:cursor-pointer mb-2">Follow +</button>)}
-         
-          <p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>
+        {visitingUser && visitingUser.username === currentUser ? ( <p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p> ) : !visitingUser ? (<p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>) :
+        (<FollowButton userProp={userProp} visitingProp={visitingProp}/>)}
         </div>
       </section>
 

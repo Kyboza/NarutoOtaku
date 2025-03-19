@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>({
     age: {type: String},
     style: {type: String},
     followers: {type: Number, default: 0},
-    following: [{type: String}],
+    following: {type: [String], default: []},
     about: {type: String},
     imgPath: {type: String, default: null},
     lastLogin: {type: Date, default: null},
@@ -44,6 +44,16 @@ const userSchema = new Schema<IUser>({
     posts: [{postId: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'}, content: {type: String}}],
     comments: [{ commentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }, content: {type: String}}],
 }, {versionKey: false})
+
+userSchema.methods.incrementFollow = function(){
+    this.followers += 1
+    return this.save()
+}
+
+userSchema.methods.decrementFollow = function(){
+    this.followers -= 1
+    return this.save()
+}
 
 const User = mongoose.models.Users || mongoose.model<IUser>("Users", userSchema, "users")
 

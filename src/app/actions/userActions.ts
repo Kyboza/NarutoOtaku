@@ -41,6 +41,9 @@ if (!ACCESS_SECRET || !REFRESH_SECRET || !stripe) {
 export async function getUserFromParams(name: string) {
     if(!name) throw new Error('Did not get a name from client')
 
+    const connection = await connectToDatabase();
+    if (!connection.success) throw new Error(connection.message);
+
     const storedCookies = cookies();
     
     const accessToken = (await storedCookies).get('accessToken')?.value;
@@ -65,8 +68,6 @@ export async function getUserFromParams(name: string) {
         console.log('No AccessToken Active')
     }
     
-    const connection = await connectToDatabase();
-    if (!connection.success) throw new Error(connection.message);
 
     let user = null
     try {
