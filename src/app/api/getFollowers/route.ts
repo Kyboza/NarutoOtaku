@@ -12,9 +12,7 @@ export async function POST(req: NextRequest){
 
         const user = await User.findOne({username: userProp}).select('followers following');
         if(!user) return NextResponse.json({message: 'Could not find followers array for user'}, {status: 404});
-        const following = user.following
-        const followers = user.followers
-        const data = {following, followers}
+        const data = { following: user.following, followers: user.followers };
         return NextResponse.json({message: 'Successfully got followers array', data}, {status: 200})
     } catch(error){
         handleError(error)

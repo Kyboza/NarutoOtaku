@@ -20,8 +20,11 @@ export default async function UserPage({params}: {params: {name: string}}) {
     console.error("Error fetching user data:", error);
   }
 
-  const userProp = user?.username;
+  const userProp = user.username;
   const visitingProp = visitingUser?.username;
+  const initialFollowers = user.followers;
+  const initialFollowing = user.following;
+
 
   // Om användaren inte finns, visa ett meddelande
   if (!user) {
@@ -66,7 +69,7 @@ export default async function UserPage({params}: {params: {name: string}}) {
         {/* Follow Column */}
         <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-4">
         {visitingUser && visitingUser.username === currentUser ? ( <p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p> ) : !visitingUser ? (<p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>) :
-        (<FollowButton userProp={userProp} visitingProp={visitingProp}/>)}
+        (<FollowButton userProp={userProp} visitingProp={visitingProp} initialFollowers={initialFollowers} initialFollowing={initialFollowing}/>)}
         </div>
       </section>
 

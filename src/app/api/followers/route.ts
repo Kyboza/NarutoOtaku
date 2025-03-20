@@ -28,32 +28,31 @@ export async function POST(req: NextRequest) {
 
     const [follower, target] = await Promise.all([
       User.findById(decoded.userId),
-      User.findOne({ username: visitingUsername }),
+      User.findOne({ username: username }),
     ]);
 
     if (!follower || !target) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const isFollowing = follower.following.includes(target.username);
+    const isFollowing = target.following.includes(follower.username);
 
     if (isFollowing) {
-      // Unfollow logic
-      await User.findByIdAndUpdate(follower._id, { $pull: { following: target.username } });
-      await User.findByIdAndUpdate(target._id, { $inc: { followers: -1 } });
+      // Unfollow logic using schema method
+      target.following.pull(follower.username);
+      await target.decrementFollow();
+      await target.save();
     } else {
-      // Follow logic
-      await User.findByIdAndUpdate(follower._id, { $addToSet: { following: target.username } });
-      await User.findByIdAndUpdate(target._id, { $inc: { followers: 1 } });
+      // Follow logic using schema method
+      target.following.addToSet(follower.username);
+      await target.incrementFollow();
+      await target.save();
     }
-
-    const updatedFollower = await User.findById(follower._id).select("following");
-    const updatedTarget = await User.findById(target._id).select("followers");
 
     return NextResponse.json({
       message: isFollowing ? "Unfollowed" : "Followed",
-      following: updatedFollower.following,
-      followers: updatedTarget.followers,
+      following: target.following,
+      followers: target.followers,
     });
 
   } catch (error) {

@@ -6,6 +6,7 @@ export interface ICharacter extends Document {
   description: string,
   image: string,
   likes: number,
+  userWhoLike: string[]
   gender: string,
   age: number,
   weight: number,
@@ -19,6 +20,7 @@ const characterSchema = new Schema<ICharacter>({
   description: { type: String},
   image: { type: String},
   likes: { type: Number, default: 0 },
+  userWhoLike: {type: [String], default: []},
   gender: {type: String},
   age: {type: Number},
   weight: {type: Number},

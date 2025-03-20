@@ -43,6 +43,7 @@ export const loadFollowAmount = createAsyncThunk(
   async (userProp: string, { rejectWithValue }) => {
     try {
       const response = await axiosAPI.post("/api/getFollowers", { userProp });
+      console.log("API Response:", response.data);
 
       if (response.status === 200) {
         return response.data; // Returnera både följare och följande
@@ -81,16 +82,14 @@ const followSlice = createSlice({
         state.followers = state.followers -=1
       } else {
         state.following.push(username);
-        state.followers += 1;
+        state.followers = state.followers += 1;
       }
-      console.log("Updated following:", state.following);
-      console.log("Updated followers:", state.followers);
     },
   },
   extraReducers: (builder) => {
     builder.addCase(updateFollowAmount.fulfilled, (state, action) => {
       state.followers = action.payload.followers;
-      state.following = action.payload.following
+      state.following = action.payload.following;
     })
     .addCase(updateFollowAmount.rejected, (state, action) => {
       state.error = action.error.message || 'Unknown Error'
@@ -98,9 +97,11 @@ const followSlice = createSlice({
 
 
     builder.addCase(loadFollowAmount.fulfilled, (state, action) => {
-      state.following = action.payload.following
-      state.followers = action.payload.followers
-      state.loading = false
+      const { followers, following } = action.payload.data;
+
+    state.followers = followers;
+    state.following = following;
+    state.loading = false
     })
     .addCase(loadFollowAmount.rejected, (state, action) => {
       state.loading = false

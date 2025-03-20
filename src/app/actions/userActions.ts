@@ -37,47 +37,96 @@ const stripe = new Stripe(process.env.STRIPE_SECRET ?? '');
 if (!ACCESS_SECRET || !REFRESH_SECRET || !stripe) {
   throw new Error("ACCESS_SECRET, REFRESH_SECRET or STRIPE_SECRET is not set in environment variables");
 }
+
 //Hämta User Page Info
 export async function getUserFromParams(name: string) {
-    if(!name) throw new Error('Did not get a name from client')
-
-    const connection = await connectToDatabase();
-    if (!connection.success) throw new Error(connection.message);
-
-    const storedCookies = cookies();
-    
-    const accessToken = (await storedCookies).get('accessToken')?.value;
-    let visitingUser = null;
-
-    if (accessToken){
-        let decoded;
-        try {
-            decoded = jwt.verify(accessToken, ACCESS_SECRET);
-
-            if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
-                throw new Error('Invalid accessToken or no id connected to it');
-            }
-    
-            visitingUser = await User.findById(decoded.userId)
-            if(!visitingUser) throw new Error('No error with that id matching from Database');
-        } catch (error) {
-            handleError(error)
-        }
-    
-    } else {
-        console.log('No AccessToken Active')
-    }
-    
-
-    let user = null
     try {
-        user = await User.findOne({username: name})
-        if (!user) throw new Error('Could not find user in database');
-        return {visitingUser, user}
-    } catch (error) {
+        if(!name) throw new Error('Did not get a name from client')
+
+            const connection = await connectToDatabase();
+            if (!connection.success) throw new Error(connection.message);
+        
+            const storedCookies = cookies();
+            
+            const accessToken = (await storedCookies).get('accessToken')?.value;
+            let visitingUser = null;
+        
+            if (accessToken){
+                let decoded;
+                try {
+                    decoded = jwt.verify(accessToken, ACCESS_SECRET);
+        
+                    if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
+                        throw new Error('Invalid accessToken or no id connected to it');
+                    }
+            
+                    visitingUser = await User.findById(decoded.userId)
+                    if(!visitingUser) throw new Error('No error with that id matching from Database');
+                } catch (error) {
+                    handleError(error)
+                }
+            
+            } else {
+                console.log('No AccessToken Active')
+            }
+            
+        
+            let user = null
+            try {
+                user = await User.findOne({username: name})
+                if (!user) throw new Error('Could not find user in database');
+                return {visitingUser, user}
+            } catch (error) {
+                handleError(error)
+            }
+    } catch(error){
         handleError(error)
     }
+   
 }
+
+
+//Hämta Chacterpage Info
+export async function getCharacter(characterId: string){
+    try{
+        if(!characterId || !mongoose.Types.ObjectId.isValid(characterId)) throw new Error('Did not recieve Character Id or its not a valid id')
+    
+            const connection = await connectToDatabase();
+            if (!connection.success) throw new Error(connection.message);
+        
+            const storedCookies = cookies();
+            
+            const accessToken = (await storedCookies).get('accessToken')?.value;
+            let visitingUser = null;
+            if(accessToken) {
+                let decoded = null;
+                try {
+                    decoded = jwt.verify(accessToken, ACCESS_SECRET);
+                    if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
+                        throw new Error('Invalid accessToken or no id connected to it');
+                    }
+                    visitingUser = await User.findById(decoded.userId).select('username')
+                    if(!visitingUser) throw new Error('No error with that id matching from Database');
+                } catch(error){
+                    handleError(error)
+                }
+            } else {
+                console.log('No accessToken active')
+            }
+    
+            let character = null
+            try{
+                character = await Character.findById(characterId)
+                if (!character) throw new Error('Could not find character in database');
+                return {character, visitingUser}
+            } catch(error){
+                handleError(error)
+            }
+    } catch(error){
+        handleError(error)
+    }
+
+}   
 
 
 
