@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { loadReplies, submitReply } from '../actions/userActions'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
+import Link from 'next/link'
 
 interface IComment {
     _id: string
@@ -70,25 +71,24 @@ const Reply = ({postId}: {postId: string}) => {
             Replies
           </h2>
           <article className="w-[80vw] h-auto flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md mt-4 mb-4">
-            <div className='h-auto w-full flex flex-row items-start border-b border-black'>
+            <div className='py-1 w-full flex flex-row justify-between items-center border-b border-black'>
               {active ? (
                 <button onClick={() => {setReplyActive(true)}} className='text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-1/8 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>
                   Create a Reply
                 </button>
               ): (
-                <p className="mx-4 my-4 text-base sm:text-xl md:text-2xl lg:text-2xl font-rock text-white text-stroke-title text-shadow-xl">
-                  Login to create a reply
-                </p>
-              )}
-              
+                <Link href='/login'><button className='text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-1/8 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>
+                  Login To Reply
+                </button></Link>
+              )}   
             </div>
             
             {comment ? comment !== null && comment.map(comment => (
             <div key={comment._id}>
             <div className="h-auto w-full flex flex-row items-center">
-                <div className="relative w-[8vh] h-[8vh] aspect-square border border-[#505050] rounded-full overflow-hidden ml-2">
+                <Link href={`/users/${comment.commentUsername}`}><div className="relative w-[8vh] h-[8vh] aspect-square border border-[#505050] rounded-full overflow-hidden ml-2">
                   <Image className="object-cover" src={comment.commentImg} alt="Profile picture" fill />
-                </div>
+                </div></Link>
                 <h2 className="mb-4 mt-4 ml-4 text-xl sm:text-xl md:text-4xl lg:text-4xl font-rock text-white text-stroke text-shadow-xl">
                   {comment.commentUsername}
                 </h2>

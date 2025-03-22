@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { fetchSpecificForum } from '@/app/actions/userActions';
+import PostButton from '@/app/components/PostButton';
 
 interface IForumSpecific {
   _id: string
@@ -38,10 +39,10 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
 
 
   return (
-    <div className='flex flex-col items-center h-full'>
-      <h1 className="mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
-        Forum
-      </h1>
+    <div className='flex flex-col items-start h-full'>
+      <div className='flex flex-row items-center justify-center mt-4 mb-4'>
+        <PostButton/>
+      </div>
   
       <section className='flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md h-[60vh] landscape-lg:h-[80vh] landscape-xl:h-[80vh] w-[95vw] md:w-[80vw] mb-6 overflow-y-auto scrollbar-hide'>
         <ul id='forumPosts' className='h-full w-full'>

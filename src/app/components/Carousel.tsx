@@ -27,7 +27,7 @@ export default function Carousel({topChar}: {topChar: ITopCharacters[]}) {
                 <div key={char._id} 
                 className={`absolute flex w-full h-[25vh] inset-0 justify-evenly items-center bg-cover bg-top -z-10 transition-opacity duration-1000 ${index === 0 ? "bg-[url('/images/favchar/First.webp')]" : index === 1 ? "bg-[url('/images/favchar/Second.webp')]" : index === 2 ? "bg-[url('/images/favchar/Third.webp')]" : ''}
                 ${visibleIndex === index ? 'opacity-100' : 'opacity-0'}`}>
-                  <div className='relative w-[20vw] h-[20vw] sm:w-[10vw] sm:h-[10vw] md:w-[10vw] md:h-[10vw] border rounded-full overflow-hidden'>
+                  <div className='relative w-[20vw] h-[20vw] sm:w-[10vw] sm:h-[10vw] md:w-[15vw] md:h-[15vw] lg:w-[10vw] lg:h-[10vw] border rounded-full overflow-hidden'>
                     <Image
                       className='object-cover'
                       src={char.image}

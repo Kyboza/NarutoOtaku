@@ -246,18 +246,23 @@ export async function fetchFrontForum(){
     }
 }
 
-export async function fetchSpecificForum(categoryId: string){
-    if(!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) throw new Error('Did not recieve an id for category or its not a valid objectid');
-    
-    const connection = await connectToDatabase()
-    if(!connection.success) throw new Error(connection.message);
+export async function fetchSpecificForum(categoryId: string) {
+    if (!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) {
+        throw new Error('Ogiltigt categoryId');
+    }
+
+    const connection = await connectToDatabase();
+    if (!connection.success) throw new Error(connection.message);
 
     try {
-        const response = await SpecificForum.find({categoryId: categoryId});
-        if(!response || response.length === 0) throw new Error('Could not find specific forum in database');
+        const response = await SpecificForum.find({ categoryId });
+        if (!response || response.length === 0) {
+            throw new Error('Inga forum hittades');
+        }
         return response;
-    } catch(error){
-        handleError(error)
+    } catch (error) {
+        console.error('Database error:', error);
+        throw new Error('Ett fel uppstod vid hämtning av forum');
     }
 }
 
