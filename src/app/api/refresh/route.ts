@@ -1,11 +1,8 @@
 import { connectToDatabase } from "@/app/lib/mongodb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken'
-import { cookies } from "next/headers";
 import User from "@/app/models/User";
-import dotenv from 'dotenv'
 
-dotenv.config()
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET ?? ''
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
@@ -14,10 +11,10 @@ if(!REFRESH_SECRET || !ACCESS_SECRET) {
     throw new Error('Could not get Refresh or Access Token from env')
 }
 
-export async function GET(){
-    const storedCookies = cookies()
-    const refreshToken = (await storedCookies).get('refreshToken')?.value;
-    if(!refreshToken) return NextResponse.json({message: 'No refresh token found user is not logged in'});
+
+export async function GET(req: NextRequest){
+    const refreshToken = req.headers.get('Authorization')?.split(' ')[1];
+    if(!refreshToken) return NextResponse.json({message: 'No refresh token found user is not logged in'}, {status: 401});
 
     const connection = await connectToDatabase();
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
@@ -33,7 +30,7 @@ export async function GET(){
             userId: user._id
         }
 
-        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5h'})
+        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '15m'})
 
         return NextResponse.json({message: 'Successfully updated accessToken', accessToken}, {status: 200});
 

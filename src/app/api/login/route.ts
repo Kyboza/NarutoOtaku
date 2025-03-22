@@ -36,7 +36,7 @@ export async function POST(req: NextRequest){
             userId: existingUser._id
         }
 
-        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '5h'});
+        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '15m'});
 
         const refreshToken = jwt.sign(payload, REFRESH_SECRET, {expiresIn: '7d'});
 
@@ -48,15 +48,17 @@ export async function POST(req: NextRequest){
 
         response.cookies.set('accessToken', accessToken, {
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 5 * 60 * 60
+            path: '/',
+            maxAge:  60 * 15
         });
 
         response.cookies.set('refreshToken', refreshToken, {
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
+            path: '/',
             maxAge: 7 * 24 * 60 * 60
         });
 

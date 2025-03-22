@@ -27,7 +27,7 @@ export default function Carousel({topChar}: {topChar: ITopCharacters[]}) {
                 <div key={char._id} 
                 className={`absolute flex w-full h-[25vh] inset-0 justify-evenly items-center bg-cover bg-top -z-10 transition-opacity duration-1000 ${index === 0 ? "bg-[url('/images/favchar/First.webp')]" : index === 1 ? "bg-[url('/images/favchar/Second.webp')]" : index === 2 ? "bg-[url('/images/favchar/Third.webp')]" : ''}
                 ${visibleIndex === index ? 'opacity-100' : 'opacity-0'}`}>
-                  <div className='relative w-[20vw] h-[20vw] sm:w-[10vw] sm:h-[10vw] md:w-[15vw] md:h-[15vw] lg:w-[10vw] lg:h-[10vw] border rounded-full overflow-hidden'>
+                  <div className='relative w-[20vw] h-[20vw] sm:w-[10vw] sm:h-[10vw] md:w-[15vw] md:h-[15vw] xl:w-[11vw] xl:h-[11vw] border rounded-full overflow-hidden'>
                     <Image
                       className='object-cover'
                       src={char.image}
@@ -36,17 +36,17 @@ export default function Carousel({topChar}: {topChar: ITopCharacters[]}) {
                     />
                   </div>
                   
-                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-3xl'>
+                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                     {`# ${index + 1}`}
                   </p>
-                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-3xl'>
+                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                     {char.name}
                   </p>
                   <div className='flex items-center mb-3 sm:mb-2 md:mb-5'>
-                      <p className='text-2xl mr-2 text-stroke-title text-shadow-xl md:text-3xl'>
+                      <p className='text-2xl mr-2 text-stroke-title text-shadow-xl md:text-4xl lg:text-5xl'>
                         &#10084;&#65039;
                       </p>
-                      <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-3xl'>
+                      <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                         {char.likes}
                       </p>
                   </div>

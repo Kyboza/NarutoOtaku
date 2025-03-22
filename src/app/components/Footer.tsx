@@ -3,6 +3,7 @@ import React from "react";
 import { FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiCrunchyroll } from "react-icons/si";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -13,27 +14,27 @@ export default function Footer() {
           © 2025 Naruto Otaku.
         </p>
         <div className="flex flex-row items-center gap-2 mt-1">
-          <FaXTwitter className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
-          <FaYoutube className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
-          <FaInstagram className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
-          <SiCrunchyroll className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" />
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer"><FaXTwitter className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" /></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"><FaYoutube className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" /></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" /></a>
+          <a href="https://crunchyroll.com" target="_blank" rel="noopener noreferrer"><SiCrunchyroll className="text-white text-xl md:text-2xl lg:text-3xl drop-shadow-xl hover:cursor-pointer" /></a>
         </div>
       </div>
 
       {/* Right Column: Navigation Links */}
       <div className="w-1/2 flex flex-row items-center justify-end gap-3">
-        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
+        <Link href='/shop'><p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Shop
-        </p>
-        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
+        </p></Link>
+        <Link href='/forum'><p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
           Forum
-        </p>
-        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
-          Contact
-        </p>
-        <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
-          Popular
-        </p>
+        </p></Link>
+        <Link href='/characters'><p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
+         Read
+        </p></Link>
+        <Link href='/'><p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border hover:cursor-pointer">
+          Home
+        </p></Link>
       </div>
     </footer>
   );

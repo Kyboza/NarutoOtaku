@@ -13,9 +13,12 @@ export async function middleware(req: NextRequest){
 
     if(!accessToken && refreshToken){
         try{
+
             const response = await fetch('http://localhost:3000/api/refresh', {
                 method: 'GET',
-                credentials: 'include'
+                headers: {
+                    'Authorization': `Bearer ${refreshToken}`
+                }
             });
 
             if(response.ok){
@@ -25,10 +28,10 @@ export async function middleware(req: NextRequest){
                     const res = NextResponse.next()
                     res.headers.set(
                         "Set-Cookie",
-                        `accessToken=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${5 * 60 * 60}`
+                        `accessToken=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 15}` //Om något fkar igen så är det secure
                     )
                     
-                    return response
+                    return res
                 }
             } else {
                 console.log('Could not get a new accessToken from our api')
@@ -37,6 +40,8 @@ export async function middleware(req: NextRequest){
             console.log('Error getting a new accessToken occured', error)
             return NextResponse.redirect(new URL('/', req.url));
         }
+    } else {
+        console.log('User is not logged in')
     }
     return NextResponse.next()
 }

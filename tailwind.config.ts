@@ -22,7 +22,8 @@ export default {
       },
       animation: {
         'hamburgerOpen': 'hamburgerOpen 0.3s ease forwards',
-        'hamburgerClose': 'hamburgerClose 0.3s ease forwards'
+        'hamburgerClose': 'hamburgerClose 0.3s ease forwards',
+        'homeNavigation': 'homeNavigation 1s ease forwards'
       },
       keyframes: {
         hamburgerOpen: {
@@ -33,6 +34,10 @@ export default {
           '0%': { transform: 'scaleX(0.1)', transformOrigin: 'center' }, // Start at normal width
           '100%': { transform: 'scaleX(1)', transformOrigin: 'center' }, // Shrink to 0 width
         },
+        homeNavigation: {
+          '0%': {transform: 'translateY(-75%)', opacity: '0', transformOrigin: 'center'},
+          '100%': {transform: 'translateY(0)', opacity: '1', transformOrigin: 'center'}
+        }
       },
       textShadow: {
         'letter-border': '1px 0px 0px rgba(0, 0, 0, 1)',

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Rock+Salt:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Noto+Sans+JP:wght@100..900&family=Rock+Salt&display=swap');
 
 
@@ -31,20 +31,26 @@
   }
 }
 
-.text-stroke-title {
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75)
-}
-
-.text-stroke {
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.1)
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+@layer utilities{
+  .text-stroke-title {
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75)
+  }
+  
+  .text-stroke {
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.1)
+  }
+  
+  .text-stroke-2 {
+    -webkit-text-stroke: 0.5px black;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 

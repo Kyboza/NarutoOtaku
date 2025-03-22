@@ -104,17 +104,17 @@ export default function Header() {
 
       {/* Icons Section */}
       <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
-        <div className="relative">
+        <Link href='/cart'><div className="relative">
           <FaShoppingCart className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
           <div className={`${itemsLength? 'flex' : 'hidden'} absolute bottom-0 left-0 max-h-4 max-w-4 sm:max-h-5 sm:max-w-5 text-white text-xxs rounded-full bg-[#D72C2C] justify-center items-center p-0.5 sm:p-2 border border-white`}>{itemsLength}</div>
-        </div>
+        </div></Link>
         <Link href={active ? `/users/${userName}` : '/login'}>
           <FaUserAlt className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
         </Link>
         <IoGlobeOutline className="text-white text-2xl md:text-3xl lg:text-4xl drop-shadow-xl" />
       </div>
 
-          <ul ref={listRef} className={`flex flex-col justify-evenly items-center bg-[#A5A5A5] bg-opacity-90 border border-black rounded-md rounded-tl-none rounded-tr-none absolute top-[100%] left-0 w-screen h-auto min-h[25vh] transition-all duration-600 ease-in-out  ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+          <ul ref={listRef} className={`flex flex-col justify-evenly items-center bg-[#A5A5A5] bg-opacity-90 border border-black rounded-md rounded-tl-none rounded-tr-none absolute top-[100%] left-0 w-screen h-auto min-h[25vh] transition-all duration-300 ease-in-out  ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
             <Link className="w-full border-b border-b-black" href='/forum'><li className="flex justify-center font-notojp text-white text-stroke leading-5 text-shadow-xl p-2 md:text-lg lg:text-xl">
               Forum
             </li></Link>
