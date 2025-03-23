@@ -23,9 +23,8 @@ export async function POST() {
 
     const refreshToken = (await storedCookie).get('refreshToken')?.value;
 
-    // Case 1: No refreshToken found or expired
     if (!refreshToken) {
-        const expirationTime = new Date(Date.now() - 60 * 1000); // 1 minute ago
+        const expirationTime = new Date(Date.now() - 60 * 60 * 24 * 7 * 1000);
 
         const expiredUsers = await User.find({
             lastLogin: { $lte: expirationTime },

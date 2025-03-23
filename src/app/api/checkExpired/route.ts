@@ -10,8 +10,8 @@ export async function GET() {
             return NextResponse.json({ message: connection.message }, { status: 500 });
         }
 
-        // Find users with expired sessions (lastLogin > 1 minute)
-        const expirationTime = new Date(Date.now() - 60 * 1000); // 1 minute ago
+      
+        const expirationTime = new Date(Date.now() - 60 * 60 * 24 * 7 * 1000); // 7 days ago
 
         const expiredUsers = await User.find({
             lastLogin: { $lte: expirationTime },
