@@ -19,6 +19,7 @@ export default function OrderSuccess() {
 
   useEffect(() => {
     if(!session_id) return
+    dispatch(clearCart())
     const fetchOrder = async() => {
       const response = await getCustomerName(session_id);
       if(response) {
@@ -28,24 +29,23 @@ export default function OrderSuccess() {
       }
     }
     fetchOrder()
-  }, [session_id])
+  }, [session_id, dispatch])
 
   const endOrder = () => {
-    dispatch(clearCart())
     router.push('/')
   }
 
-  useEffect(() => {
-    const handleUnload = (event: PageTransitionEvent) => {
-      if (event.persisted) return
-      dispatch(clearCart())
-    }
-    window.addEventListener('pagehide', handleUnload)
+  // useEffect(() => {
+  //   const handleUnload = (event: PageTransitionEvent) => {
+  //     if (event.persisted) return
+  //     dispatch(clearCart())
+  //   }
+  //   window.addEventListener('pagehide', handleUnload)
 
-    return () => {
-      window.removeEventListener('pagehide', handleUnload)
-    }
-  }, [dispatch])
+  //   return () => {
+  //     window.removeEventListener('pagehide', handleUnload)
+  //   }
+  // }, [dispatch])
   
 
   return (

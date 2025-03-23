@@ -36,12 +36,13 @@ export async function POST(req: NextRequest){
             userId: existingUser._id
         }
 
-        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '15m'});
+        const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '30s'});
 
-        const refreshToken = jwt.sign(payload, REFRESH_SECRET, {expiresIn: '7d'});
+        const refreshToken = jwt.sign(payload, REFRESH_SECRET, {expiresIn: '1m'});
 
         existingUser.refreshToken = refreshToken;
         existingUser.isActive = true;
+        existingUser.lastLogin = new Date()
         await existingUser.save()
 
         const response = NextResponse.json({message: 'User Authenticated', userName: existingUser.username}, {status: 200})
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest){
             sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
             path: '/',
-            maxAge:  60 * 15
+            maxAge:  30 * 1
         });
 
         response.cookies.set('refreshToken', refreshToken, {
@@ -59,7 +60,7 @@ export async function POST(req: NextRequest){
             sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
             path: '/',
-            maxAge: 7 * 24 * 60 * 60
+            maxAge: 60 * 1
         });
 
         return response;

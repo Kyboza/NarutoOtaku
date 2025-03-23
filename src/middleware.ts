@@ -6,8 +6,24 @@ export async function middleware(req: NextRequest){
     const storedCookies = cookies();
     const accessToken = (await storedCookies).get('accessToken')?.value;
     const refreshToken = (await storedCookies).get('refreshToken')?.value;
+
     if(!accessToken && !refreshToken){
-        console.log('Login to revalidate refreshToken')
+        console.log('No tokens found. Calling the API to check for expired sessions...');
+
+        try {
+            const response = await fetch('http://localhost:3000/api/checkExpired', {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                console.log('Expired sessions have been reset successfully.');
+            } else {
+                console.log('Error occurred while checking expired sessions');
+            }
+        } catch (error) {
+            console.error('Error calling the expired sessions API:', error);
+        }
+
         return NextResponse.redirect(new URL('/login', req.url));
     }
 
@@ -42,6 +58,7 @@ export async function middleware(req: NextRequest){
         }
     } else {
         console.log('User is not logged in')
+        
     }
     return NextResponse.next()
 }

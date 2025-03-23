@@ -27,13 +27,16 @@ export async function GET(){
         const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
         if(typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) return NextResponse.json({message: 'Invalid refreshToken or no id connected to it'}, {status: 401});
 
-        const userStatus = await User.findById(decoded.userId).select('isActive');
+        const userStatus = await User.findById(decoded.userId).select('isActive username');
         if(!userStatus) return NextResponse.json({message: 'User not found'});
         
         const statusState = userStatus.isActive
+        const statusUsername = userStatus.username
+        
         if(!statusState) return NextResponse.json({message: 'User not logged in'});
-
-        return NextResponse.json({message: 'User is logged in', statusState}, {status: 200})
+        if(!statusUsername) return NextResponse.json({message: 'Username not found'});
+        const data = {statusState, statusUsername}
+        return NextResponse.json({message: 'User is logged in', data}, {status: 200})
     } 
     catch(error) {
         console.error('Could not check status of user', error)

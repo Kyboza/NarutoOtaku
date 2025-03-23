@@ -90,6 +90,8 @@ const followSlice = createSlice({
     builder.addCase(updateFollowAmount.fulfilled, (state, action) => {
       state.followers = action.payload.followers;
       state.following = action.payload.following;
+      state.loading = false;
+      state.error = null;
     })
     .addCase(updateFollowAmount.rejected, (state, action) => {
       state.error = action.error.message || 'Unknown Error'
@@ -102,6 +104,7 @@ const followSlice = createSlice({
     state.followers = followers;
     state.following = following;
     state.loading = false
+    state.error = null
     })
     .addCase(loadFollowAmount.rejected, (state, action) => {
       state.loading = false

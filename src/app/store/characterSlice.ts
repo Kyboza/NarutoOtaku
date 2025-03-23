@@ -102,6 +102,7 @@ const characterSlice = createSlice({
             state.likes = action.payload.likes;
             state.userWhoLike = action.payload.userWhoLike;
             state.loading = false;
+            state.error = null;
         })
         .addCase(updateLikeInfo.pending, (state) => {
             state.loading = true;

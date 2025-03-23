@@ -36,7 +36,7 @@ const userSchema = new Schema<IUser>({
     following: {type: [String], default: []},
     about: {type: String},
     imgPath: {type: String, default: null},
-    lastLogin: {type: Date, default: null},
+    lastLogin: {type: Date, default: Date.now},
     isActive: {type: Boolean, default: false},
     resetCode: {type: String, default: ''},
     resetCodeExpires: {type: Date},
