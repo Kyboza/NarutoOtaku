@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
+import { inactivelimit } from "@/app/utils/ratelimiter";
 
 export async function GET() {
+    const {success} = await inactivelimit.limit('checkExpired:global')
+    if(!success) return NextResponse.json({message: 'Inactive users already logged out less than a minute ago'}, {status: 429})
     try {
-        // Connect to the database
         const connection = await connectToDatabase();
         if (!connection.success) {
             return NextResponse.json({ message: connection.message }, { status: 500 });

@@ -32,7 +32,17 @@ export async function GET(req: NextRequest){
 
         const accessToken = jwt.sign(payload, ACCESS_SECRET, {expiresIn: '15m'})
 
-        return NextResponse.json({message: 'Successfully updated accessToken', accessToken}, {status: 200});
+        const response = NextResponse.json({message: 'Successfully updated accessToken', accessToken}, {status: 200});
+
+        response.cookies.set('accessToken', accessToken, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+            maxAge:  60 * 15
+        });
+
+        return response
 
 
     } catch(error){

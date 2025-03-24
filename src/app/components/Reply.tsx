@@ -2,7 +2,8 @@
 import React, { useEffect } from 'react'
 import { useState, useRef} from 'react'
 import Image from 'next/image'
-import { loadReplies, submitReply } from '../actions/userActions'
+import { loadReplies} from '../actions/userActions'
+import axiosAPI from '../lib/axios'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import Link from 'next/link'
@@ -30,9 +31,13 @@ const Reply = ({postId}: {postId: string}) => {
             if (!replyRegex.test(replyContent)) {
                 throw new Error("Reply content does not match required format.");
             }
-                await submitReply(postId, replyContent);
-                setReplyActive(false);
-                setReplyContent("");
+                const response = await axiosAPI.post('/api/forum/submit-reply', {postId, replyContent})
+                if(response.status === 200){
+                  setReplyActive(false);
+                  setReplyContent("");
+                } else {
+                  console.log('Failed to post reply')
+                }
             } 
             catch (error) {
               console.error("Failed to post comment:", error);

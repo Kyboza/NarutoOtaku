@@ -17,7 +17,8 @@ export async function middleware(req: NextRequest){
 
             if (response.ok) {
                 console.log('Expired sessions have been reset successfully.');
-            } else {
+            }
+            else {
                 console.log('Error occurred while checking expired sessions');
             }
         } catch (error) {
@@ -64,5 +65,5 @@ export async function middleware(req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/createpost', '/edit']
+    matcher: ['/createpost', '/edit', '/myposts', '/api/forum/submit-reply']
 }

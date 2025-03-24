@@ -15,7 +15,7 @@ const specificForumSchema = new Schema<ISpecificForum>({
     title: {type: String, required: true},
     content: {type: String, required: true},
     repliesAmount: {type: Number, default: 0},
-    by: {type: String, required: true},
+    by: {type: String},
     comments: [{type: mongoose.Schema.Types.ObjectId, ref:'Comment'}],
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true},
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Forum', required: true},

@@ -17,6 +17,7 @@ const initialState: activeState = {
     userName: ''
 }
 
+
 export const fetchUserStatus = createAsyncThunk('status/fetchUserStatus', async (_, {rejectWithValue}) => {
     try{
         const response =  await axiosAPI.get('/api/status');
@@ -57,7 +58,7 @@ const statusSlice = createSlice({
         builder
         .addCase(fetchUserStatus.fulfilled, (state, action) => {
             state.active = action.payload.statusState;
-            state.userName = action.payload.statusUsername ?? '';
+            state.userName = action.payload.statusUsername;
             state.loading = false;
             state.error = null;
         })

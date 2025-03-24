@@ -2,9 +2,11 @@ import axios from "axios"
 
 export function handleError(error: unknown) {
     if(error instanceof Error){
-        console.log(error.message)
+      console.error('Error:', error.message);
+      return { error: error.message };
     } else {
-        console.log('An Unknown Error Occured')
+      console.error('Unknown error:', error);
+      return { error: 'An unexpected error occurred' };
     }
 }
 

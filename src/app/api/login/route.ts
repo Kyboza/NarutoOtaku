@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/app/models/User";
-import dotenv from 'dotenv'
-
-dotenv.config()
+import { ratelimit } from "@/app/utils/ratelimiter";
 
 const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
 const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
@@ -13,6 +11,10 @@ const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
 if(!REFRESH_SECRET || !ACCESS_SECRET ) throw new Error("One SECRET is not set in environment variables");
 
 export async function POST(req: NextRequest){
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+    const {success} = await ratelimit.limit(ip)
+    if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
     const body = await req.json()
     if(!body) return NextResponse.json({message: "No body provided"}, {status: 500});
     const {username, password} = body;

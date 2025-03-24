@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { getUserFromParams } from '@/app/actions/userActions';
 import FollowButton from '@/app/components/FollowButton';
+import Link from 'next/link';
 
 
 export default async function UserPage({params}: {params: {name: string}}) {
@@ -68,6 +69,9 @@ export default async function UserPage({params}: {params: {name: string}}) {
         </div>
         {/* Follow Column */}
         <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-4">
+        {visitingUser && visitingUser.username === currentUser ? (
+        <Link href='/myposts'><button className='mb-2 text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-1/8 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Manage Posts</button></Link>) : (null)}
+
         {visitingUser && visitingUser.username === currentUser ? ( <p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p> ) : !visitingUser ? (<p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>) :
         (<FollowButton userProp={userProp} visitingProp={visitingProp} initialFollowers={initialFollowers} initialFollowing={initialFollowing}/>)}
         </div>

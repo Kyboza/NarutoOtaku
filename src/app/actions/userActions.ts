@@ -319,53 +319,6 @@ export async function loadReplies(postId: string) {
     }
 }
 
-export async function submitReply(postId: string, replyContent: string) {
-    try {
-      if (!postId || !mongoose.Types.ObjectId.isValid(postId) || !replyContent) {
-        throw new Error("Missing ID, reply, or invalid ID");
-      }
-  
-      const storedCookies = cookies();
-      const accessToken = (await storedCookies).get("accessToken")?.value;
-      if (!accessToken) throw new Error("No accessToken active");
-  
-      const decoded = jwt.verify(accessToken, ACCESS_SECRET);
-      if (typeof decoded !== "object" || !decoded.userId) {
-        throw new Error("Invalid accessToken");
-      }
-  
-      const connection = await connectToDatabase();
-      if(!connection.success) throw new Error('Could not connect to database')
-
-      const postItself = await SpecificForum.findById(postId);
-      if (!postItself) throw new Error("Post not found");
-  
-      const user = await User.findById(decoded.userId);
-      if (!user) throw new Error("User not found");
-  
-      const newComment = new Comment({
-        commentContent: replyContent,
-        userId: user._id,
-        postId: postItself._id,
-      });
-  
-      await newComment.save();
-      postItself.comments.push(newComment._id);
-      postItself.repliesAmount += 1;
-      await postItself.save();
-  
-      user.comments.push({
-        commentId: newComment._id,
-        content: replyContent,
-      });
-      await user.save();
-  
-    console.log('Reply created successfully');
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
 
   export async function favorite(){
     try{
@@ -445,11 +398,35 @@ export async function getCustomerName(session_id: string) {
         if(!order) throw new Error('Could not Order with that id in database');
 
         const firstname = order.shipping.firstname;
-        console.log(firstname)
         if(!firstname) throw new Error('Could not find name property on order');
       
 
         return firstname
+    } catch(error){
+        handleError(error)
+        return null
+    }
+}
+
+
+
+
+//Fetch posts to My Posts Page
+export async function getMyPosts(){
+    try{
+        const storedCookies = cookies()
+        const refreshToken = (await storedCookies).get('refreshToken')?.value;
+        if(!refreshToken) throw new Error('User is not logged in, cannot fetch posts');
+
+        const decoded = jwt.verify(refreshToken, REFRESH_SECRET)
+        if(decoded === undefined || typeof decoded !== 'object' || !('userId' in decoded)) throw new Error('Invalid refreshToken')
+     
+        let posts = null  
+        posts = await SpecificForum.find({userId: decoded.userId});
+        if(!posts) console.log('No Posts Found')
+
+        return posts
+
     } catch(error){
         handleError(error)
         return null

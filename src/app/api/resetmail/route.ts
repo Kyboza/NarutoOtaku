@@ -2,11 +2,10 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt'
-import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 import crypto from 'crypto'
+import { ratelimit } from "@/app/utils/ratelimiter";
 
-dotenv.config()
 
 const EMAIL_USER = process.env.EMAIL_USER ?? '';
 const EMAIL_PASS = process.env.EMAIL_PASS ?? '';
@@ -14,6 +13,10 @@ const EMAIL_PASS = process.env.EMAIL_PASS ?? '';
 if(!EMAIL_USER || !EMAIL_PASS) throw new Error('Could not get email user or pass variable from env file')
 
 export async function POST(req: NextRequest){
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+    const {success} = await ratelimit.limit(ip)
+    if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
     const {email, username} = await req.json()
     if(!email || !username) return NextResponse.json({message: 'Did not recieve any username or email from frontend'}, {status: 400})
 
