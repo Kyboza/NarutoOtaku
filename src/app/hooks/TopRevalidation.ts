@@ -5,7 +5,7 @@ import { RootState } from "../store/store";
 import { revalidate } from "../actions/userActions";
 
 const TopRevalidation = () => {
-  const toggleStatus = useSelector((state: RootState) => state.likes.toggleStatus);
+  const toggleStatus = useSelector((state: RootState) => state.character.likes);
   const path = '/';
 
   const [activeTabs, setActiveTabs] = useState<number>(0);

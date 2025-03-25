@@ -71,7 +71,7 @@ export default function LikeButton({visitingUser, characterName, initialLikes, i
 
   return (
     <div>
-      <button onClick={updateLikes} className='flex flex-row items-center bg-[#737373] h-[33%] sm:h-[50%] md:h-[25%] xl:h-[25%] border border-black rounded-md p-1'>
+      <button onClick={updateLikes} className='flex flex-row items-center bg-[#737373] h-[33%] sm:h-[50%] md:h-[25%] border border-black rounded-md p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>
               <p className='text-shadow-lg mr-0.5 text-sm sm:text-sm md:text-xl lg:text-3xl'>
                 {buttonText}
               </p>

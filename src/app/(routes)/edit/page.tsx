@@ -4,6 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io'
 import { useState, useRef } from 'react'
 import { updateUserInfo } from '@/app/actions/userActions'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function EditSettings() {
   const router = useRouter();
@@ -25,12 +26,16 @@ export default function EditSettings() {
 
   const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-      if(file && file.type === 'image/webp'){
+      if(file && (file.type === 'image/webp' || file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/heic')){
         const path = `/images/profilepic/${file.name}`
         setImagePath(path)
         setImageFile(file)
       } else {
-        console.log('Problem uploading image')
+        console.error('Problem uploading image')
+        toast.error('Error Occurred While Uploading Image', {
+          id: 'edit-user'
+        });
+        return
       }
     }
 
@@ -46,16 +51,20 @@ export default function EditSettings() {
         if (
           gender !== null &&
           fighting !== null &&
+          weight !== null  &&
+          about !== null &&
+          imageFile !== null &&
           ageRegex.test(age) &&
           weightRegex.test(weight) &&
           aboutRegex.test(about) &&
-          imageFile !== null &&
           pathRegex.test(imagePath)
         ) {
           const updatedData = { gender, fighting, age, weight, about, imageFile, imagePath };
           
           const data = await updateUserInfo(updatedData);
-          console.log("Updated UserInfo successfully");
+          toast.success('Successfully Updated Profile', {
+            id: 'edit-user'
+          });
     
           router.push(`/users/${data}`);
     
@@ -68,10 +77,18 @@ export default function EditSettings() {
           setImageFile(null);
           setImagePath('')
         } else {
-          throw new Error("Please fill in appropriate information");
+          toast.error('Fill In All Info & Picture Can Only Be Webp', {
+            id: 'edit-user'
+          });
+          toast.error('Fill In All Info & Picture Can Only Be Webp', {
+            id: 'edit-user'
+          });
         }
       } catch (error) {
-        console.log('Could not update user info', error)
+        handleError(error)
+        toast.error('Fill In All Info & Picture Can Only Be Webp', {
+          id: 'edit-user'
+        });
       }
     };
     
@@ -179,7 +196,7 @@ export default function EditSettings() {
                     onChange={handleFileChange}
                     className="hidden border border-black outline-none w-[95%] rounded-md bg-gray-400/20 placeholder:text-white text-white text-sm sm:text-base md:text-lg lg:text-xl p-2 sm:p-3 text-shadow-xl"
                   />
-                  <button onClick={triggerFileInput} className='p-2 w-[40%] sm:w-[30%] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-xxs sm:text-sm md:text-base text-stroke text-shadow-xl transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Image</button>
+                  <button onClick={triggerFileInput} className='p-2 w-[40%] sm:w-[30%] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-xxs sm:text-sm md:text-base text-stroke text-shadow-xl transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Webp Image</button>
                   <p className='text-white text-sm sm:text-base md:text-lg p-2 sm:p-3 text-shadow-xl'>{imagePath ? imagePath : ''}</p>
                  </section>
 

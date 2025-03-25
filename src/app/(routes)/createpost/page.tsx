@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import { IoIosArrowDown } from "react-icons/io";
 import axiosAPI from '@/app/lib/axios'
+import { toast } from 'sonner';
 
 export default function CreatePost() {
   const router = useRouter()
@@ -32,12 +33,12 @@ export default function CreatePost() {
         if(response.status === 200) {
           const data = response.data;
           setCollectedData(data)
-          console.log(data)
         } else {
-          console.log("Forum categories received:", response.data);
+          toast.error('Error Occurred While Loading Posts')
         }
       } catch(error){
-        console.error("Could not contact or get data from Route", error)
+        toast.error('Error Occurred While Loading Posts')
+        handleError(error)
       }
     }
     loadCategory()
@@ -62,19 +63,19 @@ export default function CreatePost() {
 
       const response = await axiosAPI.post('api/forum/submit-post', data)
       if(response.status === 200){
-        console.log("Post successfully uploaded to the Forum")
+        toast.success('Successfully Created Post')
         router.push('/')
         setCategoryTitle('')
         setCategoryId('')
         setPostTitle('')
         setPostContent('')
       } else {
-        console.log("Could not upload post")
-        return
+        toast.error('Error Occurred While Creating Post')
       }
     }
     catch(error) {
       console.error('Error recieving a valid response', error)
+      toast.error('Error Occurred While Creating Post')
     }
   }
 

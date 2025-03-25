@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { fetchSpecificForum } from '@/app/actions/userActions';
 import PostButton from '@/app/components/PostButton';
+import { formatDateSmall } from '@/app/utils/formatDate';
 
 interface IForumSpecific {
   _id: string
@@ -23,18 +24,6 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
     } else if(specificForumData.length === 0) {
       return <p>No Specific Forums Exist</p>
     }
-
-
-  const formatDate = (date: Date) => {
-    const formattedDate = new Date(date).toLocaleString(navigator.language, {
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    return formattedDate;
-  }
-
 
 
 
@@ -65,13 +54,13 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
                   By: {forum.by}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
-                  Posted: {formatDate(forum.createdAt)}
+                  Posted: {formatDateSmall(forum.createdAt)}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
                   Replies: {forum.repliesAmount}
                 </p>
                 <p className='font-notojp text-white text-stroke text-shadow-xl text-xxs sm:text-xs md:text-md lg:text-xl xl:text-lg landscape-sm:text-xs landscape-lg:text-sm landscape-xl:text-lg landscape-sm:mt-2 landscape-xl:mt-4'>
-                  Latest Reply: {forum.updatedAt ? formatDate(forum.updatedAt) : ''}
+                  Latest Reply: {forum.updatedAt ? formatDateSmall(forum.updatedAt) : ''}
                 </p>
               </div>
   

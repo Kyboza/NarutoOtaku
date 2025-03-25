@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IItemCart } from "../../../types";
+import { toast } from "sonner";
 
 interface IStoreCart {
     items: IItemCart[]
@@ -19,8 +20,13 @@ const cartSlice = createSlice({
             if(existingItem){
                 if(existingItem.amount <= 7){
                     existingItem.amount += 1
+                    toast.success('Added Item To Cart', {
+                        id: 'cart-item-in-cart'
+                    })
                 } else {
-                    console.log('Max 8 of this item')
+                    toast.error('Max 8 Allowed At Once', {
+                        id: 'cart-item-in-cart'
+                    })
                 }
             } else {
                 state.items.push({...action.payload, amount: 1});
@@ -31,6 +37,9 @@ const cartSlice = createSlice({
             if(existingItem){
                 if(existingItem.amount > 1){
                     existingItem.amount -=1
+                    toast.success('Removed Item From Cart', {
+                        id: 'cart-item-in-cart'
+                      });
                 } else {
                     state.items = state.items.filter(item => item._id !== action.payload);
                 }

@@ -38,9 +38,11 @@ export async function GET() {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
 
+        const data = {isActive: userStatus.isActive, username: userStatus.username}
+
         return NextResponse.json({
             message: 'User is logged in',
-            data: { isActive: userStatus.isActive, username: userStatus.username },
+            data,
         }, { status: 200 });
 
     } catch (error) {

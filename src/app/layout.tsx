@@ -1,20 +1,8 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ReduxProvider from "./store/Provider";
-
-export const metadata: Metadata = {
-  title: "Naruto Otaku",
-  description: "A site dedicated for Naruto fans, including a forum, a shop, a read about characters and userprofiles fans can explore the world of naruto",
-  keywords: "Naruto, Otaku, Manga, Anime, Fan Art, Shop, Forum, Profiles, Favourite Character",
-  openGraph: {
-    title: "Naruto Otaku",
-    description: "On this site you can engage with the Naruto community, visit the Naruto based shop or read about your favourite character",
-    url: "http://localhost:3000",
-    type: "website"
-  }
-};
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -27,6 +15,7 @@ export default function RootLayout({
       <ReduxProvider>
         <Header/>
           <main className="flex justify-center h-full flex-grow">{children}</main>
+          <Toaster richColors/>
         <Footer/>
       </ReduxProvider>
       </body>

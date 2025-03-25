@@ -9,11 +9,11 @@ export default async function Shop() {
   if(!items || items.length === 0) return <p>Could not get Items from Database</p>
 
   return (
-    <div className="flex flex-col h-full items-center">
+    <div className="flex flex-col h-auto items-center">
       <h1 className="mt-4 mb-4 text-2xl md:text-3xl font-rock text-white text-stroke-title text-shadow-xl">
         Store
       </h1>
-      <section className="w-full max-w-[80vw] lg:max-w-[60vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-auto bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md overflow-hidden">
+      <section className="w-full max-w-[80vw] lg:max-w-[60vw] xl:max-w-[35vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-auto bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md overflow-hidden">
         {items && items.map((item) => (
           <div key={item._id} className="relative rounded-tl-md border-b sm:border-r border-black">
            <Image
@@ -29,8 +29,8 @@ export default async function Shop() {
             style={item.bgimage ? { backgroundImage: `url(${item.bgimage})` } : {}}
            >
              <div className="bg-[rgba(140,140,140,0.75)] absolute inset-0 flex flex-col justify-around items-center rounded-tl-md">
-               <p className="font-notojp text-white text-stroke text-shadow-xl text-sm md:text-2xl">
-                 {item.name} - {item.price}
+               <p className="font-notojp text-white text-stroke text-shadow-xl text-sm md:text-2xl xl:text-xl">
+                 {item.name} - {item.price + '$'}
                </p>
                <CartButton item={item}/>
              </div>

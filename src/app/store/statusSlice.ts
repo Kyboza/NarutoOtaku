@@ -57,8 +57,9 @@ const statusSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(fetchUserStatus.fulfilled, (state, action) => {
-            state.active = action.payload.statusState;
-            state.userName = action.payload.statusUsername;
+            const {isActive, username} = action.payload.data
+            state.active = isActive;
+            state.userName = username;
             state.loading = false;
             state.error = null;
         })

@@ -24,8 +24,19 @@ export default function Cart() {
   ) 
 
   const removeItemCart = (itemId: string) => {
-    dispatch(removeItem(itemId));
-    // persistor.flush() //tvingar direkt sync
+    try {
+      dispatch(removeItem(itemId));
+    } catch(error){
+      handleError(error)
+    }
+  }
+
+  const addItemCart = (item: IItemCart) => {
+    try{
+      dispatch(addItem(item))
+    } catch(error){
+      handleError(error)
+    }
   }
 
   const totalAmount = items.map(item => item.price * item.amount).reduce((acc, curr) => acc + curr, 0)
@@ -62,14 +73,14 @@ export default function Cart() {
             </p>
             <div className="flex flex-row items-center">
               <button
-                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1"
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
                 onClick={() => removeItemCart(item._id)} // Assuming you want to remove items here
               >
                 <FaMinus className="text-xxs sm:text-sm" />
               </button>
               <button
-                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1"
-                onClick={() => dispatch(addItem(item))} // Assuming you want to add items here
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
+                onClick={() => addItemCart(item)} // Assuming you want to add items here
               >
                 <FaPlus className="text-xxs sm:text-sm" />
               </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { fetchFrontForum } from '../actions/userActions';
+import { formatDateFull } from '../utils/formatDate';
 
 interface IForum {
   _id: string
@@ -20,16 +21,6 @@ export default async function Forum() {
     return <p>No Forum Categories Found</p>
    }
 
-  const formatDate = (date: Date) => {
-    const formattedDate = new Date(date).toLocaleString(navigator.language,{
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    })
-    return formattedDate
-  }
 
   return (
     <div className='flex flex-col items-center h-full'>
@@ -56,7 +47,7 @@ export default async function Forum() {
                   Posts/Day: {forum.perday}
                 </p>
                 <p className=' font-notojp text-white text-stroke text-shadow-xl text-xxs md:text-md lg:text-lg sm:text-xs'>
-                  Latest Post: {formatDate(new Date(forum.latest))}
+                  Latest Post: {forum.latest ? formatDateFull(new Date(forum.latest)) : ('-')}
                 </p>
               </div>
             </li>

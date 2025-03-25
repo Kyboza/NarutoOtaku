@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '@/app/store/store';
 import { toggleStatus, getUserId } from '@/app/store/statusSlice'
+import { toast } from 'sonner'
 
 export default function Login() {
     const dispatch = useDispatch<AppDispatch>()
@@ -23,20 +24,20 @@ export default function Login() {
         e.preventDefault();
         
         if (!usernameRegex.test(username) || !passwordRegex.test(password)) {
-            console.error("Invalid username or password format");
+            toast.error('Invalid Characters In Username Or Password')
             return;
         }
     
         if (!username.trim() || !password.trim()) {
-            console.error("Please provide login info");
+            toast.error('Please Fill In Both Username & Password')
             return;
         }
     
         try {
             const response = await axiosAPI.post('/api/login', { username, password });
-    
+            const toastId = toast.loading('Loading...')
             if (response.status === 200) {
-                console.log("Successfully logged in");
+                toast.success("Successfully Logged In", { id: toastId });
                 setUsername('');
                 setPassword('');
                 const userName = response.data.userName
@@ -44,10 +45,12 @@ export default function Login() {
                 dispatch(getUserId(userName))
                 router.push('/')
             } else {
-                console.error("Login failed. Unexpected response status:", response.status);
+                toast.error("Failed To Log In", { id: toastId });
+                return
             }
         } catch (error) {
             console.error('Could not log in user', error);
+            toast.error("Failed To Log In");
         }
     };
     

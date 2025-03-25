@@ -34,18 +34,6 @@ export default function OrderSuccess() {
   const endOrder = () => {
     router.push('/')
   }
-
-  // useEffect(() => {
-  //   const handleUnload = (event: PageTransitionEvent) => {
-  //     if (event.persisted) return
-  //     dispatch(clearCart())
-  //   }
-  //   window.addEventListener('pagehide', handleUnload)
-
-  //   return () => {
-  //     window.removeEventListener('pagehide', handleUnload)
-  //   }
-  // }, [dispatch])
   
 
   return (
@@ -69,7 +57,7 @@ export default function OrderSuccess() {
       </section>
 
       {/* "Okay" Button */}
-      <button onClick={endOrder} className="w-full sm:w-[50vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-stroke text-shadow-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:bg-[#d18a15] transition duration-300 ease-in-out">
+      <button onClick={endOrder} className="w-full sm:w-[50vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-stroke text-shadow-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:bg-[#d18a15] transition-all duration-100 ease-in-out hover:scale-105 active:scale-95">
         Okay
       </button>
     </div>

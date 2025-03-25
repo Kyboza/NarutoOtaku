@@ -7,6 +7,7 @@ import axiosAPI from '../lib/axios'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface IComment {
     _id: string
@@ -29,18 +30,31 @@ const Reply = ({postId}: {postId: string}) => {
         
         try {
             if (!replyRegex.test(replyContent)) {
+                toast.error('Comment Contains Non Allowed Characters', {
+                  id: 'comment'
+                })
                 throw new Error("Reply content does not match required format.");
             }
                 const response = await axiosAPI.post('/api/forum/submit-reply', {postId, replyContent})
                 if(response.status === 200){
+                  toast.success('Successfully Posted Comment', {
+                    id: 'comment'
+                  });
                   setReplyActive(false);
                   setReplyContent("");
                 } else {
-                  console.log('Failed to post reply')
+                  console.error('Failed to post reply')
+                  toast.error('Error Occured Creating Comment', {
+                    id: 'comment'
+                  });
+                  return
                 }
             } 
             catch (error) {
               console.error("Failed to post comment:", error);
+              toast.error('Error Occured Creating Comment', {
+                id: 'comment'
+              });
           }
         }
 

@@ -10,6 +10,7 @@ import { RootState, AppDispatch } from "../store/store";
 import axiosAPI from "../lib/axios";
 import { useRouter } from "next/navigation";
 import TopRevalidation from "../hooks/TopRevalidation";
+import { toast } from "sonner";
 
 export default function Header() {
   const router = useRouter()
@@ -25,20 +26,19 @@ export default function Header() {
 
   const logoutUser = async(e: React.MouseEvent<HTMLLIElement>) => {
     e.preventDefault()
-    console.log("Sending logout request...");
     try {
       const response = await axiosAPI.post('/api/logout')
-      console.log("Response:", response);
       if(response.status === 200){
-        console.log('User Successfully logged out')
+        toast.success('Successfully Logged Out')
         dispatch(toggleStatus(false))
         router.push('/')
       } else {
-        console.log('Could not logout user but sent request to api route')
+        toast.error('Failed To Logout')
       }
     } 
     catch(error){
-      console.error('Could not logout user', error)
+      handleError(error)
+      toast.error('Failed To Logout')
     }
   }
 

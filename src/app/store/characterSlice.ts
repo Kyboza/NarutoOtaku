@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosAPI from "../lib/axios";
+import { toast } from "sonner";
 
 // Define the character type
 interface ICharacter {
@@ -72,9 +73,15 @@ const characterSlice = createSlice({
             if(state.userWhoLike.includes(visitingUser)){
                 state.userWhoLike = state.userWhoLike.filter((user) => user !== visitingUser)
                 state.likes = state.likes -= 1
+                toast.success('Unliked Character', {
+                    id: 'character-like'
+                })
             } else {
                 state.userWhoLike.push(visitingUser);
                 state.likes = state.likes += 1
+                toast.success('Liked Character', {
+                    id: 'character-like'
+                })
             }
         }
        

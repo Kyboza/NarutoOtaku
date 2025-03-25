@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosAPI from "../lib/axios";
+import { toast } from "sonner";
 
 
 interface IFollow {
@@ -80,9 +81,15 @@ const followSlice = createSlice({
       if (state.following.includes(username)) {
         state.following = state.following.filter((name) => name !== username);
         state.followers = state.followers -=1
+        toast.success('Successfully Unfollowed User', {
+          id: 'follow-user'
+        });
       } else {
         state.following.push(username);
         state.followers = state.followers += 1;
+        toast.success('Successfully Followed User', {
+          id: 'follow-user'
+        });
       }
     },
   },

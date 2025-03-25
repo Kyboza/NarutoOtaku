@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer} from 'redux-persist';
 import { combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import likesReducer from './likesSlice';
 import characterReducer from './characterSlice';
 import statusReducer from './statusSlice';
 import cartReducer from './cartSlice';
@@ -16,7 +15,6 @@ const persistConfig = {
 
 // Explicitly handle `undefined` for each slice during hydration
 const rootReducer = combineReducers({
-  likes: likesReducer,
   character: characterReducer,
   status: statusReducer,
   cart: cartReducer,
