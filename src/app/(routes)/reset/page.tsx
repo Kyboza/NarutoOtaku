@@ -3,8 +3,8 @@ import React from 'react'
 import Link from 'next/link'
 import { useState } from 'react'
 import axiosAPI from '@/app/lib/axios'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function Reset() {
     const router = useRouter()
@@ -18,35 +18,40 @@ export default function Reset() {
     const requestReset = async(e:React.FormEvent) => {
         e.preventDefault()
 
+        if (!email.trim() || !username.trim()) {
+            toast.error('Please Fill In All Fields', {
+                 id: 'reset'
+            })
+            return;
+        }
+
         if(!emailRegex.test(email) || !usernameRegex.test(username)){
-             console.error('Incorrect Format for Email or Username')
-             return
+             toast.error('Please Do Not Include Non-Allowed Characters', {
+                id: 'reset'
+            })
+            return
         }
 
         try{
             const data = {email, username}
             const response = await axiosAPI.post('/api/resetmail', data)
             if(response.status === 200) {
+                toast.success('Successfully Sent Reset Mail', {
+                    id: 'reset'
+                })
                 setEmail('')
                 setUsername('')
-                console.log('Mail sent successfully')
                 router.push(`/verification?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`)
             }
         } 
         catch(error){
-            if(axios.isAxiosError(error)){
-                console.error(error.response?.data?.message || 'Unknown Axios Error')
-            } else if(error instanceof Error){
-                console.error('Unknown Error of type Error', error)
-            } else {
-                console.log('Unknown Error', error)
-            }
+           handleErrorWithAxios(error)
         }
     }
 
   return (
     <div className='flex flex-col items-center'>
-        <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl'>Login</h1>
+        <h1 className='mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl'>Reset</h1>
         <form onSubmit={(e) => requestReset(e)} className='flex flex-col items-center h-auto min-h-[30vh] w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-4 mb-2'>
         <label htmlFor="resetPasswordEmail" className='sr-only'>Reset - Email</label>
             <input
@@ -79,8 +84,8 @@ export default function Reset() {
                 onChange={(e) => setUsername(e.target.value)}
                 />
             <div className='flex flex-col items-center w-full gap-1'>
-                <Link href='/login'><p className='font-notojp text-white opacity-75 text-xs sm:text-sm text-shadow-xl'>Login</p></Link>
-                <Link href='/register'><p className='font-notojp text-white opacity-75 text-xs sm:text-sm text-shadow-xl'>Register</p></Link>
+                <Link href='/login'><p className='font-notojp text-white text-xs sm:text-sm text-shadow-xl'>Login</p></Link>
+                <Link href='/register'><p className='font-notojp text-white text-xs sm:text-sm text-shadow-xl'>Register</p></Link>
             </div>
             <div className='flex flex-row justify-end h-auto w-full'>
                 <button type='submit' className='p-2 w-[40%] sm:w-[30%] py-2 bg-[#E19B1A] border border-black rounded-md font-notojp text-white text-sm sm:text-base md:text-lg text-stroke text-shadow-xl transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Reset</button>

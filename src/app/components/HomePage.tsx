@@ -17,7 +17,7 @@ export default async function HomePage() {
        <Carousel topChar={topChar}/>
       </section>
 
-      {/* <h1 className="mb-2 text-2xl sm:text-3xl font-rock text-white text-stroke-title text-shadow-xl">
+      {/* <h1 className="mb-2 text-2xl sm:text-3xl font-rock text-white text-stroke-p text-shadow-xl">
           Welcome
         </h1> */}
 
@@ -40,7 +40,7 @@ export default async function HomePage() {
             alt='Visit Forum'
             fill
           />
-           <p className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-white font-rock text-stroke-title text-2xl md:text-4xl lg:text-5xl'>Forum</p>
+           <p className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-white font-rock text-stroke-p text-2xl md:text-4xl lg:text-5xl'>Forum</p>
         </div></Link>
         <Link href='/characters'><div className='relative h-[25vh] w-[30vw] sm:w-[25vw] sm:h-[33vh] md:w-[30vw] xl:h-[40vh] transition-transform duration-300 hover:scale-105 active:scale-95'>
           <Image

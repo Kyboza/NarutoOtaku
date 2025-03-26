@@ -1,7 +1,6 @@
 "use server";
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path'
 import { revalidatePath } from 'next/cache';
@@ -21,10 +20,8 @@ import { IItemCart } from '../../../types';
 import Stripe from 'stripe';
 
 
-dotenv.config();
-
-interface IReply {
-    _id: string; // Konverterat till en sträng
+type IReply = {
+    _id: string;
     commentContent: string;
     commentUsername: string;
     commentImg: string;
@@ -421,7 +418,7 @@ export async function getMyPosts(){
         const decoded = jwt.verify(refreshToken, REFRESH_SECRET)
         if(decoded === undefined || typeof decoded !== 'object' || !('userId' in decoded)) throw new Error('Invalid refreshToken')
      
-        let posts = null  
+        let posts = []  
         posts = await SpecificForum.find({userId: decoded.userId});
         if(!posts) console.log('No Posts Found')
 
@@ -429,6 +426,5 @@ export async function getMyPosts(){
 
     } catch(error){
         handleError(error)
-        return null
     }
 }

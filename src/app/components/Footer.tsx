@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full fixed bottom-0 z-10 flex flex-row justify-between items-start bg-[#D48900] border-t border-black border-opacity-25 shadow-[0px_-10px_8px_rgba(0,0,0,0.03)] py-2 px-4 mt-2">
+    <footer className="w-full relative bottom-0 z-10 flex flex-row justify-between items-start bg-[#D48900] border-t border-black border-opacity-25 shadow-[0px_-10px_8px_rgba(0,0,0,0.03)] py-2 px-4 mt-2">
       {/* Left Column: Copyright & Social Icons */}
       <div className="w-1/2 flex flex-col items-start">
         <p className="font-bold font-notojp text-xs md:text-sm lg:text-lg text-white text-shadow-letter-border">

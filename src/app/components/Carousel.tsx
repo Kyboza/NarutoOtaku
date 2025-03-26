@@ -36,17 +36,17 @@ export default function Carousel({topChar}: {topChar: ITopCharacters[]}) {
                     />
                   </div>
                   
-                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
+                  <p className='font-rock text-white font-bold text-stroke-p text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                     {`# ${index + 1}`}
                   </p>
-                  <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
+                  <p className='font-rock text-white font-bold text-stroke-p text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                     {char.name}
                   </p>
                   <div className='flex items-center mb-3 sm:mb-2 md:mb-5'>
-                      <p className='text-2xl mr-2 text-stroke-title text-shadow-xl md:text-4xl lg:text-5xl'>
+                      <p className='text-2xl mr-2 text-stroke-p text-shadow-xl md:text-4xl lg:text-5xl'>
                         &#10084;&#65039;
                       </p>
-                      <p className='font-rock text-white font-bold text-stroke-title text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
+                      <p className='font-rock text-white font-bold text-stroke-p text-shadow-xl text-xl sm:text-lg md:text-4xl lg:text-5xl'>
                         {char.likes}
                       </p>
                   </div>

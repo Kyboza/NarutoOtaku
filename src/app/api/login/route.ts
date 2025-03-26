@@ -47,11 +47,17 @@ export async function POST(req: NextRequest){
         existingUser.lastLogin = new Date()
         await existingUser.save()
 
-        const response = NextResponse.json({message: 'User Authenticated', userName: existingUser.username}, {status: 200})
+        const response = NextResponse.json({
+            message: 'User Authenticated',
+            data: {
+              isActive: true,
+              username: existingUser.username
+            }
+          }, { status: 200 });
 
         response.cookies.set('accessToken', accessToken, {
             httpOnly: true,
-            sameSite: "lax",
+            sameSite: "strict",
             secure: process.env.NODE_ENV === 'production',
             path: '/',
             maxAge:  60 * 15
@@ -59,7 +65,7 @@ export async function POST(req: NextRequest){
 
         response.cookies.set('refreshToken', refreshToken, {
             httpOnly: true,
-            sameSite: "lax",
+            sameSite: "strict",
             secure: process.env.NODE_ENV === 'production',
             path: '/',
             maxAge: 60 * 60 * 24 * 7

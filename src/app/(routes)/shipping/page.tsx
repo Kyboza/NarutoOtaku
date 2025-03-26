@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/store/store'
 import axiosAPI from '@/app/lib/axios'
-import { handleErrorWithAxios } from '@/app/utils/errorHandler'
+import { toast } from 'sonner'
 
-interface ShippingFormData {
+type ShippingFormData = {
   shippingFirstName: string;
   shippingLastName: string;
   shippingEmail: string;
@@ -34,28 +34,35 @@ export default function Shipping() {
     try {
       const response = await axiosAPI.post('/api/comparison', {itemSeparation})
       if(response.status === 200){
-        console.log('Comparison succedded, sending to payment')
 
         const orderResponse = await axiosAPI.post('/api/orders', {
           items: itemSeparation,
           shipping: data
         });
 
-        if(orderResponse.status !== 200) throw new Error('Could not save order to database');
+        if(orderResponse.status !== 200)  toast.error('Error Occurred While Preparing Order', {
+          id: 'address'
+        });
 
         const orderId = orderResponse.data.id
 
         const stripeResponse = await axiosAPI.post('/api/checkout', {itemSeparation, orderId})
         if(stripeResponse.status === 200) {
-          console.log('Success Redirecting to payment.')
+          toast.success('Redirecting to Payment', {
+            id: 'address'
+          })
           window.location.href = stripeResponse.data.url
         } else {
-          throw new Error('Failed to get a session id')
+          toast.error('Error Occurred While Redirecting To Payment', {
+            id: 'address'
+          })
         }
       } else {
-        throw new Error('Failed to compare cart to warehouse stock')
+        toast.error('Error Occured While Checking Warehouse Stock', {
+          id: 'address'
+        })
       }
-    } catch(error: unknown){
+    } catch(error){
       handleErrorWithAxios(error)
     }
   }
@@ -63,11 +70,11 @@ export default function Shipping() {
 
   return (
     <div className="w-full flex flex-col items-center p-4 h-auto">
-    <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">Shipping Information</h1>
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center w-full bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-4 gap-4">
+    <h1 className="mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl">Shipping Information</h1>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center w-full sm:w-[50%] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-4 gap-4">
       <label htmlFor="shippingFirstName" className='sr-only'>Firstname</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingFirstName'
         aria-required='true'
@@ -93,7 +100,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingLastName" className='sr-only'>Lastname</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingLastName'
         placeholder='Lastname'
@@ -119,7 +126,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingEmail" className='sr-only'>Email</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="email" 
         id='shippingEmail'
         autoComplete='off'
@@ -145,7 +152,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingAddressOne" className='sr-only'>Street Address</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingAddressOne'
         placeholder='Street Address'
@@ -171,7 +178,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingAddressAdditional" className='sr-only'>Additional Address Information Optional</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingAddressAdditional'
         placeholder='Apartment/ Suite/ Floor (Optional)'
@@ -196,7 +203,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingCity" className='sr-only'>City</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingCity'
         placeholder='City'
@@ -222,7 +229,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingState" className='sr-only'>State/Province/Region</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingState'
         placeholder='State/ Province/ Region'
@@ -248,7 +255,7 @@ export default function Shipping() {
 
       <label htmlFor="shippingZIP" className='sr-only'>ZIP Code</label>
       <input
-        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+        className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
         type="text" 
         id='shippingZIP'
         placeholder='ZIP Code'

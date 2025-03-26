@@ -29,7 +29,7 @@ if(!post) return <p>No Post Found</p>
 return (
 
     <div className='flex flex-col items-center justify-top h-auto overflow-y-scroll scrollbar-hide'>
-       <h1 className=" mt-4 mb-4 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-title text-shadow-xl">
+       <h1 className=" mt-4 mb-4 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-p text-shadow-xl">
           {post.title}
         </h1>
     {/* Forum Inlägg */}

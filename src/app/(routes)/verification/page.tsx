@@ -2,8 +2,8 @@
 import React, { FormEvent } from 'react'
 import { useState, useRef } from 'react'
 import axiosAPI from '@/app/lib/axios'
-import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function Verification() {
     const router = useRouter()
@@ -40,27 +40,29 @@ export default function Verification() {
                 const data = {email, username, code}
                 const response = await axiosAPI.post('/api/verifycode', data);
                 if(response.status === 200){
+                    toast.success('Successfully Validated Code', {
+                        id: 'validate'
+                    });
                     setCode('')
-                    console.log('Code is correct')
                     router.push(`/newpassword?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`)
+                } else{
+                    toast.error('Error Occurred While Validating Code', {
+                        id: 'validate'
+                    })
                 }
             } else{
-                console.log('Please provide 4 characters for the Code')
+                toast.error('Please Fill In The Full Code', {
+                    id: 'validate'
+                });
             }
         } catch(error){
-            if(axios.isAxiosError(error)){
-                console.log(error.response?.data?.message || 'Unknown Axios Error')
-            } else if(error instanceof Error){
-                console.log('Unknown Error of type Error', error)
-            } else {
-                console.log('Unknown Error', error)
-            }
+           handleErrorWithAxios(error)
         }
     }
 
   return (
     <div className='flex flex-col items-center'>
-        <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl'>Verification Code</h1>
+        <h1 className='mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl'>Verification Code</h1>
         <form onSubmit={(e) => submitCode(e)} className='flex flex-col justify-between items-center h-auto min-h-[20vh] max-w-[90vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-6 mb-2'>
         <div className='flex flex-row justify-around w-full max-h-14 gap-12'>
             {[0, 1, 2, 3].map((_, index) => (

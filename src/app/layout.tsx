@@ -11,11 +11,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[url('/images/website-standard/HiddenLeafBackground.webp')] bg-cover bg-center flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen">
+      <Toaster/>
       <ReduxProvider>
         <Header/>
           <main className="flex justify-center h-full flex-grow">{children}</main>
-          <Toaster richColors/>
         <Footer/>
       </ReduxProvider>
       </body>

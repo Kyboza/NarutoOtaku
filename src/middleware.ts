@@ -1,15 +1,26 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function middleware(req: NextRequest){
+export async function middleware(req: NextRequest) {
     const storedCookies = cookies();
     const accessToken = (await storedCookies).get('accessToken')?.value;
     const refreshToken = (await storedCookies).get('refreshToken')?.value;
 
-    if(!accessToken && !refreshToken){
-        console.log('No tokens found. Calling the API to check for expired sessions...');
+    const protectedRoutes = [
+        "/createpost",
+        "/edit",
+        "/myposts",
+        "/api/forum/submit-reply",
+        "/api/forum/submit-post",
+        "/api/forum/deletePost",
+        "/api/forum/deleteReply"
+    ];
 
+    const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname);
+
+    if (!accessToken && !refreshToken) {
+        console.log('No tokens found. Calling the API to check for expired sessions...');
+        
         try {
             const response = await fetch('http://localhost:3000/api/checkExpired', {
                 method: 'GET',
@@ -17,20 +28,21 @@ export async function middleware(req: NextRequest){
 
             if (response.ok) {
                 console.log('Expired sessions have been reset successfully.');
-            }
-            else {
+            } else {
                 console.log('Error occurred while checking expired sessions');
             }
         } catch (error) {
             console.error('Error calling the expired sessions API:', error);
         }
 
-        return NextResponse.redirect(new URL('/login', req.url));
+        // 🚨 Redirect only if it's a protected route (not `/`)
+        if (isProtectedRoute) {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
     }
 
-    if(!accessToken && refreshToken){
-        try{
-
+    if (!accessToken && refreshToken) {
+        try {
             const response = await fetch('http://localhost:3000/api/refresh', {
                 method: 'GET',
                 headers: {
@@ -38,32 +50,39 @@ export async function middleware(req: NextRequest){
                 }
             });
 
-            if(response.ok){
-                const data = await response.json()
-                const newAccessToken = data.accessToken
-                if(newAccessToken){
-                    const res = NextResponse.next()
+            if (response.ok) {
+                const data = await response.json();
+                const newAccessToken = data.accessToken;
+                if (newAccessToken) {
+                    const res = NextResponse.next();
                     res.headers.set(
                         "Set-Cookie",
-                        `accessToken=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 15}` //Om något fkar igen så är det secure
-                    )
-                    
-                    return res
+                        `accessToken=${newAccessToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 15}`
+                    );
+
+                    return res;
                 }
             } else {
-                console.log('Could not get a new accessToken from our api')
+                console.log('Could not get a new accessToken from our API');
+
+                // 🚨 Redirect only if it's a protected route (not `/`)
+                if (isProtectedRoute) {
+                    return NextResponse.redirect(new URL('/login', req.url));
+                }
             }
-        } catch(error: unknown){
-            console.log('Error getting a new accessToken occured', error)
-            return NextResponse.redirect(new URL('/', req.url));
+        } catch (error) {
+            console.log('Error getting a new accessToken occurred', error);
+
+            // 🚨 Redirect only if it's a protected route (not `/`)
+            if (isProtectedRoute) {
+                return NextResponse.redirect(new URL('/login', req.url));
+            }
         }
-    } else {
-        console.log('User is not logged in')
-        
     }
-    return NextResponse.next()
+
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/createpost', '/edit', '/myposts', '/api/forum/submit-reply']
-}
+    matcher: ['/', '/users:path*', '/createpost', '/edit', '/myposts', '/api/forum/submit-reply', '/api/forum/submit-post', '/api/forum/deletePost', '/api/forum/deleteReply']
+};

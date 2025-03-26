@@ -40,7 +40,7 @@ export default async function SpecificForum({params}: {params: {categoryId: stri
   
               <Link href={`/forum/${forum._id}/${forum._id}`}>
                 <div className='flex flex-col justify-start h-[50%] w-full p-2'>
-                  <h2 className='font-notojp font-bold text-white text-stroke-title text-shadow-xl text-md sm:text-sm md:text-xl lg:text-3xl xl:text-2xl landscape-sm:text-sm landscape-md:text-md landscape-lg:text-xl landscape-xl:text-2xl'>
+                  <h2 className='font-notojp font-bold text-white text-stroke-p text-shadow-xl text-md sm:text-sm md:text-xl lg:text-3xl xl:text-2xl landscape-sm:text-sm landscape-md:text-md landscape-lg:text-xl landscape-xl:text-2xl'>
                     {forum.title}
                   </h2>
                   <p className='font-notojp text-white text-stroke text-shadow-xl text-xs sm:text-xs md:text-md lg:text-2xl xl:text-xl landscape-sm:text-sm landscape-lg:text-sm landscape-xl:text-lg'>

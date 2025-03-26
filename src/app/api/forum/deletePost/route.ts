@@ -6,10 +6,15 @@ import SpecificForum from "@/app/models/SpecificForum";
 import Post from "@/app/models/Post";
 import { cookies } from "next/headers";
 import jwt from 'jsonwebtoken'
+import { ratelimit } from "@/app/utils/ratelimiter";
 
-export async function POST(req: NextRequest){
+export async function DELETE(req: NextRequest){
     try {
-        const { postId } = await req.json()
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+        const {success} = await ratelimit.limit(ip)
+        if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
+        const postId = req.nextUrl.searchParams.get('postId')
         if(!postId) return NextResponse.json({message: 'No PostId provided'}, {status: 400});
         if(!mongoose.Types.ObjectId.isValid(postId)) return NextResponse.json({message: 'postId is not a valid ObjectId'}, {status: 400});
 

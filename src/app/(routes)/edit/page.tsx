@@ -95,7 +95,7 @@ export default function EditSettings() {
   
   return (
     <div className='flex flex-col items-center'>
-        <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl'>Edit Profile</h1>
+        <h1 className='mb-4 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-p text-shadow-xl'>Edit Profile</h1>
         <form onSubmit={(e) => submitInfo(e)} className='flex flex-col items-center h-auto w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-8 gap-4 mb-2'>
           <section className='w-[95%] flex relative items-start'>
               <div 

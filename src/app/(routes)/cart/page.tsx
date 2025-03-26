@@ -6,17 +6,15 @@ import { RootState, AppDispatch } from "@/app/store/store";
 import { clearCart, addItem, removeItem } from "@/app/store/cartSlice";
 import { IItemCart } from "../../../../types";
 import { useRouter } from "next/navigation";
-// import { persistor } from "@/app/store/store";
 
 export default function Cart() {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>();
   const items: IItemCart[] = useSelector((state: RootState) => state.cart.items);
 
-  // If no items, show a message
   if (!items || items.length === 0) return (
     <div className="w-full flex flex-col justify-center items-center p-4">
-      <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">Cart</h1>
+      <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-p text-shadow-xl">Cart</h1>
       <section className="w-full sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] flex flex-col h-[50vh] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md overflow-y-auto items-center justify-center">
         <p className="font-notojp text-white text-stroke text-shadow-xl text-base sm:text-lg md:text-xl">Cart Is Empty</p>
       </section>
@@ -44,7 +42,7 @@ export default function Cart() {
 
   return (
     <div className="flex flex-col items-center p-4">
-      <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">
+      <h1 className="mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl">
         Cart
       </h1>
       {items.map((item) => (
@@ -55,7 +53,7 @@ export default function Cart() {
           <div className="flex flex-row items-center justify-between py-4">
             <div className="w-[25%] h-[60%] rounded-sm ml-1">
               <Image
-                src={item.image ? item.image : '/path/to/default-image.jpg'} // Provide a default fallback image
+                src={item.image ? item.image : '/path/to/default-image.jpg'}
                 alt="Product Image"
                 className="w-full h-full object-contain"
                 width={1300}
@@ -73,14 +71,14 @@ export default function Cart() {
             </p>
             <div className="flex flex-row items-center">
               <button
-                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
-                onClick={() => removeItemCart(item._id)} // Assuming you want to remove items here
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-stroke text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
+                onClick={() => removeItemCart(item._id)}
               >
                 <FaMinus className="text-xxs sm:text-sm" />
               </button>
               <button
-                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
-                onClick={() => addItemCart(item)} // Assuming you want to add items here
+                className="bg-[#E19B1A] border border-black rounded-md flex items-center justify-center mr-1 text-white text-stroke text-sm sm:text-base md:text-lg text-shadow-xl p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95"
+                onClick={() => addItemCart(item)}
               >
                 <FaPlus className="text-xxs sm:text-sm" />
               </button>

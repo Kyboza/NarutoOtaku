@@ -21,12 +21,11 @@ const initialState: activeState = {
 export const fetchUserStatus = createAsyncThunk('status/fetchUserStatus', async (_, {rejectWithValue}) => {
     try{
         const response =  await axiosAPI.get('/api/status');
-        if(response.status === 200){
+        if(response.status === 200 && response.data){
             return response.data
         }
         else {
-            console.error('Request did not go through')
-            throw new Error('Request did not go through')
+            throw new Error('Request did not go through');
         }
     }
     catch(error: unknown){
@@ -57,7 +56,20 @@ const statusSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(fetchUserStatus.fulfilled, (state, action) => {
-            const {isActive, username} = action.payload.data
+            if (!action.payload) {
+                console.warn('Payload saknar data:', action.payload);
+                state.active = false;
+                state.userName = 'Guest';
+                state.loading = false;
+                state.error = 'User status unknown';
+                return;
+            }
+    
+            const { isActive, username } = action.payload.data || {
+                isActive: action.payload.isActive ?? false,
+                username: action.payload.username ?? 'Guest'
+            };
+        
             state.active = isActive;
             state.userName = username;
             state.loading = false;

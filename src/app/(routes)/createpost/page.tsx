@@ -6,18 +6,21 @@ import { IoIosArrowDown } from "react-icons/io";
 import axiosAPI from '@/app/lib/axios'
 import { toast } from 'sonner';
 
+
+type IForum = {
+  _id: string,
+  title: string,
+  content: string,
+  amount: number,
+  active: number,
+  perday: number,
+  latest: string
+}
+
 export default function CreatePost() {
   const router = useRouter()
-
-  interface IForum{
-      _id: string,
-      title: string,
-      content: string,
-      amount: number,
-      active: number,
-      perday: number,
-      latest: string
-  }
+  const titleRegex = /^[a-zA-Z0-9!_\-&]{2,20}$/;
+  const contentRegex = /^[a-zA-Z0-9!_\-&\s]{10,400}$/;
 
   const [collectedData, setCollectedData] = useState<IForum[]>([])
   const [isOpen, setIsOpen] = useState(false)
@@ -35,6 +38,7 @@ export default function CreatePost() {
           setCollectedData(data)
         } else {
           toast.error('Error Occurred While Loading Posts')
+          return
         }
       } catch(error){
         toast.error('Error Occurred While Loading Posts')
@@ -46,21 +50,19 @@ export default function CreatePost() {
 
 
   const menuChange = (id: string, title: string) => {
-    setIsOpen((prev) => !prev)
     setCategoryId(id)
     setCategoryTitle(title)
+    setIsOpen(false)
   }
 
   const postHandler = async(e: React.FormEvent) => {
     e.preventDefault()
     const data = {categoryId, postTitle, postContent}
     try{
-      if(Object.values(data).some(value => value.trim() === '')){
-        console.log('Insufficient info for post')
-        return
+      if (!categoryId.trim() || !postTitle.trim() || !postContent.trim() || !titleRegex.test(postTitle) || !contentRegex.test(postContent)) {
+        toast.error("Please fill in all values");
+        return;
       }
-
-
       const response = await axiosAPI.post('api/forum/submit-post', data)
       if(response.status === 200){
         toast.success('Successfully Created Post')
@@ -71,17 +73,18 @@ export default function CreatePost() {
         setPostContent('')
       } else {
         toast.error('Error Occurred While Creating Post')
+        return
       }
     }
     catch(error) {
-      console.error('Error recieving a valid response', error)
       toast.error('Error Occurred While Creating Post')
+      handleErrorWithAxios(error)
     }
   }
 
   return (
     <div className='flex flex-col items-center w-full max-w-[80%] xl:max-w-[50%] gap-4'>
-        <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">Create A Post</h1>
+        <h1 className="mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl">Create A Post</h1>
         <form onSubmit={(e) => postHandler(e)} className='flex flex-col items-center w-full bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md p-4 gap-4'>
            
 
@@ -106,7 +109,7 @@ export default function CreatePost() {
             
             <label htmlFor='postTitle' className='sr-only'>Post Title</label>
             <input
-                className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
+                className='w-[90%] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl text-white text-stroke text-shadow-lg'
                 type="text" 
                 id='postTitle'
                 name='postTitle'
@@ -114,14 +117,14 @@ export default function CreatePost() {
                 required
                 autoComplete='off'
                 minLength={2}
-                maxLength={35}
+                maxLength={20}
                 aria-required="true"
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
                 />
                 <label htmlFor='postContent' className='sr-only'>Post Content</label>
                 <textarea
-                    className='w-[90%] xl:min-h-[40vh] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke-title placeholder:text-shadow-xl resize-none text-white text-stroke text-shadow-lg'
+                    className='w-[90%] xl:min-h-[40vh] border border-black bg-transparent outline-none p-2 rounded-md placeholder:text-white placeholder:text-stroke placeholder:text-shadow-xl resize-none text-white text-stroke text-shadow-lg'
                     name="postContent" 
                     id="postContent"
                     placeholder='Enter Post Content'

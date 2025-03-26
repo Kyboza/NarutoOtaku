@@ -20,7 +20,7 @@ export async function GET() {
     // 🚨 Om refreshToken saknas, returnera direkt att användaren är utloggad
     if (!refreshToken) {
         console.log("No refreshToken found. User is considered logged out.");
-        return NextResponse.json({ message: 'User is logged out', isActive: false, username: '' }, { status: 200 });
+        return NextResponse.json({ message: 'User is logged out', isActive: false, username: 'Guest' }, { status: 200 });
     }
 
     const connection = await connectToDatabase();
@@ -38,12 +38,7 @@ export async function GET() {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
 
-        const data = {isActive: userStatus.isActive, username: userStatus.username}
-
-        return NextResponse.json({
-            message: 'User is logged in',
-            data,
-        }, { status: 200 });
+        return NextResponse.json({message: 'User is logged in',  data: { isActive: userStatus.isActive, username: userStatus.username }}, { status: 200 });
 
     } catch (error) {
         console.error('Could not check status of user', error);

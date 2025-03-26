@@ -27,7 +27,7 @@ export default async function CharactersPage() {
 
   return (
     <div className='flex flex-col items-center mb-4'>
-      <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-title text-shadow-xl">
+      <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-p text-shadow-xl">
         Characters
       </h1>
       <section className='flex flex-col h-[60vh] w-[80vw] xl:h-[70vh] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md overflow-y-scroll scrollbar-hide'>

@@ -15,14 +15,19 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
-          description: "group-[.toast]:text-muted-foreground",
+            "group toast group-[.toaster]:border-black group-[.toaster]:shadow-lg " +
+            "group-[.toaster]:bg-[#A5A5A5] group-[.toaster]:bg-opacity-[75%] " +
+            "group-[.toaster]:text-white", // Gör all text i toasten vit
+          title: "group-[.toast]:text-white", // Gör titeln vit
+          description: "group-[.toast]:text-white", // Gör beskrivningstexten vit
           actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
+            "group-[.toast]:bg-primary group-[.toast]:text-white group-[.toast]:border-black", // Vit text, svart border
           cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+            "group-[.toast]:bg-black group-[.toast]:text-white group-[.toast]:border-black", // Svart bakgrund och vit text för Cancel
+          closeButton: "group-[.toast]:text-white", // Gör close-knappen vit
         },
       }}
+      
       {...props}
     />
   )

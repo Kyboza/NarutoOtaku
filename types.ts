@@ -1,11 +1,11 @@
-export interface ITopCharacters {
+export type ITopCharacters = {
     _id: string,
     name: string,
     likes: number,
     image: string,
   }
 
-export interface IItemCart  {
+export type IItemCart =  {
       _id: string,
       name: string,
       image: string,
@@ -14,9 +14,3 @@ export interface IItemCart  {
       amount: number,
       storage: number
 }
-
-// export interface PassItem {
-//   name: string,
-//   price: number,
-//   amount: number
-// }

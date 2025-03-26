@@ -18,17 +18,16 @@
   }
   
   body {
-    @apply min-h-full m-0 p-0 antialiased overflow-y-scroll overflow-x-hidden
+    @apply min-h-full m-0 p-0 antialiased overflow-y-scroll overflow-x-hidden;
+    background-image: url('/images/website-standard/HiddenLeafBackground.webp');
+    background-size: cover;
+    background-position: center;
   }
   
   img {
     @apply block h-auto max-w-full
   }
   
-  .offscreen {
-    left: -600rem;
-    position: absolute;
-  }
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -85,7 +84,7 @@
 }
 
 @layer utilities{
-  .text-stroke-title {
+  .text-stroke-p {
     -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75)
   }
   

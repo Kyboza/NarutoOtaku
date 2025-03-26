@@ -10,7 +10,7 @@ export default async function Shop() {
 
   return (
     <div className="flex flex-col h-auto items-center">
-      <h1 className="mt-4 mb-4 text-2xl md:text-3xl font-rock text-white text-stroke-title text-shadow-xl">
+      <h1 className="mt-4 mb-4 text-2xl md:text-3xl font-rock text-white text-stroke-p text-shadow-xl">
         Store
       </h1>
       <section className="w-full max-w-[80vw] lg:max-w-[60vw] xl:max-w-[35vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-auto bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md overflow-hidden">
