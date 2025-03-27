@@ -5,54 +5,60 @@ import Link from 'next/link'
 import { fetchSpecificPost } from '@/app/actions/serverActions'
 
 type IUser = {
-  _id: string;
-  username: string;
-  imgPath: string;
+  _id: string
+  username: string
+  imgPath: string
 }
 
 type IPost = {
   _id: string
-  title: string,
-  content: string,
-  posted: string,
-  replies: number,
-  latest: string,
-  userId: IUser,
+  title: string
+  content: string
+  posted: string
+  replies: number
+  latest: string
+  userId: IUser
   categoryId: string
 }
 
-export default async function Post({params}: {params: {postId: string}}) {
-const {postId} = await params;
-const post: IPost | null = await fetchSpecificPost(postId)
-if(!post) return <p>No Post Found</p>
+export default async function Post({ params }: { params: { postId: string } }) {
+  const { postId } = await params
+  const post: IPost | null = await fetchSpecificPost(postId)
+  if (!post) return <p>No Post Found</p>
 
-return (
+  return (
+    <div className="justify-top scrollbar-hide flex h-auto flex-col items-center overflow-y-scroll">
+      <h1 className="text-stroke-p mb-4 mt-4 font-rock text-xl text-white text-shadow-xl sm:text-2xl md:text-4xl lg:text-5xl">
+        {post.title}
+      </h1>
+      <article className="mb-4 mt-4 flex h-auto w-[80vw] flex-col rounded-md border border-black bg-[#A5A5A5] bg-opacity-[75%]">
+        <div className="flex h-[15vh] w-full flex-row items-center justify-evenly border-b border-[#505050] py-1">
+          <Link href={`/users/${post.userId.username}`}>
+            <div className="relative aspect-square h-[10vh] w-[10vh] overflow-hidden rounded-full border border-[#505050]">
+              <Image
+                className="object-cover"
+                src={post.userId.imgPath}
+                alt="Profile picture"
+                fill
+                priority
+                sizes="(max-width: 640px) 20vh, (max-width: 1024px) 10vh, (min-width: 1280px) 20vh"
+              />
+            </div>
+          </Link>
+          <Link href={`/users/${post.userId.username}`}>
+            <h2 className="text-stroke mb-4 mt-4 font-rock text-xl text-white text-shadow-xl sm:text-xl md:text-4xl lg:text-4xl">
+              {post.userId.username}
+            </h2>
+          </Link>
+        </div>
 
-    <div className='flex flex-col items-center justify-top h-auto overflow-y-scroll scrollbar-hide'>
-       <h1 className=" mt-4 mb-4 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-p text-shadow-xl">
-          {post.title}
-        </h1>
-    {/* Forum Inlägg */}
-    <article className='w-[80vw] mb-4 mt-4 h-auto flex flex-col bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md'>
-      
-      {/* Profil & Namn */}
-      <div className='h-[15vh] py-1 w-full flex flex-row justify-evenly items-center border-b border-[#505050]'>
-        <Link href={`/users/${post.userId.username}`}><div className='relative w-[10vh] h-[10vh] aspect-square border border-[#505050] rounded-full overflow-hidden'>
-          <Image className='object-cover' src={post.userId.imgPath} alt='Profile picture' fill priority sizes='100%' />
-        </div></Link>
-        <Link href={`/users/${post.userId.username}`}><h2 className='mb-4 mt-4 text-xl sm:text-xl md:text-4xl lg:text-4xl font-rock text-white text-stroke text-shadow-xl'>
-          {post.userId.username}
-        </h2></Link>
-      </div>
-
-      {/* Innehåll */}
-      <div className='h-full w-full overflow-y-scroll scrollbar-hide'>
-        <p className='p-2 mt-1 text-sm md:text-xl font-notojp text-white text-stroke leading-5 text-shadow-xl whitespace-pre-line break-words'>
-          {post.content}
-        </p>
-      </div>
-    </article>
-    <Reply postId={postId}/>
+        <div className="scrollbar-hide h-full w-full overflow-y-scroll">
+          <p className="text-stroke mt-1 whitespace-pre-line break-words p-2 font-notojp text-sm leading-5 text-white text-shadow-xl md:text-xl">
+            {post.content}
+          </p>
+        </div>
+      </article>
+      <Reply postId={postId} />
     </div>
-);
+  )
 }

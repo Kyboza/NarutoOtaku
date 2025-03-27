@@ -1,33 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Rock+Salt:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Noto+Sans+JP:wght@100..900&family=Rock+Salt&display=swap');
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-  
-  html{
-    @apply text-[16px] min-h-screen
+  html {
+    @apply min-h-screen text-[16px];
   }
-  
-  *, *::before, *::after{
-    @apply m-0 p-0 box-border
+
+  *,
+  *::before,
+  *::after {
+    @apply m-0 box-border p-0;
   }
-  
+
   body {
-    @apply min-h-full m-0 p-0 antialiased overflow-y-scroll overflow-x-hidden;
+    @apply m-0 min-h-full overflow-x-hidden overflow-y-scroll p-0 antialiased;
     background-image: url('/images/website-standard/HiddenLeafBackground.webp');
     background-size: cover;
     background-position: center;
   }
-  
+
   img {
-    @apply block h-auto max-w-full
+    @apply block h-auto max-w-full;
   }
-  
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -83,30 +82,28 @@
   }
 }
 
-@layer utilities{
+@layer utilities {
   .text-stroke-p {
-    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75)
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.75);
   }
-  
+
   .text-stroke {
-    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.1)
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.1);
   }
-  
+
   .text-stroke-2 {
     -webkit-text-stroke: 0.5px black;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 }
-
-
 
 @layer base {
   * {
@@ -116,4 +113,3 @@
     @apply bg-background text-foreground;
   }
 }
-

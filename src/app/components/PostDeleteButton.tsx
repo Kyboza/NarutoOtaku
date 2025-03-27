@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React from 'react'
 import axiosAPI from '../lib/axios'
 import { revalidate } from '../actions/serverActions'
@@ -8,19 +8,21 @@ type TId = {
   postId: string
 }
 
-export default function PostDeleteButton({postId}: TId) {
+export default function PostDeleteButton({ postId }: TId) {
   const path = '/myposts'
 
   const deletePost = async () => {
     try {
-      const response = await axiosAPI.delete('/api/forum/deletePost', {params: {postId}})
-      if(response.status === 200){
+      const response = await axiosAPI.delete('/api/forum/deletePost', {
+        params: { postId },
+      })
+      if (response.status === 200) {
         toast.success('Post Deleted Successfully')
         await revalidate(path)
       } else {
         toast.error('Error Occurred While Deleting Post')
       }
-    } catch(error){
+    } catch (error) {
       toast.error('Error Occurred While Deleting Post')
       handleErrorWithAxios(error)
     }
@@ -31,18 +33,23 @@ export default function PostDeleteButton({postId}: TId) {
       id: 'delete-post',
       action: {
         label: 'Yes',
-        onClick: () => deletePost()
+        onClick: () => deletePost(),
       },
       cancel: {
         label: 'No',
-        onClick: () => toast.message('Post Was Not Deleted')
-      }
-    });
-  };
+        onClick: () => toast.message('Post Was Not Deleted'),
+      },
+    })
+  }
 
   return (
     <>
-     <button onClick={areYouSure} className='text-white text-xxs md:text-xs lg:text-sm xl:text-base text-center text-shadow-xl p-0.5 border border-black rounded-md bg-[#DC2626] w-[45%] transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Delete</button>
+      <button
+        onClick={areYouSure}
+        className="w-[45%] transform rounded-md border border-black bg-[#DC2626] p-0.5 text-center text-xxs text-white transition-all duration-100 ease-in-out text-shadow-xl hover:scale-105 active:scale-95 md:text-xs lg:text-sm xl:text-base"
+      >
+        Delete
+      </button>
     </>
   )
 }
