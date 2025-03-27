@@ -3,9 +3,16 @@ import SpecificForum from '@/app/models/SpecificForum'
 import { NextRequest, NextResponse } from 'next/server'
 import mongoose from 'mongoose'
 
-export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
+export async function GET(req: NextRequest) {
   try {
-    const { postId } = await params
+    // Access params from the URL directly
+    const segments = req.nextUrl.pathname.split('/');
+    const postId = segments[segments.length - 1];
+
+    // Ensure postId is present
+    if (!postId) {
+      return NextResponse.json({ message: 'PostId is required' }, { status: 400 })
+    }
 
     const connection = await connectToDatabase()
     if (!connection.success) {
