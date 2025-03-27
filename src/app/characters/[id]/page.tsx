@@ -8,7 +8,8 @@ export default async function CharacterAbout({
 }: {
   params: { id: string }
 }) {
-  const { id } = params  // Directly destructure the 'id' from params
+  // Directly destructure the id from params
+  const { id } = params
   
   let visitingUser = null
   const response = await getCharacter(id)
