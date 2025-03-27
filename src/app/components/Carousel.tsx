@@ -33,6 +33,8 @@ export default function Carousel({topChar}: {topChar: ITopCharacters[]}) {
                       src={char.image}
                       alt='Top Characters Image'
                       fill
+                      sizes='100%'
+                      priority
                     />
                   </div>
                   

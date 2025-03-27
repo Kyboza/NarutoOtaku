@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
-import { getCharacter } from '@/app/actions/userActions';
+import { getCharacter } from '@/app/actions/serverActions';
 import LikeButton from '@/app/components/LikeButton';
 
 
@@ -28,7 +28,7 @@ if(!character) return <p>Failed to get character info</p>
           
           <div className='flex items-center justify-center w-[40%] mb-2'>
             <div className='w-[90%] h-[95%] border border-black rounded-md'>
-              <Image src={character.image} alt={character.name} className='w-full h-full object-cover object-center rounded-md' width={1920} height={1080} />
+              <Image src={character.image} alt={character.name} className='w-full h-full object-cover object-center rounded-md' width={1920} height={1080} priority />
             </div>
           </div>
 
@@ -43,13 +43,11 @@ if(!character) return <p>Failed to get character info</p>
             <p className='font-notojp text-white text-xs sm:text-sm md:text-2xl lg:text-3xl xl:text-xl text-stroke text-shadow-lg'>Fighting Style: {character.style}</p>
           </div>
 
-          {/* Like Button */}
           <div className='flex items-center justify-center mb-1 mr-1 w-[20%]'>
             <LikeButton visitingUser={visitingUser} characterName={characterName} initialLikes={initialLikes} initialLikers={initialLikers}/>
           </div>
         </div>
 
-        {/* Character Content */}
         <article className='w-full p-4 overflow-hidden'>
           <p className='font-notojp text-white text-xs sm:text-xs md:text-xl lg:text-2xl xl:text-xl leading-6 text-stroke text-shadow-lg'>
             {character.content}

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosAPI from "../lib/axios";
-import axios from "axios";
 
 
 type activeState = {
@@ -28,17 +27,9 @@ export const fetchUserStatus = createAsyncThunk('status/fetchUserStatus', async 
             throw new Error('Request did not go through');
         }
     }
-    catch(error: unknown){
-       if(axios.isAxiosError(error)){
-        console.error('Axios Error', error.response?.data?.message || 'Unknown Axios Error')
-        return rejectWithValue(error.response?.data?.message || "Failed to fetch status");
-       } else if(error instanceof Error){
-        console.error('Unknown Error of instance Error')
-        return rejectWithValue(error.message);
-       } else {
-        console.error('Unknown Error & type')
-        return rejectWithValue("An unexpected error occurred");
-       }
+    catch(error){
+        handleErrorWithAxios(error);
+        return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }
 })
 

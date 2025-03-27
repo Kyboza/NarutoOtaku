@@ -7,20 +7,18 @@ import Post from "@/app/models/Post";
 import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
 import { ratelimit } from "@/app/utils/ratelimiter";
 
-dotenv.config()
 
 
 
 export async function POST(req: NextRequest){
+    try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1';
     const {success} = await ratelimit.limit(ip)
     if(!success) return NextResponse.json({message: 'Ratelimit Reached'}, {status: 429});
 
-    try {
-    const ACCESS_SECRET = process.env.ACCESS_SECRET;
+    const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim();
     if(!ACCESS_SECRET) throw new Error('Could not find access value in env')
 
     const body = await req.json();

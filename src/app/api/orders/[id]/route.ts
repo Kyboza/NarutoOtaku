@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
-import Order from "@/app/models/Order"; // Ensure you import your Order model
-import { connectToDatabase } from "@/app/lib/mongodb"; // Ensure you connect to DB
+import Order from "@/app/models/Order";
+import { connectToDatabase } from "@/app/lib/mongodb";
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
     try {
-        // Ensure database connection
         const connection = await connectToDatabase();
         if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500})
 
-        const { id } = await params; // Get order ID from URL params
-        const body = await req.json(); // Read body ONCE
+        const { id } = await params; 
+        const body = await req.json();
         console.log("Received request body:", body);
 
         const { status } = body;

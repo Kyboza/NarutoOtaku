@@ -8,13 +8,12 @@ import { addItem } from '../store/cartSlice'
 
 export default function CartButton({item}: {item: IItemCart}) {
     const dispatch = useDispatch<AppDispatch>()
-    // const {_id, name, image, price, amount } = item;
 
     const updateCart = async () => {
         try {
           dispatch(addItem(item))
         } catch(error){
-            handleError(error)
+            console.error(error)
         }
     }
 

@@ -7,7 +7,7 @@ import { AppDispatch } from '@/app/store/store';
 import { clearCart } from '@/app/store/cartSlice';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { getCustomerName } from '@/app/actions/userActions';
+import { getCustomerName } from '@/app/actions/serverActions';
 
 export default function OrderSuccess() {
   const dispatch = useDispatch<AppDispatch>()
@@ -28,11 +28,9 @@ export default function OrderSuccess() {
   
         if (response) {
           setUsername(response);
-        } else {
-          return;
         }
       } catch (error) {
-        handleError(error);
+        console.error(error)
       }
     };
   

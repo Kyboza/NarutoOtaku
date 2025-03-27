@@ -2,14 +2,13 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import Order from "@/app/models/Order";
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+
 import { cookies } from "next/headers";
 
-dotenv.config();
 
 export async function POST(req: NextRequest) {
     try {
-        const ACCESS_SECRET = process.env.ACCESS_SECRET ?? "";
+        const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim();
         if (!ACCESS_SECRET) {
             return NextResponse.json({ message: "Server configuration error: Missing access secret" }, { status: 500 });
         }

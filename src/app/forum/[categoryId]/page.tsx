@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { fetchSpecificForum } from '@/app/actions/userActions';
+import { fetchSpecificForum } from '@/app/actions/serverActions';
 import PostButton from '@/app/components/PostButton';
 import { formatDateSmall } from '@/app/utils/formatDate';
 
-interface IForumSpecific {
+type IForumSpecific = {
   _id: string
   pagetitle: string,
   title: string,

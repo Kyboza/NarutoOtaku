@@ -2,15 +2,15 @@ import React from 'react'
 import Image from 'next/image'
 import Reply from '@/app/components/Reply'
 import Link from 'next/link'
-import { fetchSpecificPost } from '@/app/actions/userActions'
+import { fetchSpecificPost } from '@/app/actions/serverActions'
 
-interface IUser {
+type IUser = {
   _id: string;
   username: string;
   imgPath: string;
 }
 
-interface IPost {
+type IPost = {
   _id: string
   title: string,
   content: string,
@@ -38,7 +38,7 @@ return (
       {/* Profil & Namn */}
       <div className='h-[15vh] py-1 w-full flex flex-row justify-evenly items-center border-b border-[#505050]'>
         <Link href={`/users/${post.userId.username}`}><div className='relative w-[10vh] h-[10vh] aspect-square border border-[#505050] rounded-full overflow-hidden'>
-          <Image className='object-cover' src={post.userId.imgPath} alt='Profile picture' fill />
+          <Image className='object-cover' src={post.userId.imgPath} alt='Profile picture' fill priority sizes='100%' />
         </div></Link>
         <Link href={`/users/${post.userId.username}`}><h2 className='mb-4 mt-4 text-xl sm:text-xl md:text-4xl lg:text-4xl font-rock text-white text-stroke text-shadow-xl'>
           {post.userId.username}

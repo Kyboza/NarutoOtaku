@@ -15,27 +15,52 @@ import Item from '../models/Item';
 import Order from '../models/Order';
 import { handleError } from '../utils/errorHandler';
 import { ObjectId } from 'mongoose';
-import { ITopCharacters } from '../../../types';
-import { IItemCart } from '../../../types';
+import { IItemCart, IReply, ITopCharacters } from '../../../types';
 import Stripe from 'stripe';
 
 
-type IReply = {
-    _id: string;
-    commentContent: string;
-    commentUsername: string;
-    commentImg: string;
-}
-
-const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
-const REFRESH_SECRET = process.env.REFRESH_SECRET ?? ''
-const stripe = new Stripe(process.env.STRIPE_SECRET ?? '');
+const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim()
+const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim()
+const stripe = new Stripe(process.env.STRIPE_SECRET!.trim());
 
 if (!ACCESS_SECRET || !REFRESH_SECRET || !stripe) {
   throw new Error("ACCESS_SECRET, REFRESH_SECRET or STRIPE_SECRET is not set in environment variables");
 }
 
-//Hämta User Page Info
+//Loading Carousel Images On Homepage
+export async function favorite(){
+    try{
+        const connection = await connectToDatabase();
+        if(!connection.success) throw new Error('Could not connect to database');
+
+        const topCharacters = await Character.find({}, 'name image _id likes').sort({likes: -1}).limit(3);
+        if(!Array.isArray(topCharacters) || topCharacters.length === 0) throw new Error('Could not get characters from Database');
+        const returnObj: ITopCharacters[] = topCharacters.map(character => ({
+            name: character.name,
+            likes: character.likes,
+            image: character.image,
+            _id: (character._id as ObjectId).toString()
+        }))
+        return returnObj
+        
+    } catch(error){
+        handleError(error)
+        return null
+    }
+  }
+
+//Used To Force a Revalidation on Paths
+export async function revalidate(value: string){
+    try {
+        if(!value) throw new Error('Did not recieve info on what path to revalidate')
+        revalidatePath(value)
+        console.log('Successfully revalidated path')
+    } catch(error){
+        handleError(error)
+    }
+}
+
+//Gets A UserProfile
 export async function getUserFromParams(name: string) {
     try {
         if(!name) throw new Error('Did not get a name from client')
@@ -62,11 +87,7 @@ export async function getUserFromParams(name: string) {
                 } catch (error) {
                     handleError(error)
                 }
-            
-            } else {
-                console.log('No AccessToken Active')
             }
-            
         
             let user = null
             try {
@@ -80,55 +101,10 @@ export async function getUserFromParams(name: string) {
         handleError(error)
     }
    
-}
+} 
 
 
-//Hämta Chacterpage Info
-export async function getCharacter(characterId: string){
-    try{
-        if(!characterId || !mongoose.Types.ObjectId.isValid(characterId)) throw new Error('Did not recieve Character Id or its not a valid id')
-    
-            const connection = await connectToDatabase();
-            if (!connection.success) throw new Error(connection.message);
-        
-            const storedCookies = cookies();
-            
-            const accessToken = (await storedCookies).get('accessToken')?.value;
-            let visitingUser = null;
-            if(accessToken) {
-                let decoded = null;
-                try {
-                    decoded = jwt.verify(accessToken, ACCESS_SECRET);
-                    if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
-                        throw new Error('Invalid accessToken or no id connected to it');
-                    }
-                    visitingUser = await User.findById(decoded.userId).select('username')
-                    if(!visitingUser) throw new Error('No error with that id matching from Database');
-                } catch(error){
-                    handleError(error)
-                }
-            } else {
-                console.log('No accessToken active')
-            }
-    
-            let character = null
-            try{
-                character = await Character.findById(characterId)
-                if (!character) throw new Error('Could not find character in database');
-                return {character, visitingUser}
-            } catch(error){
-                handleError(error)
-            }
-    } catch(error){
-        handleError(error)
-    }
-
-}   
-
-
-
-
-//Edit
+//Edit Profile Information
 export async function updateUserInfo(updatedData: {gender: string; fighting: string; age: string; weight: string; about: string, imageFile: File, imagePath: string}) {
     if(!updatedData) throw new Error('Did not recieve all information needed to update')
     const {gender, fighting, age, weight, about, imageFile, imagePath} = updatedData;
@@ -177,9 +153,7 @@ export async function updateUserInfo(updatedData: {gender: string; fighting: str
 
 
 
-
-
-//Character Layers
+//Fetches Characters
 export async function fetchCharacters(){
     const connection = await connectToDatabase()
     if(!connection.success) throw new Error(connection.message);
@@ -193,11 +167,50 @@ export async function fetchCharacters(){
     }
 }
 
+//Fetches Specific Character Info
+export async function getCharacter(characterId: string){
+    try{
+        if(!characterId || !mongoose.Types.ObjectId.isValid(characterId)) throw new Error('Did not recieve Character Id or its not a valid id')
+    
+            const connection = await connectToDatabase();
+            if (!connection.success) throw new Error(connection.message);
+        
+            const storedCookies = cookies();
+            
+            const accessToken = (await storedCookies).get('accessToken')?.value;
+            let visitingUser = null;
+            if(accessToken) {
+                let decoded = null;
+                try {
+                    decoded = jwt.verify(accessToken, ACCESS_SECRET);
+                    if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
+                        throw new Error('Invalid accessToken or no id connected to it');
+                    }
+                    visitingUser = await User.findById(decoded.userId).select('username')
+                    if(!visitingUser) throw new Error('No error with that id matching from Database');
+                } catch(error){
+                    handleError(error)
+                }
+            }
+    
+            let character = null
+            try{
+                character = await Character.findById(characterId)
+                if (!character) throw new Error('Could not find character in database');
+                return {character, visitingUser}
+            } catch(error){
+                handleError(error)
+            }
+    } catch(error){
+        handleError(error)
+    }
+
+}  
 
 
 
 
-//Forum Layers
+//Fetches The Categories For The Forum
 export async function fetchFrontForum(){
     const connection = await connectToDatabase()
     if(!connection.success) throw new Error(connection.message);
@@ -205,20 +218,16 @@ export async function fetchFrontForum(){
         const forum = await Forum.find()
         if(!forum || forum.length === 0) throw new Error('No forum sections found in database');
          await Promise.all(forum.map(async (forumSection) => {
-            // Hitta alla specifika forum som har categoryId som matchar forumSection._id
             const specificForumPosts = await SpecificForum.find({$and: [
                 { categoryId: forumSection._id },
                 { createdAt: {$exists: true}}
             ]});
 
-            // Räkna antalet specifika inlägg (posts) för forumSection
             const postCount = specificForumPosts.length;
 
-            //Skapar datum som visas upp senaste postens datum
             const createdAtArray = specificForumPosts.map(post => post.createdAt).filter(date => date !== undefined)
             const latestPost = createdAtArray.sort((a, b) => b.createdAt - a.createdAt)[0]
 
-            //Räknar antalet posts inom 24 timmar
             const todaysDate = new Date()
             const postsToday = createdAtArray.filter(postDate => {
                 const postDateObj = new Date(postDate);
@@ -229,11 +238,9 @@ export async function fetchFrontForum(){
             const postCountIn24 = postsToday.length
 
 
-            // Lägg till postCount och latestPost till forumSection
             forumSection.amount = postCount;
             forumSection.latest = latestPost;
             forumSection.perday = postCountIn24
-            // Spara tillbaka den uppdaterade forumsektionen (valfritt, beroende på behov)
             await forumSection.save();
         }));
 
@@ -243,6 +250,7 @@ export async function fetchFrontForum(){
     }
 }
 
+//Fetches The Specific Forum Posts For a Category In Forum
 export async function fetchSpecificForum(categoryId: string) {
     if (!categoryId || !mongoose.Types.ObjectId.isValid(categoryId)) {
         throw new Error('Ogiltigt categoryId');
@@ -258,11 +266,11 @@ export async function fetchSpecificForum(categoryId: string) {
         }
         return response;
     } catch (error) {
-        console.error('Database error:', error);
-        throw new Error('Ett fel uppstod vid hämtning av forum');
+        handleError(error)
     }
 }
 
+//Fetches The Specific Post In Forum
 export async function fetchSpecificPost(postId: string){
     if(!postId || !mongoose.Types.ObjectId.isValid(postId)) throw new Error('Did not recieve an id for post or its not a valid id');
     
@@ -282,7 +290,7 @@ export async function fetchSpecificPost(postId: string){
     }
 }
 
-
+//Loads Replies On A Specific Post
 export async function loadReplies(postId: string) {
     const connection = await connectToDatabase()
     if(!connection.success) throw new Error(connection.message);
@@ -307,7 +315,7 @@ export async function loadReplies(postId: string) {
             _id: (reply._id as ObjectId).toString(),
             commentContent: reply.commentContent,
             commentUsername: reply.userId.username,
-            commentImg: reply.userId.imgPath || '/path/to/default/image.jpg', // Använd ett standardbild om ingen finns
+            commentImg: reply.userId.imgPath || '/path/to/default/image.jpg',
           }));
 
         return formattedReplies
@@ -317,40 +325,7 @@ export async function loadReplies(postId: string) {
 }
 
 
-  export async function favorite(){
-    try{
-        const connection = await connectToDatabase();
-        if(!connection.success) throw new Error('Could not connect to database');
-
-        const topCharacters = await Character.find({}, 'name image _id likes').sort({likes: -1}).limit(3);
-        if(!Array.isArray(topCharacters) || topCharacters.length === 0) throw new Error('Could not get characters from Database');
-        const returnObj: ITopCharacters[] = topCharacters.map(character => ({
-            name: character.name,
-            likes: character.likes,
-            image: character.image,
-            _id: (character._id as ObjectId).toString()
-        }))
-        return returnObj
-        
-    } catch(error){
-        handleError(error)
-        return null
-    }
-  }
-
-
-export async function revalidate(value: string){
-    try {
-        if(!value) throw new Error('Did not recieve info on what path to revalidate')
-        revalidatePath(value)
-        console.log('Successfully revalidated path')
-    } catch(error){
-        handleError(error)
-    }
-}
-
-
-//Shop Related
+//Loading Shop Items To Shop
 export async function loadShopItems(){
     try {
         const connection = await connectToDatabase();
@@ -375,9 +350,7 @@ export async function loadShopItems(){
     }
 }
 
-
-
-//Completed Purchase Get Name (Last Step)
+//Get Customer Name After Order Success To Display Thier Name On The Page
 export async function getCustomerName(session_id: string) {
     try {
         if(!session_id) throw new Error('Did not recieve an id from client');
@@ -396,19 +369,14 @@ export async function getCustomerName(session_id: string) {
 
         const firstname = order.shipping.firstname;
         if(!firstname) throw new Error('Could not find name property on order');
-      
 
         return firstname
     } catch(error){
         handleError(error)
-        return null
     }
 }
 
-
-
-
-//Fetch posts to My Posts Page
+//Load Posts To Logged In User "My Posts" Page
 export async function getMyPosts(){
     try{
         const storedCookies = cookies()
@@ -420,7 +388,6 @@ export async function getMyPosts(){
      
         let posts = []  
         posts = await SpecificForum.find({userId: decoded.userId});
-        if(!posts) console.log('No Posts Found')
 
         return posts
 

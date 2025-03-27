@@ -55,11 +55,10 @@ export async function DELETE(req: NextRequest) {
         );
         if(!commentInUser)  return NextResponse.json({message: 'Could not remove comment from User Collection'}, {status: 404});
 
-        console.log(path)
         return NextResponse.json({message: 'Successfully removed comment', path}, {status: 200})
 
     } catch(error){
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Could not delete Post, Something went wrong'}, {status: 500});
     }
 }

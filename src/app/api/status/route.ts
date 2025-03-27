@@ -3,21 +3,17 @@ import jwt from 'jsonwebtoken';
 import User from "@/app/models/User";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
-if (!REFRESH_SECRET) {
-    console.error('REFRESH_SECRET is not set in environment variables');
-    throw new Error("REFRESH_SECRET is not set in environment variables");
-}
 
 export async function GET() {
+    try {
+    const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim();
+    if (!REFRESH_SECRET) {
+    throw new Error("REFRESH_SECRET is not set in environment variables");
+    }
     const storedCookies = cookies();
     const refreshToken = (await storedCookies).get('refreshToken')?.value;
 
-    // 🚨 Om refreshToken saknas, returnera direkt att användaren är utloggad
     if (!refreshToken) {
         console.log("No refreshToken found. User is considered logged out.");
         return NextResponse.json({ message: 'User is logged out', isActive: false, username: 'Guest' }, { status: 200 });
@@ -26,7 +22,6 @@ export async function GET() {
     const connection = await connectToDatabase();
     if (!connection.success) return NextResponse.json({ message: connection.message }, { status: 500 });
 
-    try {
         const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
         if (typeof decoded !== 'object' || decoded === null || !('userId' in decoded)) {
             return NextResponse.json({ message: 'Invalid refreshToken or no ID connected to it' }, { status: 401 });

@@ -1,18 +1,15 @@
 import Stripe from 'stripe'
 import { NextRequest, NextResponse } from "next/server";
-import dotenv from 'dotenv'
-import { handleError } from '@/app/utils/errorHandler';
-
-dotenv.config()
 
 export async function POST(req: NextRequest){
-    const {itemSeparation, orderId} = await req.json()
-    if(!itemSeparation || !orderId) return NextResponse.json({message: 'Missing data from client to complete purchase'}, {status: 400})
     try{
-        const STRIPE_SECRET = process.env.STRIPE_SECRET ?? '';
+        const {itemSeparation, orderId} = await req.json()
+        if(!itemSeparation || !orderId) return NextResponse.json({message: 'Missing data from client to complete purchase'}, {status: 400})
+
+        const STRIPE_SECRET = process.env.STRIPE_SECRET!.trim();
         if(!STRIPE_SECRET) throw new Error('Could not find validate with stripe key');
 
-        const SITE_URL = process.env.SITE_URL ?? '';
+        const SITE_URL = process.env.SITE_URL!.trim();
         if(!SITE_URL) throw new Error('Could not find the Site url env variable');
 
         const stripe = new Stripe(STRIPE_SECRET, {apiVersion: '2025-02-24.acacia'})
@@ -44,7 +41,7 @@ export async function POST(req: NextRequest){
         } else throw new Error('Could not redirect user to checkout')
 
     } catch(error){
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Failed to checkout'}, {status: 500})
     }
 }

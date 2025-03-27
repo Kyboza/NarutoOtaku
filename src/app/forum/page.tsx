@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { fetchFrontForum } from '../actions/userActions';
+import { fetchFrontForum } from '../actions/serverActions';
 import { formatDateFull } from '../utils/formatDate';
 
 type IForum = {

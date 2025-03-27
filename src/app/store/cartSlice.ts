@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IItemCart } from "../../../types";
 import { toast } from "sonner";
 
-interface IStoreCart {
+type IStoreCart = {
     items: IItemCart[]
 }
 
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
             state.items = []
         },
         setCartItems: (state, action: PayloadAction<IItemCart[]>) => {
-            state.items = action.payload; // Replace cart with new items
+            state.items = action.payload;
         },
     }
 })

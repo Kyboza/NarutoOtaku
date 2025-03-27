@@ -15,7 +15,7 @@ export async function POST(req: NextRequest){
         const data = { following: user.following, followers: user.followers };
         return NextResponse.json({message: 'Successfully got followers array', data}, {status: 200})
     } catch(error){
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Failed to get followers to redux'}, {status: 500})
     }
 }

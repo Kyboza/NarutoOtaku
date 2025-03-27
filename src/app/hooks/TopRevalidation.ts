@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { revalidate } from "../actions/userActions";
+import { revalidate } from "../actions/serverActions";
 
 const TopRevalidation = () => {
   const toggleStatus = useSelector((state: RootState) => state.character.likes);

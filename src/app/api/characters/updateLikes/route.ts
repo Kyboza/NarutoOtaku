@@ -8,11 +8,11 @@ import { ratelimit } from "@/app/utils/ratelimiter";
 
 
 export async function POST(req: NextRequest){
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
-    const {success} = await ratelimit.limit(ip)
-    if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
-
     try{
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+        const {success} = await ratelimit.limit(ip)
+        if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
         const { data: { visitingUser, characterName } } = await req.json();
         if(!visitingUser || !characterName) return NextResponse.json({message: 'Liking user or character was not provided'}, {status: 400});
 
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: 'Successfully updated Likes', likes: character.likes, userWhoLike: character.userWhoLike}, {status: 200})
 
     } catch(error){
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Problem updating likes for character'}, {status: 500})
     }
 }

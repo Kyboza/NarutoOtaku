@@ -2,7 +2,7 @@
 import React from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { useState, useRef } from 'react'
-import { updateUserInfo } from '@/app/actions/userActions'
+import { updateUserInfo } from '@/app/actions/serverActions'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 

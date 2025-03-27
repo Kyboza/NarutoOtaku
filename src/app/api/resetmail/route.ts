@@ -7,15 +7,18 @@ import crypto from 'crypto'
 import { ratelimit } from "@/app/utils/ratelimiter";
 
 
-const EMAIL_USER = process.env.EMAIL_USER ?? '';
-const EMAIL_PASS = process.env.EMAIL_PASS ?? '';
 
-if(!EMAIL_USER || !EMAIL_PASS) throw new Error('Could not get email user or pass variable from env file')
 
 export async function POST(req: NextRequest){
+    try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
     const {success} = await ratelimit.limit(ip)
     if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
+    const EMAIL_USER = process.env.EMAIL_USER!.trim();
+    const EMAIL_PASS = process.env.EMAIL_PASS!.trim();
+
+    if(!EMAIL_USER || !EMAIL_PASS) throw new Error('Could not get email user or pass variable from env file')
 
     const {email, username} = await req.json()
     if(!email || !username) return NextResponse.json({message: 'Did not recieve any username or email from frontend'}, {status: 400})
@@ -24,7 +27,6 @@ export async function POST(req: NextRequest){
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
 
 
-    try {
         const veriCode = crypto.randomBytes(2).toString('hex');
         const hashedCode = await bcrypt.hash(veriCode, 10);
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000);

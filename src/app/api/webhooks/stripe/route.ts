@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import dotenv from 'dotenv'
 import axiosAPI from "@/app/lib/axios";
 import { AxiosError } from "axios";
 
-dotenv.config()
 
 
 
 export async function POST(req: NextRequest) {
-    const STRIPE_SECRET = process.env.STRIPE_SECRET ?? '';
-    const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? '';
+    const STRIPE_SECRET = process.env.STRIPE_SECRET!.trim();
+    const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET?.trim();
     if(!STRIPE_SECRET || !STRIPE_WEBHOOK_SECRET) throw new Error('Could not get secret stripe key')
 
     const stripe = new Stripe(STRIPE_SECRET);

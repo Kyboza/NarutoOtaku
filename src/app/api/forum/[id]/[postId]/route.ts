@@ -1,36 +1,30 @@
 import { connectToDatabase } from "@/app/lib/mongodb";
 import SpecificForum from "@/app/models/SpecificForum";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export async function GET(req: NextRequest, {params}: {params: {postId: string}}) {
-    const {postId} = await params;  // Destructure directly from params
+export async function GET({params}: {params: {postId: string}}) {
+    try {
+    const {postId} = await params; 
 
-    // Connect to the database
+
     const connection = await connectToDatabase();
     if (!connection.success) {
-        console.error("Could not connect to database");
-        return NextResponse.json({ message: "Could not connect to database" }, { status: 500 });
+        return NextResponse.json({ message: connection.message }, { status: 500 });
     }
 
-    // Validate if the postId is a valid ObjectId
+
     const isValidObjectId = mongoose.Types.ObjectId.isValid(postId);
     if (!isValidObjectId) {
-        console.error("Id is not a valid ObjectId");
         return NextResponse.json({ message: "Not a valid ObjectId" }, { status: 400 });
     }
 
-    try {
-        // Find the post by ObjectId
-        const actualPost = await SpecificForum.findById(postId); // Use findById instead of find()
+        const actualPost = await SpecificForum.findById(postId);
 
-        // Check if the post exists
         if (!actualPost) {
-            console.error("No post with that id was found");
             return NextResponse.json({ message: "No post with the specific id was found" }, { status: 404 });
         }
 
-        // Return the found post
         return NextResponse.json(actualPost, { status: 200 });
 
     } catch (error) {

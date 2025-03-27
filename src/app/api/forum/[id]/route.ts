@@ -1,9 +1,10 @@
 import { connectToDatabase } from "@/app/lib/mongodb";
-import SpecificForum from "@/app/models/SpecificForum";  // Just SpecificForum behövs nu, inte Category
+import SpecificForum from "@/app/models/SpecificForum";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+    try {
     const { id} = await params; 
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -13,14 +14,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     const CategoryId = new mongoose.Types.ObjectId(id);
 
-    // Anslut till databasen
     const connection = await connectToDatabase();
     if (!connection.success) {
-        console.error("Could not connect to Database");
         return NextResponse.json({ message: connection.message }, { status: 500 });
     }
 
-    try {
+    
         const responseForumPosts = await SpecificForum.find({ categoryId: CategoryId });
         
         if (responseForumPosts.length === 0) {

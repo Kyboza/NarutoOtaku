@@ -1,6 +1,6 @@
 import Image from "next/image";
 import CartButton from "../components/CartButton";
-import { loadShopItems } from "../actions/userActions";
+import { loadShopItems } from "../actions/serverActions";
 import { IItemCart } from "../../../types";
 
 
@@ -18,11 +18,11 @@ export default async function Shop() {
           <div key={item._id} className="relative rounded-tl-md border-b sm:border-r border-black">
            <Image
              src={item.image}
-             alt="Naruto doll"
+             alt="Product"
              className="w-full h-full object-cover"
              width={1300}
              height={1300}
-            //  priority={item.image === '/images/storeitems/GaaraFunko.webp' ? true : false} Kan vara bakgrunden och inte funko vänta på error igen
+            priority
            />
            <div
             className="bg-cover bg-center cursor-pointer absolute inset-0 rounded-tl-md opacity-0 transition-opacity duration-300 hover:opacity-100"

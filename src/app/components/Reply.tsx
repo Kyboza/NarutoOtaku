@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useState, useRef} from 'react'
 import Image from 'next/image'
-import { loadReplies} from '../actions/userActions'
+import { loadReplies} from '../actions/serverActions'
 import axiosAPI from '../lib/axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../store/store'
@@ -10,9 +10,9 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { TiDeleteOutline } from "react-icons/ti";
 import { fetchUserStatus } from '../store/statusSlice'
-import { revalidate } from '../actions/userActions'
+import { revalidate } from '../actions/serverActions'
 
-interface IComment {
+type IComment = {
     _id: string
     commentContent:  string,
     commentUsername: string,
@@ -51,11 +51,10 @@ const Reply = ({postId}: {postId: string}) => {
                   toast.error('Error Occured Creating Comment', {
                     id: 'comment'
                   });
-                  return
                 }
             } 
             catch (error) {
-              console.error("Failed to post comment:", error);
+              handleErrorWithAxios(error)
               toast.error('Error Occured Creating Comment', {
                 id: 'comment'
               });
@@ -79,7 +78,7 @@ const Reply = ({postId}: {postId: string}) => {
         toast.error('Error Occurred While Deleting Comment', {
           id: 'actual-delete'
         })
-        handleError(error)
+        handleErrorWithAxios(error)
       }
     }
 
@@ -100,8 +99,8 @@ const Reply = ({postId}: {postId: string}) => {
     useEffect(() => {
       const loadRepliesFromAction = async () => {
         try {
-          const replies = await loadReplies(postId); // Hämta svar från backend
-          setComment(replies || []); // Sätt dem i state
+          const replies = await loadReplies(postId);
+          setComment(replies || []);
         } catch (error) {
           console.error("Failed to load replies:", error);
           setComment([])
@@ -110,7 +109,6 @@ const Reply = ({postId}: {postId: string}) => {
   
       loadRepliesFromAction();
   
-      // Event handler för att stänga reply fönster
       const refHandler = (e: MouseEvent) => {
         if (replyActive && ref.current && !ref.current.contains(e.target as Node)) {
           setReplyActive(false);
@@ -153,7 +151,7 @@ const Reply = ({postId}: {postId: string}) => {
               <div className='flex flex-row'>
                 <Link href={`/users/${comment.commentUsername}`}>
                 <div className="relative w-[8vh] h-[8vh] aspect-square border border-[#505050] rounded-full overflow-hidden ml-2">
-                  <Image className="object-cover" src={comment.commentImg} alt="Profile picture" fill />
+                  <Image className="object-cover" src={comment.commentImg} alt="Profile picture" fill priority sizes='100%' />
                 </div></Link>
                 <h2 className="mb-4 mt-4 ml-4 text-xl sm:text-xl md:text-4xl lg:text-4xl font-rock text-white text-stroke text-shadow-xl">
                   {comment.commentUsername}
@@ -167,7 +165,7 @@ const Reply = ({postId}: {postId: string}) => {
               </div>
               </div>
         
-              {/* Reply Text */}
+             
               <div className="flex flex-col w-full overflow-y-scroll scrollbar-hide border-b border-[#505050]">
                 <p className="p-2 mt-1 text-sm md:text-xl font-notojp text-white text-stroke leading-5 text-shadow-xl break-words">
                   {comment.commentContent}

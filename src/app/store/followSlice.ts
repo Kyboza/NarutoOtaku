@@ -3,7 +3,7 @@ import axiosAPI from "../lib/axios";
 import { toast } from "sonner";
 
 
-interface IFollow {
+type IFollow = {
   following: string[];
   followers: number;
   loading: boolean;
@@ -17,7 +17,6 @@ const initialState: IFollow = {
   error: null
 };
 
-// Uppdatera antalet följare (undvik rekursion)
 export const updateFollowAmount = createAsyncThunk(
   "followSlice/updateFollowAmount",
   async ({ userProp, visitingProp }: { userProp: string; visitingProp: string }, { rejectWithValue }) => {
@@ -28,17 +27,13 @@ export const updateFollowAmount = createAsyncThunk(
       }
       throw new Error("Failed to update followers in database");
     } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message); // Return the error to redux
-      } else {
-        console.log("Unknown error getting followers and following");
-      }
+      handleErrorWithAxios(error);
+      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }
   }
 );
 
 
-//Ladda in följda användaren till following
 export const loadFollowAmount = createAsyncThunk(
   "followSlice/loadFollowAmount",
   async (userProp: string, { rejectWithValue }) => {
@@ -47,16 +42,13 @@ export const loadFollowAmount = createAsyncThunk(
       console.log("API Response:", response.data);
 
       if (response.status === 200) {
-        return response.data; // Returnera både följare och följande
+        return response.data;
       } else {
         throw new Error("Failed to get followers and following");
       }
     } catch (error) {
-      if(error instanceof Error){
-        return rejectWithValue(error.message); // Returnera felet till redux
-      } else {
-        console.log('Unknown error getting followers and following')
-      }
+      handleErrorWithAxios(error);
+      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }
   }
 );
@@ -72,12 +64,10 @@ const followSlice = createSlice({
         state.following = [];
       }
   
-      // Ensure state.followers is a number
       if (typeof state.followers !== 'number') {
         state.followers = 0;
       }
 
-      // Kolla om användaren redan finns i listan för att undvika oändlig loop
       if (state.following.includes(username)) {
         state.following = state.following.filter((name) => name !== username);
         state.followers = state.followers -=1

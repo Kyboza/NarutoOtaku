@@ -3,13 +3,12 @@ import Forum from "@/app/models/Forum";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+    try{
     const connection = await connectToDatabase()
-    console.log(connection)
     if(!connection.success){
         console.error("Could not connect to Database")
         return NextResponse.json({message: connection.message}, {status: 500})
     }
-    try{
         const forum = await Forum.find();
         if(forum.length === 0){
             console.error("Collection is empty")

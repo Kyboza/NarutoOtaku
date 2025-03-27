@@ -19,9 +19,7 @@ export async function POST(req: NextRequest){
 
         return NextResponse.json({message: 'Succesfully got likes and likers', data}, {status: 200})
     } catch(error){
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Something went wrong getting likes and likers for character'}, {status: 500})
     }
-
-
 }

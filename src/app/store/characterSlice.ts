@@ -3,7 +3,7 @@ import axiosAPI from "../lib/axios";
 import { toast } from "sonner";
 
 // Define the character type
-interface ICharacter {
+type ICharacter = {
     likes: number;
     userWhoLike: string[]
     error: null | string,
@@ -17,7 +17,6 @@ const initialState: ICharacter = {
     loading: false
 }
 
-// Async thunk to fetch all characters from the database
 export const fetchLikeInfo = createAsyncThunk("characters/fetchLikeInfo", async (characterName: string, {rejectWithValue}) => {
     try {
         const response = await axiosAPI.post("/api/characters/getLikes", {characterName});
@@ -28,11 +27,8 @@ export const fetchLikeInfo = createAsyncThunk("characters/fetchLikeInfo", async 
             throw new Error('Failed getting Character likes and likers')
         }
     } catch(error){
-        if(error instanceof Error){
-            return rejectWithValue(error.message);
-          } else {
-            console.log('Unknown error getting followers and following')
-          }
+        handleErrorWithAxios(error);
+        return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }
 });
 
@@ -40,21 +36,16 @@ export const updateLikeInfo = createAsyncThunk('characters/updateLikeInfo', asyn
     try {
         const response = await axiosAPI.post("/api/characters/updateLikes", {data});
         if (response.status === 200){
-            console.log('Got Character likes and likers')
             return response.data;
         } else {
             throw new Error('Failed getting Character likes and likers')
         }
     } catch(error){
-        if(error instanceof Error){
-            return rejectWithValue(error.message);
-          } else {
-            console.log('Unknown error getting followers and following')
-          }
+        handleErrorWithAxios(error);
+        return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
     }
 })
 
-// Create the slice to manage character data
 const characterSlice = createSlice({
     name: "character",
     initialState,
@@ -66,7 +57,6 @@ const characterSlice = createSlice({
                 state.userWhoLike = [];
               }
           
-              // Ensure state.followers is a number
               if (typeof state.likes !== 'number') {
                 state.likes = 0;
               }
@@ -88,7 +78,6 @@ const characterSlice = createSlice({
     },
 
     extraReducers: (builder) => {
-        // Hantera fullföljd av 'fetchLikeInfo' action
         builder.addCase(fetchLikeInfo.fulfilled, (state, action) => {
             state.likes = action.payload.likes;
             state.userWhoLike = action.payload.userWhoLike;
@@ -104,7 +93,7 @@ const characterSlice = createSlice({
             state.loading = false;
         });
     
-        // Hantera fullföljd av 'updateLikeInfo' action
+     
         builder.addCase(updateLikeInfo.fulfilled, (state, action) => {
             state.likes = action.payload.likes;
             state.userWhoLike = action.payload.userWhoLike;
@@ -122,8 +111,7 @@ const characterSlice = createSlice({
     
 });
 
-// Export actions for use in components
+
 export const {handleLike} = characterSlice.actions;
 
-// Export the reducer to be used in the store
 export default characterSlice.reducer;

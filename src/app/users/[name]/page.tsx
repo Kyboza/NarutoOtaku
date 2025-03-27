@@ -1,7 +1,7 @@
 "// app/user/page.tsx"
 import React from 'react';
 import Image from 'next/image';
-import { getUserFromParams } from '@/app/actions/userActions';
+import { getUserFromParams } from '@/app/actions/serverActions';
 import FollowButton from '@/app/components/FollowButton';
 import Link from 'next/link';
 
@@ -12,7 +12,6 @@ export default async function UserPage({params}: {params: {name: string}}) {
   let user = null;
   let visitingUser = null;
 
-   //Både visitingUser och user är hela objekt
   try {
     const response = await getUserFromParams(currentUser);
     user = response?.user
@@ -27,16 +26,13 @@ export default async function UserPage({params}: {params: {name: string}}) {
   const initialFollowing = user.following;
 
 
-  // Om användaren inte finns, visa ett meddelande
   if (!user) {
     return <div>User not found or error fetching data</div>;
   }
 
   return (
     <div className="flex flex-col items-center px-4">
-      {/* Profile Section */}
       <section className="flex flex-col md:flex-row w-full max-w-[90vw] mt-6 bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md overflow-hidden shadow-sm">
-        {/* Image Column */}
         <div className="w-full md:w-1/3 flex justify-center items-center p-4">
           <div className="relative w-40 h-40 border rounded-md border-black">
             <Image
@@ -44,12 +40,14 @@ export default async function UserPage({params}: {params: {name: string}}) {
               alt="Profile Picture"
               className={`rounded-md ${user.imgPath ? 'object-cover' : 'object-contain'}`}
               fill
+              sizes='100%'
+              priority
             />
           </div>
         </div>
-        {/* Info Column */}
+     
         <div className="w-full md:w-1/3 flex flex-col justify-center items-center p-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-notojp text-white drop-shadow mb-2">
+          <h1 className="mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl">
             {user.username}
           </h1>
           <div className="flex flex-col gap-1">
@@ -67,19 +65,18 @@ export default async function UserPage({params}: {params: {name: string}}) {
             </p>
           </div>
         </div>
-        {/* Follow Column */}
+  
         <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-4">
         {visitingUser && visitingUser.username === currentUser ? (
         <Link href='/myposts'><button className='mb-2 text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-24 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>My Posts</button></Link>) : (null)}
         {visitingUser && visitingUser.username === currentUser ? (
         <Link href='/edit'><button className='mb-2 text-white text-stroke text-shadow-xl m-1 py-1 px-2 border border-black rounded-md bg-[#E19B1A] w-24 transform transition-all duration-100 ease-in-out hover:scale-105 active:scale-95'>Edit Profile</button></Link>) : (null)}
 
-        {visitingUser && visitingUser.username === currentUser ? ( <p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p> ) : !visitingUser ? (<p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>) :
+        {visitingUser && visitingUser.username === currentUser ? ( <p className="text-sm md:text-base text-white font-notojp text-stroke text-shadow-xl">{user.followers} Followers</p> ) : !visitingUser ? (<p className="text-sm md:text-base text-white font-notojp text-stroke">{user.followers} Followers</p>) :
         (<FollowButton userProp={userProp} visitingProp={visitingProp} initialFollowers={initialFollowers} initialFollowing={initialFollowing}/>)}
         </div>
       </section>
 
-      {/* About Me Section */}
       <section className="w-full max-w-[90vw] p-4 bg-[#A5A5A5] bg-opacity-75 border border-black rounded-md mt-4 mb-6 max-h-[40vh] overflow-y-auto scrollbar-hide">
         <h2 className="text-2xl md:text-3xl font-notojp text-white drop-shadow mb-2 text-stroke">About Me</h2>
         <p className="text-sm md:text-base text-white font-notojp break-words">

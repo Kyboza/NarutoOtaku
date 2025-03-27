@@ -7,17 +7,16 @@ import { ratelimit } from "@/app/utils/ratelimiter";
 
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
-  const {success} = await ratelimit.limit(ip)
-  if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
-
   try {
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+    const {success} = await ratelimit.limit(ip)
+    if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
+
     const { username, visitingUsername } = await req.json();
     if (!username || !visitingUsername) {
       return NextResponse.json({ message: "Missing parameters" }, { status: 400 });
     }
 
-    // Verify JWT Token
     const storedCookies = cookies();
     const accessToken = (await storedCookies).get("accessToken")?.value;
     if (!accessToken) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -41,12 +40,10 @@ export async function POST(req: NextRequest) {
     const isFollowing = target.following.includes(follower.username);
 
     if (isFollowing) {
-      // Unfollow logic using schema method
       target.following.pull(follower.username);
       await target.decrementFollow();
       await target.save();
     } else {
-      // Follow logic using schema method
       target.following.addToSet(follower.username);
       await target.incrementFollow();
       await target.save();

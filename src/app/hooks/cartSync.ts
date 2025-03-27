@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import store from "../store/store"; // Se till att importera rätt store
-import { setCartItems } from "../store/cartSlice";// Importera din action för att sätta varorna i carten
+import store from "../store/store";
+import { setCartItems } from "../store/cartSlice";
 
 let timeoutId: NodeJS.Timeout;
 

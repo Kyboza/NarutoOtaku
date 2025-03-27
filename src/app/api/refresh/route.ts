@@ -4,22 +4,20 @@ import jwt from 'jsonwebtoken'
 import User from "@/app/models/User";
 
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET ?? ''
-const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
-if(!REFRESH_SECRET || !ACCESS_SECRET) {
-    console.error('Could not get Refresh or Access Token from env');
-    throw new Error('Could not get Refresh or Access Token from env')
-}
-
 
 export async function GET(req: NextRequest){
+    try {
+        const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim()
+        const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim();
+            if(!REFRESH_SECRET || !ACCESS_SECRET) {
+                throw new Error('Could not get Refresh or Access Token from env')
+            }
     const refreshToken = req.headers.get('Authorization')?.split(' ')[1];
     if(!refreshToken) return NextResponse.json({message: 'No refresh token found user is not logged in'}, {status: 401});
 
     const connection = await connectToDatabase();
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500});
 
-    try {
         const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
         if(decoded === null || typeof decoded !== 'object' || !('userId' in decoded)) return NextResponse.json({message: 'Refresh token is invalid or it is missing content'}, {status: 401});
 

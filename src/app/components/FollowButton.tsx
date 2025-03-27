@@ -6,7 +6,7 @@ import { RootState, AppDispatch } from '../store/store'
 import { loadFollowAmount, updateFollowAmount } from '../store/followSlice'
 import { handleFollow } from '../store/followSlice'
 
-interface FollowButtonProps {
+type FollowButtonProps = {
     userProp: string,
     visitingProp: string,
     initialFollowers: number,
@@ -21,11 +21,11 @@ export default function FollowButton({userProp, visitingProp, initialFollowers, 
     useEffect(() => {
       const fetchData = async () => {
         if (userProp && visitingProp) {
-          await dispatch(loadFollowAmount(userProp)); // Wait for the action to complete
+          await dispatch(loadFollowAmount(userProp));
         }
       };
     
-      fetchData(); // Call the async function
+      fetchData();
     }, [dispatch, userProp, visitingProp]);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ export default function FollowButton({userProp, visitingProp, initialFollowers, 
            await dispatch(updateFollowAmount({ userProp, visitingProp }));
         } catch(error){
             dispatch(handleFollow(visitingProp))
-            handleError(error)
+            console.log(error)
         }
     }
 

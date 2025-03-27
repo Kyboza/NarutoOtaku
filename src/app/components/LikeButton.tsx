@@ -7,7 +7,7 @@ import { fetchLikeInfo, updateLikeInfo } from '../store/characterSlice'
 import { handleLike } from '../store/characterSlice'
 
 
-interface LikeProps{
+type LikeProps = {
     visitingUser: string,
     characterName: string,
     initialLikes: number,
@@ -44,7 +44,7 @@ export default function LikeButton({visitingUser, characterName, initialLikes, i
                 dispatch(updateLikeInfo(data))
             } catch(error){
                 dispatch(handleLike(visitingUser))
-                handleError(error)
+                console.log(error)
             }
         }
     }

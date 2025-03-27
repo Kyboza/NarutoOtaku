@@ -10,10 +10,9 @@ import followReducer from './followSlice'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart']// Only persist 'cart'
+  whitelist: ['cart']
 };
 
-// Explicitly handle `undefined` for each slice during hydration
 const rootReducer = combineReducers({
   character: characterReducer,
   status: statusReducer,
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure the store
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>

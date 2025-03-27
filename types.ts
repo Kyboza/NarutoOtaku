@@ -5,6 +5,14 @@ export type ITopCharacters = {
     image: string,
   }
 
+export type IReply = {
+    _id: string;
+    commentContent: string;
+    commentUsername: string;
+    commentImg: string;
+}
+
+
 export type IItemCart =  {
       _id: string,
       name: string,

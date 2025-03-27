@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ratelimit } from "@/app/utils/ratelimiter";
 
 export async function POST(req: NextRequest){
+    try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
     const {success} = await ratelimit.limit(ip)
     if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
@@ -16,7 +17,6 @@ export async function POST(req: NextRequest){
     const connection = await connectToDatabase();
     if(!connection.success) return NextResponse.json({message: connection.message}, {status: 500})
 
-    try {
         const userExists = await User.findOne({$or: [{email: email}, {username: username}]});
         if(userExists){
             console.error('User with that username or email already exists')

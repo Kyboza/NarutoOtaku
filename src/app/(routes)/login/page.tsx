@@ -49,7 +49,7 @@ export default function Login() {
                 return
             }
         } catch (error) {
-            handleError(error)
+            console.error(error)
             toast.error("Failed To Log In");
         }
     };

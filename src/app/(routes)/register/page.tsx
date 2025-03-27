@@ -51,7 +51,6 @@ export default function Register() {
                 toast.error('Error Occurred While Registering User', {
                     id: 'register'
                 })
-                return
             }
         } catch (error) {
             handleErrorWithAxios(error);

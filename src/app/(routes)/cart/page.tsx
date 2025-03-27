@@ -25,7 +25,7 @@ export default function Cart() {
     try {
       dispatch(removeItem(itemId));
     } catch(error){
-      handleError(error)
+      console.error(error)
     }
   }
 
@@ -33,7 +33,7 @@ export default function Cart() {
     try{
       dispatch(addItem(item))
     } catch(error){
-      handleError(error)
+      console.error(error)
     }
   }
 

@@ -12,4 +12,5 @@ declare global {
 
   function handleError(err: unknown): void;
   function handleErrorWithAxios(err: unknown): void;
+  function logError(title: string, details: unknown): void;
 }

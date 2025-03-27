@@ -35,7 +35,6 @@ export async function middleware(req: NextRequest) {
             console.error('Error calling the expired sessions API:', error);
         }
 
-        // 🚨 Redirect only if it's a protected route (not `/`)
         if (isProtectedRoute) {
             return NextResponse.redirect(new URL('/login', req.url));
         }
@@ -65,7 +64,6 @@ export async function middleware(req: NextRequest) {
             } else {
                 console.log('Could not get a new accessToken from our API');
 
-                // 🚨 Redirect only if it's a protected route (not `/`)
                 if (isProtectedRoute) {
                     return NextResponse.redirect(new URL('/login', req.url));
                 }
@@ -73,7 +71,6 @@ export async function middleware(req: NextRequest) {
         } catch (error) {
             console.log('Error getting a new accessToken occurred', error);
 
-            // 🚨 Redirect only if it's a protected route (not `/`)
             if (isProtectedRoute) {
                 return NextResponse.redirect(new URL('/login', req.url));
             }

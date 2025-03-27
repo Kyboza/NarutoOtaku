@@ -5,12 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/app/models/User";
 import { ratelimit } from "@/app/utils/ratelimiter";
 
-const REFRESH_SECRET = process.env.REFRESH_SECRET ?? '';
-const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
+const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim();
+const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim();
 
 if(!REFRESH_SECRET || !ACCESS_SECRET ) throw new Error("One SECRET is not set in environment variables");
 
 export async function POST(req: NextRequest){
+    try{
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
     const {success} = await ratelimit.limit(ip)
     if(!success) return NextResponse.json({message: 'To many requests to logout, please try again later'}, {status: 429});
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: 'Internal error, not validation tokens'}, {status: 500})
     }
     
-    try{
+    
         const existingUser = await User.findOne({username: username}).select('+password');
         if(!existingUser) return NextResponse.json({message: "User does not exist"}, {status: 400});
 
@@ -75,7 +76,7 @@ export async function POST(req: NextRequest){
 
 
     } catch(error){
-        console.error('Internal error', error)
+        console.error(error)
         return NextResponse.json({message: "Internal error"}, {status: 500});
     }
 }

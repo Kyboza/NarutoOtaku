@@ -11,13 +11,12 @@ import { handleError } from "@/app/utils/errorHandler";
 
 
 export async function POST(req: NextRequest){
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
-    const {success} = await ratelimit.limit(ip)
-    if(!success) return NextResponse.json({message: 'Reply limit reached for the moment'}, {status: 429})
+  try {
+        const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? '127.0.0.1'
+        const {success} = await ratelimit.limit(ip)
+        if(!success) return NextResponse.json({message: 'Reply limit reached for the moment'}, {status: 429})
 
-
-    try {
-        const ACCESS_SECRET = process.env.ACCESS_SECRET ?? '';
+        const ACCESS_SECRET = process.env.ACCESS_SECRET!.trim();
         if(!ACCESS_SECRET) return NextResponse.json({message: 'Failed to get env accessToken'}, {status: 500})
 
         const {postId, replyContent} = await req.json()
@@ -67,10 +66,9 @@ export async function POST(req: NextRequest){
         });
         await user.save();
     
-        console.log('Reply created successfully');
         return NextResponse.json({message: 'Successfully posted comment'}, {status: 200})
       } catch (error) {
-        handleError(error)
+        console.error(error)
         return NextResponse.json({message: 'Failed to create reply'}, {status: 500})
       }
 }

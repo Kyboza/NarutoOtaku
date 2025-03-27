@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import axiosAPI from '../lib/axios'
-import { revalidate } from '../actions/userActions'
+import { revalidate } from '../actions/serverActions'
 import { toast } from 'sonner'
 
 type TId = {
@@ -19,11 +19,10 @@ export default function PostDeleteButton({postId}: TId) {
         await revalidate(path)
       } else {
         toast.error('Error Occurred While Deleting Post')
-        return
       }
     } catch(error){
       toast.error('Error Occurred While Deleting Post')
-      handleError(error)
+      handleErrorWithAxios(error)
     }
   }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchCharacters } from '../actions/userActions';
+import { fetchCharacters } from '../actions/serverActions';
 
-interface ICharacter {
+type ICharacter = {
   _id: string;
   name: string;
   description: string;
@@ -27,7 +27,7 @@ export default async function CharactersPage() {
 
   return (
     <div className='flex flex-col items-center mb-4'>
-      <h1 className="mb-2 mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-rock text-white text-stroke-p text-shadow-xl">
+      <h1 className="mb-4 mt-4 text-2xl md:text-4xl lg:text-5xl font-rock text-white text-stroke-2 text-shadow-xl">
         Characters
       </h1>
       <section className='flex flex-col h-[60vh] w-[80vw] xl:h-[70vh] bg-[#A5A5A5] bg-opacity-[75%] border border-black rounded-md overflow-y-scroll scrollbar-hide'>
@@ -41,7 +41,8 @@ export default async function CharactersPage() {
                     alt={character.name} 
                     className="w-full h-full object-cover object-center rounded-md" 
                     width={1920} 
-                    height={1080} 
+                    height={1080}
+                    priority
                   />
                 </div>
               </div>

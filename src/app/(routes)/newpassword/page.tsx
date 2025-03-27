@@ -10,7 +10,7 @@ export default function NewPassword() {
   const router = useRouter();
   const searchParams = useSearchParams()
   const email = searchParams.get('email') ?? '';
-  const username = searchParams.get('username') ?? ''
+  const username = searchParams.get('username') ?? '';
 
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
@@ -44,7 +44,6 @@ export default function NewPassword() {
           toast.error('Error Occurred While Changing Password', {
             id: 'new-password'
           });
-          return
         }
       } 
     catch(error){

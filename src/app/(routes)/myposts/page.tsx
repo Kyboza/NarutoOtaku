@@ -1,5 +1,5 @@
 import React from 'react'
-import { getMyPosts } from '@/app/actions/userActions'
+import { getMyPosts } from '@/app/actions/serverActions'
 import { ObjectId } from 'mongoose'
 import Link from 'next/link'
 import PostEditDeleteButton from '@/app/components/PostDeleteButton'
