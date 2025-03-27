@@ -18,7 +18,7 @@ type IForum = {
 
 export default function CreatePost() {
   const router = useRouter()
-  const titleRegex = /^[a-zA-Z0-9!_\-&]{2,20}$/
+  const titleRegex = /^[a-zA-Z0-9!_\-&\s]{2,25}$/
   const contentRegex = /^[a-zA-Z0-9!_\-&\s]{10,400}$/
 
   const [collectedData, setCollectedData] = useState<IForum[]>([])
@@ -61,10 +61,10 @@ export default function CreatePost() {
         !categoryId.trim() ||
         !postTitle.trim() ||
         !postContent.trim() ||
-        titleRegex.test(postTitle) ||
-        contentRegex.test(postContent)
+        !titleRegex.test(postTitle) ||
+        !contentRegex.test(postContent)
       ) {
-        toast.error('Please fill in all values')
+        toast.error('Please fill in all values, Title Max 25 Characters')
         return
       }
       const response = await axiosAPI.post('api/forum/submit-post', data)
@@ -129,7 +129,7 @@ export default function CreatePost() {
           required
           autoComplete="off"
           minLength={2}
-          maxLength={20}
+          maxLength={25}
           aria-required="true"
           value={postTitle}
           onChange={(e) => setPostTitle(e.target.value)}

@@ -1,9 +1,10 @@
+
 import { connectToDatabase } from '@/app/lib/mongodb'
 import jwt from 'jsonwebtoken'
 import User from '@/app/models/User'
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
   try {
     const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim()
