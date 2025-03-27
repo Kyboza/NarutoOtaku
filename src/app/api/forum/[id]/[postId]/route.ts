@@ -1,9 +1,9 @@
 import { connectToDatabase } from '@/app/lib/mongodb'
 import SpecificForum from '@/app/models/SpecificForum'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import mongoose from 'mongoose'
 
-export async function GET({ params }: { params: { postId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { postId: string } }) {
   try {
     const { postId } = await params
 

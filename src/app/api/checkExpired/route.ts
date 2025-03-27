@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { connectToDatabase } from '@/app/lib/mongodb'
 import User from '@/app/models/User'
 import { inactivelimit } from '@/app/utils/ratelimiter'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { success } = await inactivelimit.limit('checkExpired:global')
   if (!success)
     return NextResponse.json(

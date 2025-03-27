@@ -1,10 +1,10 @@
 import { connectToDatabase } from '@/app/lib/mongodb'
 import jwt from 'jsonwebtoken'
 import User from '@/app/models/User'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const REFRESH_SECRET = process.env.REFRESH_SECRET!.trim()
     if (!REFRESH_SECRET) {
