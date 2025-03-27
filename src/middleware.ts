@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
     )
 
     try {
-      const response = await fetch('http://localhost:3000/api/checkExpired', {
+      const response = await fetch('https://johanclifford.com/api/checkExpired', {
         method: 'GET',
       })
 
@@ -44,7 +44,7 @@ export async function middleware(req: NextRequest) {
 
   if (!accessToken && refreshToken) {
     try {
-      const response = await fetch('http://localhost:3000/api/refresh', {
+      const response = await fetch('https://johanclifford.com/api/refresh', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${refreshToken}`,
