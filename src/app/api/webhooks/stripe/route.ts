@@ -62,13 +62,13 @@ export async function POST(req: NextRequest) {
       break
 
     case 'checkout.session.async_payment_succeeded':
-      console.log('Payment Succeded', event.data.object)
+      console.log('Payment Succeded')
       break
     case 'checkout.session.expired':
-      console.log('Payment failed and expired', event.data.object)
+      console.log('Payment failed and expired')
       break
     case 'checkout.session.async_payment_failed':
-      console.log('Payment Failed', event.data.object)
+      console.log('Payment Failed')
       break
     default:
       console.log(`unhandled Event Type ${event.type}`)
