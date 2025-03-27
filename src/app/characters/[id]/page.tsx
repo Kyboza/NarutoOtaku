@@ -8,8 +8,8 @@ export default async function CharacterAbout({
 }: {
   params: { id: string }
 }) {
-  const parameters = await params
-  const id: string = parameters?.id
+  const { id } = params  // Directly destructure the 'id' from params
+  
   let visitingUser = null
   const response = await getCharacter(id)
 
@@ -20,6 +20,7 @@ export default async function CharacterAbout({
   const initialLikers = character.userWhoLike
 
   if (!character) return <p>Failed to get character info</p>
+  
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-stroke-p mb-4 mt-4 font-rock text-xl text-white text-shadow-xl sm:text-2xl md:text-4xl lg:text-5xl">
