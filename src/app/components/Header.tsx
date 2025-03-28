@@ -116,7 +116,7 @@ export default function Header() {
           </div>
         </Link>
         <Link href={active ? `/users/${userName}` : '/login'}>
-          <FaUserAlt className="text-2xl text-white drop-shadow-xl md:text-3xl lg:text-4xl" />
+          <FaUserAlt className="text-2xl text-white drop-shadow-xl md:text-3xl lg:text-4xl mr-2" />
         </Link>
       </div>
 

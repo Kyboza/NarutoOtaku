@@ -21,7 +21,7 @@ type IPost = {
   categoryId: string
 }
 
-export default async function Post({ params }: { params: { postId: string } }) {
+export default async function Post({ params }: { params: Promise<{ postId: string }> }) {
   const { postId } = await params
   const post: IPost | null = await fetchSpecificPost(postId)
   if (!post) return <p>No Post Found</p>

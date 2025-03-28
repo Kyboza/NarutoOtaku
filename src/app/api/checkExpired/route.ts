@@ -25,9 +25,6 @@ export async function GET(req: NextRequest) {
     })
 
     if (expiredUsers.length > 0) {
-      console.log(
-        `Found ${expiredUsers.length} expired users. Resetting status...`
-      )
 
       // Reset the status of all expired users
       await User.updateMany(

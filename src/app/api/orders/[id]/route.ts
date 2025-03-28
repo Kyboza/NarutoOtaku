@@ -14,8 +14,6 @@ export async function PUT(req: NextRequest) {
 
     // Parse the request body
     const body = await req.json()
-    console.log('Received request body:', body)
-
     const { status } = body
 
     if (!id || !status) {

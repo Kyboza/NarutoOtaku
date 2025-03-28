@@ -38,15 +38,12 @@ export async function POST(req: NextRequest) {
         console.error('Order ID missing in session metadata')
         return NextResponse.json({ error: 'Missing order ID' }, { status: 400 })
       }
-      console.log('Updating order:', orderId)
-      console.log('Payload:', { status: 'paid' })
 
       try {
         const status = 'paid'
-        const response = await axiosAPI.put(`/api/orders/${orderId}`, {
+        await axiosAPI.put(`/api/orders/${orderId}`, {
           status,
         })
-        console.log('Order update response:', response.data)
       } catch (error) {
         if (error instanceof AxiosError) {
           console.error(
@@ -57,8 +54,6 @@ export async function POST(req: NextRequest) {
           console.error('Unexpected error:', error)
         }
       }
-
-      console.log('Order updated to paid:', orderId)
       break
 
     case 'checkout.session.async_payment_succeeded':
@@ -71,7 +66,7 @@ export async function POST(req: NextRequest) {
       console.log('Payment Failed')
       break
     default:
-      console.log(`unhandled Event Type ${event.type}`)
+      console.log('Unhandled event type')
   }
   return NextResponse.json({ recieved: true })
 }

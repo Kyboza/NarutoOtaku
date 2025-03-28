@@ -33,7 +33,6 @@ const TopRevalidation = () => {
 
         // Kontrollera om vi ska köra revalidation direkt
         if (newActiveTabs <= MAX_TABS) {
-          console.log('Running revalidate from tab:', tabId)
           revalidate(path)
         } else {
           console.log('Max tab limit reached')
@@ -51,7 +50,6 @@ const TopRevalidation = () => {
       clearInterval(interval)
       interval = setInterval(async () => {
         if (activeTabs <= MAX_TABS) {
-          console.log('Running revalidate on Topchar from tab:', tabId)
           await revalidate(path)
         } else {
           console.log('Max tab limit reached')

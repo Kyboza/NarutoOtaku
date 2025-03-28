@@ -69,7 +69,7 @@ export default function FollowButton({
       await dispatch(updateFollowAmount({ userProp, visitingProp }))
     } catch (error) {
       dispatch(handleFollow(visitingProp))
-      console.log(error)
+      console.error(error)
     }
   }
 

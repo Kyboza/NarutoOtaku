@@ -16,11 +16,7 @@ type IForumSpecific = {
   categoryId: string
 }
 
-export default async function SpecificForum({
-  params,
-}: {
-  params: { categoryId: string }
-}) {
+export default async function SpecificForum({params}: {params: Promise<{ categoryId: string }>}) {
   const { categoryId } = await params
   const specificForumData: IForumSpecific[] | undefined =
     await fetchSpecificForum(categoryId)

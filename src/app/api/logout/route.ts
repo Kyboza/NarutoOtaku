@@ -38,9 +38,6 @@ export async function DELETE(req: NextRequest) {
       })
 
       if (expiredUsers.length > 0) {
-        console.log(
-          `Found ${expiredUsers.length} expired users. Resetting status...`
-        )
 
         // Reset the status of all expired users
         await User.updateMany(

@@ -45,7 +45,6 @@ export const loadFollowAmount = createAsyncThunk(
   async (userProp: string, { rejectWithValue }) => {
     try {
       const response = await axiosAPI.post('/api/getFollowers', { userProp })
-      console.log('API Response:', response.data)
 
       if (response.status === 200) {
         return response.data

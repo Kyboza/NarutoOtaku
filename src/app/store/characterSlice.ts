@@ -25,7 +25,6 @@ export const fetchLikeInfo = createAsyncThunk(
         characterName,
       })
       if (response.status === 200) {
-        console.log('Got Character likes and likers')
         return response.data
       } else {
         throw new Error('Failed getting Character likes and likers')

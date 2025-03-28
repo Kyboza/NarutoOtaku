@@ -17,14 +17,12 @@ export async function POST(req: NextRequest) {
 
     const { items, shipping } = await req.json()
     if (!items || !shipping) {
-      console.log(shipping)
       return NextResponse.json(
         { message: 'Missing order details' },
         { status: 400 }
       )
     }
     if (!Array.isArray(items)) {
-      console.log(items)
       return NextResponse.json(
         { message: 'Invalid format: Items must be an array' },
         { status: 400 }

@@ -58,7 +58,6 @@ export async function revalidate(value: string) {
     if (!value)
       throw new Error('Did not recieve info on what path to revalidate')
     revalidatePath(value)
-    console.log('Successfully revalidated path')
   } catch (error) {
     handleError(error)
   }

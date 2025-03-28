@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.log('Could not compare to database', error)
+    console.error('Could not compare to database', error)
     return NextResponse.json(
       { message: 'Failed to compare cart to database storage' },
       { status: 500 }

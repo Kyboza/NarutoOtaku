@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
     const id = urlSegments[urlSegments.length - 1]; // Assuming the 'id' is the last segment
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log(`${id} is not a valid ObjectId`)
       return NextResponse.json(
         { message: 'Not a valid ObjectId' },
         { status: 400 }
@@ -29,7 +28,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (responseForumPosts.length === 0) {
-      console.log(`No posts found for: ${CategoryId}`);
+      console.error('No Posts Found')
       return NextResponse.json({ message: 'No posts found' }, { status: 400 });
     }
 

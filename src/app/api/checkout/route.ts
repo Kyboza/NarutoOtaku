@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { NextRequest, NextResponse } from 'next/server'
+import { baseURL } from '@/app/lib/axios'
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,8 +15,6 @@ export async function POST(req: NextRequest) {
     if (!STRIPE_SECRET)
       throw new Error('Could not find validate with stripe key')
 
-    const SITE_URL = process.env.SITE_URL!.trim()
-    if (!SITE_URL) throw new Error('Could not find the Site url env variable')
 
     const stripe = new Stripe(STRIPE_SECRET, {
       apiVersion: '2025-02-24.acacia',
@@ -42,8 +41,8 @@ export async function POST(req: NextRequest) {
       line_items: lineItems,
       mode: 'payment',
       payment_method_types: ['card', 'paypal'],
-      success_url: `${SITE_URL}/order?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/`,
+      success_url: `${baseURL}/order?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseURL}/`,
       metadata: { orderId },
     })
     if (session.url) {

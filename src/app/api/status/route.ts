@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
     const refreshToken = (await storedCookies).get('refreshToken')?.value
 
     if (!refreshToken) {
-      console.log('No refreshToken found. User is considered logged out.')
       return NextResponse.json(
         { message: 'User is logged out', isActive: false, username: 'Guest' },
         { status: 200 }

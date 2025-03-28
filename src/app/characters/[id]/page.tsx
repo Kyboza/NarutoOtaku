@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { getCharacter } from '@/app/actions/serverActions'
 import LikeButton from '@/app/components/LikeButton'
 
-export default async function CharacterAbout({params}: { params: { id: string }}) {
-  const { id } = params
+export default async function CharacterAbout({params}: { params: Promise<{ id: string }>}) {
+  const { id } = await params
   
   let visitingUser = null
   const response = await getCharacter(id)
