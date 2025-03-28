@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       )
 
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
     const accessToken = (await storedCookies).get('accessToken')?.value
     if (!accessToken)
       return NextResponse.json(

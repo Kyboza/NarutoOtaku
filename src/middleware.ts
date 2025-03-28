@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(req: NextRequest) {
-  const storedCookies = cookies()
+  const storedCookies = await cookies()
   const accessToken = (await storedCookies).get('accessToken')?.value
   const refreshToken = (await storedCookies).get('refreshToken')?.value
 

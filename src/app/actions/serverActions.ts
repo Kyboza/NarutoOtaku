@@ -72,7 +72,7 @@ export async function getUserFromParams(name: string) {
     const connection = await connectToDatabase()
     if (!connection.success) throw new Error(connection.message)
 
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
 
     const accessToken = (await storedCookies).get('accessToken')?.value
     let visitingUser = null
@@ -126,7 +126,7 @@ export async function updateUserInfo(updatedData: {
   const { gender, fighting, age, weight, about, imageFile, imagePath } =
     updatedData
 
-  const storedCookies = cookies()
+  const storedCookies = await cookies()
 
   const accessToken = (await storedCookies).get('accessToken')?.value
   if (!accessToken) throw new Error('No accessToken active')
@@ -196,7 +196,7 @@ export async function getCharacter(characterId: string) {
     const connection = await connectToDatabase()
     if (!connection.success) throw new Error(connection.message)
 
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
 
     const accessToken = (await storedCookies).get('accessToken')?.value
     let visitingUser = null
@@ -413,7 +413,7 @@ export async function getCustomerName(session_id: string) {
 //Load Posts To Logged In User "My Posts" Page
 export async function getMyPosts() {
   try {
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
     const refreshToken = (await storedCookies).get('refreshToken')?.value
     if (!refreshToken)
       throw new Error('User is not logged in, cannot fetch posts')

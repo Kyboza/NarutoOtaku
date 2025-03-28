@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: connection.message }, { status: 500 })
     }
 
-    const storedCookie = cookies()
+    const storedCookie = await cookies()
     const accessToken = (await storedCookie).get('accessToken')?.value
 
     let userId = null

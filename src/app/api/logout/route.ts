@@ -19,7 +19,7 @@ export async function DELETE(req: NextRequest) {
     if (!REFRESH_SECRET) {
       throw new Error('REFRESH_SECRET is not set in environment variables')
     }
-    const storedCookie = cookies()
+    const storedCookie = await cookies()
     const connection = await connectToDatabase()
 
     if (!connection.success) {

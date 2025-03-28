@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { categoryId, postTitle, postContent } = body
 
-    const storedCookie = cookies()
+    const storedCookie = await cookies()
     const accessToken = (await storedCookie).get('accessToken')?.value
     if (!accessToken)
       return NextResponse.json(

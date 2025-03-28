@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
     const accessToken = (await storedCookies).get('accessToken')?.value
     if (!accessToken)
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

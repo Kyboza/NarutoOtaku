@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     if (!REFRESH_SECRET) {
       throw new Error('REFRESH_SECRET is not set in environment variables')
     }
-    const storedCookies = cookies()
+    const storedCookies = await cookies()
     const refreshToken = (await storedCookies).get('refreshToken')?.value
 
     if (!refreshToken) {

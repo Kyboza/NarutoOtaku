@@ -3,12 +3,7 @@ import Image from 'next/image'
 import { getCharacter } from '@/app/actions/serverActions'
 import LikeButton from '@/app/components/LikeButton'
 
-export default async function CharacterAbout({
-  params,
-}: {
-  params: { id: string }
-}) {
-  // Directly destructure the id from params
+export default async function CharacterAbout({params}: { params: { id: string }}) {
   const { id } = params
   
   let visitingUser = null
