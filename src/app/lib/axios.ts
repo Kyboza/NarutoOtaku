@@ -10,7 +10,7 @@ const LOCAL_IP = "192.168.2.102" // Change this to your actual local IP
 
 export const baseURL =
     process.env.NODE_ENV === "production"
-        ? "https://johanclifford.com"
+        ? "https://www.johanclifford.com"
         : isUsingPhone
           ? `http://${LOCAL_IP}:3000`
           : "http://localhost:3000"
