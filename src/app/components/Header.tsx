@@ -42,9 +42,7 @@ export default function Header() {
     }
 
     useEffect(() => {
-        if (!active) {
-            dispatch(fetchUserStatus())
-        }
+        dispatch(fetchUserStatus())
     }, [dispatch, active])
 
     useEffect(() => {
@@ -68,9 +66,9 @@ export default function Header() {
     TopRevalidation()
 
     return (
-        <header className="relative top-0 z-10 flex h-[10vh] w-full items-center justify-between border-b border-black border-opacity-25 bg-[#D48900] drop-shadow-xl">
+        <header className="relative top-0 z-10 flex h-[10vh] w-full items-center justify-evenly border-b border-black border-opacity-25 bg-[#D48900] drop-shadow-xl">
             <button
-                className="relative z-20 ml-1 flex h-[4vh] w-[20vw] cursor-pointer items-center justify-center sm:h-[6vh] lg:h-[7.5vh]"
+                className="relative z-20 ml-1 flex h-[4vh] w-[25vw] cursor-pointer items-center justify-center sm:h-[6vh] lg:h-[7.5vh]"
                 onClick={() => setIsOpen((prev) => !prev)}
             >
                 <div
@@ -97,7 +95,7 @@ export default function Header() {
             </button>
 
             <Link href="/">
-                <figure className="relative flex h-[10vh] w-[60vw] items-center justify-center sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
+                <figure className="relative flex h-[10vh] w-[33vw] items-center justify-center">
                     <Image
                         className="h-full object-contain"
                         src="/images/website-standard/NarutoLogo.svg"
@@ -112,7 +110,7 @@ export default function Header() {
                 </figure>
             </Link>
 
-            <div className="flex items-center justify-center gap-4 sm:w-[40vw] md:w-[30vw] lg:w-[20vw]">
+            <div className="flex w-[25vw] items-center justify-center gap-4">
                 <Link href="/cart">
                     <div className="relative">
                         <FaShoppingCart className="text-2xl text-white drop-shadow-xl md:text-3xl lg:text-4xl" />

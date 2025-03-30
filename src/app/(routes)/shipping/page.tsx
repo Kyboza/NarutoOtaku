@@ -33,6 +33,7 @@ export default function Shipping() {
     }))
 
     const onSubmit = async (data: ShippingFormData) => {
+        console.log("Data Submitted")
         try {
             const response = await axiosAPI.post("/api/comparison", {
                 itemSeparation,
@@ -339,16 +340,21 @@ export default function Shipping() {
                                 "Zip Code needs to be atleast 5 characters",
                         },
                         maxLength: {
-                            value: 5,
+                            value: 6,
                             message: "Zip Code cannot exceed 5 characters",
                         },
                         pattern: {
-                            value: /^\d{5}$/,
+                            value: /^\d{5}$|^\d{3}\s\d{2}$/,
                             message:
                                 "ZIP Code: Needs to be 5 characters and only numbers 0-9",
                         },
                     })}
                 />
+                {errors.shippingZIP && (
+                    <span className="text-stroke font-semibold italic text-red-600 drop-shadow-xl">
+                        {errors.shippingZIP.message}
+                    </span>
+                )}
                 <div className="flex w-[90%] justify-end">
                     <button
                         type="submit"

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "../store/store"
 import { fetchLikeInfo, updateLikeInfo } from "../store/characterSlice"
 import { handleLike } from "../store/characterSlice"
+import { toast } from "sonner"
 
 type LikeProps = {
     visitingUser: string
@@ -23,6 +24,7 @@ export default function LikeButton({
     const { userWhoLike, likes, loading, error } = useSelector(
         (state: RootState) => state.character,
     )
+    const { active } = useSelector((state: RootState) => state.status)
 
     const [isAlreadyLiking, setIsAlreadyLiking] = useState<boolean>(false)
 
@@ -49,12 +51,16 @@ export default function LikeButton({
                 dispatch(handleLike(visitingUser))
                 console.error(error)
             }
+        } else {
+            toast.error("Login To Like Character", {
+                id: "like-character",
+            })
         }
     }
 
     if (loading) {
         return (
-            <>
+            <div className="flex w-full flex-col items-center justify-center">
                 <button className="flex h-[33%] flex-row items-center rounded-md border border-black bg-[#737373] p-1 sm:h-[50%] md:h-[25%] xl:h-[25%]">
                     <p className="mr-0.5 text-sm text-shadow-lg sm:text-sm md:text-xl lg:text-3xl">
                         {initialLikers.includes(visitingUser) ? "🖤" : "❤️"}
@@ -63,7 +69,12 @@ export default function LikeButton({
                         {initialLikes}
                     </p>
                 </button>
-            </>
+                {!active && (
+                    <p className="mt-2 font-notojp text-xxs text-white text-shadow-lg sm:text-sm md:text-base lg:text-xl">
+                        Login To Like
+                    </p>
+                )}
+            </div>
         )
     }
 
@@ -73,7 +84,7 @@ export default function LikeButton({
     const buttonText = isAlreadyLiking ? "🖤" : "❤️"
 
     return (
-        <div>
+        <div className="flex w-full flex-col items-center justify-center">
             <button
                 onClick={updateLikes}
                 className="flex h-[33%] flex-row items-center rounded-md border border-black bg-[#737373] p-1 transition-all duration-100 ease-in-out hover:scale-105 active:scale-95 sm:h-[50%] md:h-[25%]"
@@ -85,6 +96,11 @@ export default function LikeButton({
                     {displayedLikes}
                 </p>
             </button>
+            {!active && (
+                <p className="mt-2 font-notojp text-xxs text-white text-shadow-lg sm:text-sm md:text-base lg:text-xl">
+                    Login To Like
+                </p>
+            )}
         </div>
     )
 }
