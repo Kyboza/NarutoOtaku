@@ -10,7 +10,7 @@ export default function Register() {
     const router = useRouter()
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/
-    const usernameRegex = /^[a-zA-Z0-9._%+-]{5,30}$/
+    const usernameRegex = /^[a-zA-Z0-9._%+-]{3,12}$/
     const passwordRegex = /^[a-zA-Z0-9._%+!-]{15,}$/
 
     const [email, setEmail] = useState("")
@@ -97,8 +97,8 @@ export default function Register() {
                     name="registerName"
                     required
                     placeholder="Enter Username"
-                    minLength={5}
-                    maxLength={30}
+                    minLength={3}
+                    maxLength={12}
                     autoComplete="off"
                     spellCheck={false}
                     value={username}

@@ -53,7 +53,7 @@ export default async function UserPage({
                 </div>
 
                 <div className="flex w-full flex-col items-center justify-center p-4 md:w-1/3">
-                    <h1 className="text-stroke-2 mb-4 mt-4 font-rock text-3xl text-white text-shadow-xl md:text-4xl lg:text-5xl">
+                    <h1 className="text-stroke-2 mb-4 mt-4 font-rock text-3xl text-white text-shadow-xl md:text-4xl lg:text-2xl">
                         {user.username}
                     </h1>
                     <div className="flex flex-col gap-1">
