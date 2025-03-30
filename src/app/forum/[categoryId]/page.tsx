@@ -45,29 +45,29 @@ export default async function SpecificForum({
                         >
                             <Link href={`/forum/${forum._id}/${forum._id}`}>
                                 <div className="flex h-[50%] w-full flex-col justify-start p-2">
-                                    <h2 className="text-stroke-p text-md landscape-md:text-md landscape-sm:text-sm landscape-lg:text-xl landscape-xl:text-2xl font-notojp font-bold text-white text-shadow-xl sm:text-sm md:text-xl lg:text-3xl xl:text-2xl">
+                                    <h2 className="text-stroke-p text-md  font-notojp font-bold text-white text-shadow-xl sm:text-sm md:text-xl lg:text-3xl xl:text-2xl">
                                         {forum.title}
                                     </h2>
-                                    <p className="text-stroke md:text-md landscape-sm:text-sm landscape-lg:text-sm landscape-xl:text-lg font-notojp text-xs text-white text-shadow-xl sm:text-xs lg:text-2xl xl:text-xl">
-                                        {forum.content.length > 75
-                                            ? forum.content.substring(0, 75) +
+                                    <p className="text-stroke md:text-md font-notojp text-xs text-white text-shadow-xl sm:text-xs lg:text-xl">
+                                        {forum.content.length > 60
+                                            ? forum.content.substring(0, 60) +
                                               "..."
                                             : forum.content}
                                     </p>
                                 </div>
                             </Link>
 
-                            <div className="flex h-[50%] w-full flex-row items-center justify-evenly">
-                                <p className="text-stroke md:text-md landscape-sm:mt-2 landscape-sm:text-xs landscape-lg:text-sm landscape-xl:mt-4 landscape-xl:text-lg font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-xl xl:text-lg">
+                            <div className="flex h-[50%] w-full flex-row items-center justify-evenly mt-2">
+                                <p className="text-stroke md:text-md font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-lg">
                                     By: {forum.by}
                                 </p>
-                                <p className="text-stroke md:text-md landscape-sm:mt-2 landscape-sm:text-xs landscape-lg:text-sm landscape-xl:mt-4 landscape-xl:text-lg font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-xl xl:text-lg">
+                                <p className="text-stroke md:text-md font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-lg">
                                     Posted: {formatDateSmall(forum.createdAt)}
                                 </p>
-                                <p className="text-stroke md:text-md landscape-sm:mt-2 landscape-sm:text-xs landscape-lg:text-sm landscape-xl:mt-4 landscape-xl:text-lg font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-xl xl:text-lg">
+                                <p className="text-stroke md:text-md font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-lg">
                                     Replies: {forum.repliesAmount}
                                 </p>
-                                <p className="text-stroke md:text-md landscape-sm:mt-2 landscape-sm:text-xs landscape-lg:text-sm landscape-xl:mt-4 landscape-xl:text-lg font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-xl xl:text-lg">
+                                <p className="text-stroke md:text-md font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-lg">
                                     Latest Reply:{" "}
                                     {forum.updatedAt
                                         ? formatDateSmall(forum.updatedAt)
