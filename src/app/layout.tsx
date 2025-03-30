@@ -2,6 +2,7 @@ import "./globals.css"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import ReduxProvider from "./store/Provider"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "@/components/ui/sonner"
 
 export default function RootLayout({
@@ -13,6 +14,7 @@ export default function RootLayout({
         <html lang="en">
             <body className="flex min-h-screen flex-col">
                 <Toaster />
+                <SpeedInsights/>
                 <ReduxProvider>
                     <Header />
                     <main className="flex h-full flex-grow justify-center">
