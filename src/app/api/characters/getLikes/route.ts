@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
         const character = await Character.findOne({
             name: characterName,
-        }).select("likes likers")
+        }).select("likes userWhoLike")
         if (!character)
             return NextResponse.json(
                 { message: "Could not find character with that name" },
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
             )
 
         const likes = character.likes
-        const userWhoLike = character.userWhoLike
+        const userWhoLike = character.userWhoLike || []
         const data = { likes, userWhoLike }
 
         return NextResponse.json(

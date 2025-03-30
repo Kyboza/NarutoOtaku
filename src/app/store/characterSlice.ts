@@ -101,7 +101,7 @@ const characterSlice = createSlice({
         builder
             .addCase(fetchLikeInfo.fulfilled, (state, action) => {
                 state.likes = action.payload.data.likes
-                state.userWhoLike = action.payload.data.userWhoLike
+                state.userWhoLike = Array.isArray(action.payload.data.userWhoLike) ? action.payload.data.userWhoLike : []
                 state.error = null
                 state.loading = false
             })

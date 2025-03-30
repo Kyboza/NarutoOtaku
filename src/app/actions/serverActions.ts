@@ -73,8 +73,7 @@ export async function getUserFromParams(name: string) {
         if (!connection.success) throw new Error(connection.message)
 
         const storedCookies = await cookies()
-
-        const accessToken = (await storedCookies).get("accessToken")?.value
+        const accessToken = storedCookies.get("accessToken")?.value
         let visitingUser = null
 
         if (accessToken) {
@@ -94,9 +93,7 @@ export async function getUserFromParams(name: string) {
 
                 visitingUser = await User.findById(decoded.userId)
                 if (!visitingUser)
-                    throw new Error(
-                        "No error with that id matching from Database",
-                    )
+                    throw new Error("No user with that ID found in the database")
             } catch (error) {
                 handleError(error)
             }
@@ -104,9 +101,15 @@ export async function getUserFromParams(name: string) {
 
         let user = null
         try {
-            user = await User.findOne({ username: name })
+            user = await User.findOne({ username: new RegExp(`^${name}$`, "i") }) // Case-insensitive search
             if (!user) throw new Error("Could not find user in database")
-            return { visitingUser, user }
+
+            return { 
+                visitingUser: visitingUser 
+                    ? { ...visitingUser.toObject(), username: visitingUser.username.toLowerCase() } 
+                    : null,
+                user: { ...user.toObject(), username: user.username.toLowerCase() } 
+            }
         } catch (error) {
             handleError(error)
         }
@@ -114,6 +117,8 @@ export async function getUserFromParams(name: string) {
         handleError(error)
     }
 }
+
+
 
 //Edit Profile Information
 export async function updateUserInfo(updatedData: {
@@ -196,13 +201,13 @@ export async function getCharacter(characterId: string) {
     try {
         if (!characterId || !mongoose.Types.ObjectId.isValid(characterId))
             throw new Error(
-                "Did not recieve Character Id or its not a valid id",
+                "Did not receive Character Id or it's not a valid id",
             )
 
         const connection = await connectToDatabase()
         if (!connection.success) throw new Error(connection.message)
 
-        const storedCookies = await cookies()
+        const storedCookies = cookies()
 
         const accessToken = (await storedCookies).get("accessToken")?.value
         let visitingUser = null
@@ -219,12 +224,15 @@ export async function getCharacter(characterId: string) {
                         "Invalid accessToken or no id connected to it",
                     )
                 }
-                visitingUser = await User.findById(decoded.userId).select(
-                    "username",
-                )
+
+                
+                visitingUser = await User.findOne({ 
+                    _id: decoded.userId 
+                }).select("username")
+
                 if (!visitingUser)
                     throw new Error(
-                        "No error with that id matching from Database",
+                        "No user with that ID matching from Database",
                     )
             } catch (error) {
                 handleError(error)
@@ -244,6 +252,7 @@ export async function getCharacter(characterId: string) {
         handleError(error)
     }
 }
+
 
 //Fetches The Categories For The Forum
 export async function fetchFrontForum() {

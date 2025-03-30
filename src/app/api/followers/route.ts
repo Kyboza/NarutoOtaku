@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(
                 {
                     message:
-                        "To many requests to logout, please try again later",
+                        "Too many requests to logout, please try again later",
                 },
                 { status: 429 },
             )
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        const storedCookies = await cookies()
+        const storedCookies = cookies()
         const accessToken = (await storedCookies).get("accessToken")?.value
         if (!accessToken)
             return NextResponse.json(
@@ -47,7 +47,8 @@ export async function POST(req: NextRequest) {
 
         const [follower, target] = await Promise.all([
             User.findById(decoded.userId),
-            User.findOne({ username: username }),
+            // Using a case-insensitive query with the "username" field
+            User.findOne({ username: { $regex: `^${username}$`, $options: "i" } }),
         ])
 
         if (!follower || !target) {

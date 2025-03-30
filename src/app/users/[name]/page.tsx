@@ -86,14 +86,14 @@ export default async function UserPage({
                 </div>
 
                 <div className="flex w-full flex-col items-center justify-center p-4 md:w-1/3">
-                    {visitingUser && visitingUser.username === currentUser ? (
+                    {visitingUser && visitingUser.username === currentUser.toLowerCase() ? (
                         <Link href="/myposts">
                             <button className="text-stroke m-1 mb-2 w-24 transform rounded-md border border-black bg-[#E19B1A] px-2 py-1 text-sm text-white transition-all duration-100 ease-in-out text-shadow-xl hover:scale-105 active:scale-95">
                                 My Posts
                             </button>
                         </Link>
                     ) : null}
-                    {visitingUser && visitingUser.username === currentUser ? (
+                    {visitingUser && visitingUser.username === currentUser.toLowerCase() ? (
                         <Link href="/edit">
                             <button className="text-stroke m-1 mb-2 w-24 transform rounded-md border border-black bg-[#E19B1A] px-2 py-1 text-sm text-white transition-all duration-100 ease-in-out text-shadow-xl hover:scale-105 active:scale-95">
                                 Edit Profile
@@ -101,7 +101,7 @@ export default async function UserPage({
                         </Link>
                     ) : null}
 
-                    {visitingUser && visitingUser.username === currentUser ? (
+                    {visitingUser && visitingUser.username === currentUser.toLowerCase() ? (
                         <p className="text-stroke font-notojp text-base text-white text-shadow-xl md:text-lg">
                             {user.followers} Followers
                         </p>

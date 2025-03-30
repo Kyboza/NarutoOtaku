@@ -1,10 +1,8 @@
 "use client"
-import React from "react"
-import { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "../store/store"
-import { fetchLikeInfo, updateLikeInfo } from "../store/characterSlice"
-import { handleLike } from "../store/characterSlice"
+import { fetchLikeInfo, updateLikeInfo, handleLike } from "../store/characterSlice"
 import { toast } from "sonner"
 
 type LikeProps = {
@@ -26,7 +24,6 @@ export default function LikeButton({
     )
     const { active } = useSelector((state: RootState) => state.status)
 
-    const [isAlreadyLiking, setIsAlreadyLiking] = useState<boolean>(false)
 
     useEffect(() => {
         if (characterName) {
@@ -34,21 +31,16 @@ export default function LikeButton({
         }
     }, [dispatch, characterName])
 
-    useEffect(() => {
-        if (Array.isArray(userWhoLike)) {
-            const followingStatus = userWhoLike.includes(visitingUser)
-            setIsAlreadyLiking(followingStatus)
-        }
-    }, [userWhoLike, visitingUser])
 
     const updateLikes = async () => {
         if (visitingUser) {
             const data = { visitingUser, characterName }
             dispatch(handleLike(visitingUser))
+
             try {
-                dispatch(updateLikeInfo(data))
+                await dispatch(updateLikeInfo(data))
             } catch (error) {
-                dispatch(handleLike(visitingUser))
+                dispatch(handleLike(visitingUser)) 
                 console.error(error)
             }
         } else {
@@ -69,19 +61,15 @@ export default function LikeButton({
                         {initialLikes}
                     </p>
                 </button>
-                {!active && (
-                    <p className="mt-2 font-notojp text-xxs text-white text-shadow-lg sm:text-sm md:text-base lg:text-xl">
-                        Login To Like
-                    </p>
-                )}
             </div>
         )
     }
 
     if (error) return <p>{error}</p>
 
-    const displayedLikes = likes ?? 0
-    const buttonText = isAlreadyLiking ? "🖤" : "❤️"
+
+    const displayedLikes = likes ?? initialLikes 
+    const buttonText = userWhoLike.includes(visitingUser) ? "🖤" : "❤️"
 
     return (
         <div className="flex w-full flex-col items-center justify-center">
