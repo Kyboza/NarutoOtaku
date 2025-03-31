@@ -95,19 +95,19 @@ export default function Header() {
             </button>
 
             <Link href="/">
-                <figure className="relative flex h-[10vh] w-[33vw] items-center justify-center">
+                <div className="relative flex h-[10vh] w-[33vw] items-center justify-center">
                     <Image
                         className="h-full object-contain"
                         src="/images/website-standard/NarutoLogo.svg"
                         alt="Naruto Otaku Website Logo"
                         priority
                         fill
-                        sizes="(max-width: 640px) 60vw, (max-width: 748px) 40vw, (max-width: 1024px) 30vw, (min-width: 1024px) 25vw"
+                        sizes="(max-width: 640px) 40vw, (max-width: 748px) 20vw, 30vw"
                     />
                     <figcaption className="sr-only">
                         Naruto Website Logo
                     </figcaption>
-                </figure>
+                </div>
             </Link>
 
             <div className="flex w-[25vw] items-center justify-center gap-4">
@@ -115,7 +115,7 @@ export default function Header() {
                     <div className="relative">
                         <FaShoppingCart className="text-2xl text-white drop-shadow-xl md:text-3xl lg:text-4xl" />
                         <div
-                            className={`${itemsLength ? "flex" : "hidden"} absolute bottom-0 left-0 max-h-4 max-w-4 items-center justify-center rounded-full border border-white bg-[#D72C2C] p-0.5 text-xxs text-white sm:max-h-5 sm:max-w-5 sm:p-2`}
+                            className={`${itemsLength ? "flex" : "hidden"} absolute -bottom-1 -left-1 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-[#D72C2C] text-xxs text-white sm:h-5 sm:w-5`}
                         >
                             {itemsLength}
                         </div>

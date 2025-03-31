@@ -29,13 +29,13 @@ export default async function CharacterAbout({
             <section className="mb-4 flex h-auto w-full max-w-[90vw] flex-col rounded-md border border-black bg-[#A5A5A5] bg-opacity-[75%] lg:max-w-[900px]">
                 <div className="flex h-auto w-full flex-row border-b border-black">
                     <div className="mb-2 flex w-[40%] items-center justify-center">
-                        <div className="h-[95%] w-[90%] rounded-md border border-black">
+                        <div className="relative h-[95%] w-[90%] rounded-md border border-black">
                             <Image
                                 src={character.image}
                                 alt={character.name}
                                 className="h-full w-full rounded-md object-cover object-center"
-                                width={1920}
-                                height={1080}
+                                fill
+                                sizes="(max-width: 640px) 20vw, (max-width: 768px) 25vw, 30vw"
                             />
                         </div>
                     </div>

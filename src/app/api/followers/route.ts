@@ -48,7 +48,9 @@ export async function POST(req: NextRequest) {
         const [follower, target] = await Promise.all([
             User.findById(decoded.userId),
             // Using a case-insensitive query with the "username" field
-            User.findOne({ username: { $regex: `^${username}$`, $options: "i" } }),
+            User.findOne({
+                username: { $regex: `^${username}$`, $options: "i" },
+            }),
         ])
 
         if (!follower || !target) {

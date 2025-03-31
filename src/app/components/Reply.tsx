@@ -176,11 +176,13 @@ const Reply = ({ postId }: { postId: string }) => {
                                                 <div className="relative ml-2 aspect-square h-[8vh] w-[8vh] overflow-hidden rounded-full border border-[#505050]">
                                                     <Image
                                                         className="object-cover"
-                                                        src={comment.commentImg || '/images/profilepic/default.webp'}
+                                                        src={
+                                                            comment.commentImg ||
+                                                            "/images/profilepic/default.webp"
+                                                        }
                                                         alt="Profile picture"
                                                         fill
-                                                        priority
-                                                        sizes="(max-width: 640px) 20vh, (max-width: 1024px) 10vh, (min-width: 1280px) 20vh"
+                                                        sizes="(max-width: 640px) 30vh, 20vh"
                                                     />
                                                 </div>
                                             </Link>

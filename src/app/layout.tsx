@@ -14,7 +14,7 @@ export default function RootLayout({
         <html lang="en">
             <body className="flex min-h-screen flex-col">
                 <Toaster />
-                <SpeedInsights/>
+                <SpeedInsights />
                 <ReduxProvider>
                     <Header />
                     <main className="flex h-full flex-grow justify-center">

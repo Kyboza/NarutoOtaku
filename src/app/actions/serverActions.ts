@@ -93,7 +93,9 @@ export async function getUserFromParams(name: string) {
 
                 visitingUser = await User.findById(decoded.userId)
                 if (!visitingUser)
-                    throw new Error("No user with that ID found in the database")
+                    throw new Error(
+                        "No user with that ID found in the database",
+                    )
             } catch (error) {
                 handleError(error)
             }
@@ -101,14 +103,22 @@ export async function getUserFromParams(name: string) {
 
         let user = null
         try {
-            user = await User.findOne({ username: new RegExp(`^${name}$`, "i") }) // Case-insensitive search
+            user = await User.findOne({
+                username: new RegExp(`^${name}$`, "i"),
+            }) // Case-insensitive search
             if (!user) throw new Error("Could not find user in database")
 
-            return { 
-                visitingUser: visitingUser 
-                    ? { ...visitingUser.toObject(), username: visitingUser.username.toLowerCase() } 
+            return {
+                visitingUser: visitingUser
+                    ? {
+                          ...visitingUser.toObject(),
+                          username: visitingUser.username.toLowerCase(),
+                      }
                     : null,
-                user: { ...user.toObject(), username: user.username.toLowerCase() } 
+                user: {
+                    ...user.toObject(),
+                    username: user.username.toLowerCase(),
+                },
             }
         } catch (error) {
             handleError(error)
@@ -117,8 +127,6 @@ export async function getUserFromParams(name: string) {
         handleError(error)
     }
 }
-
-
 
 //Edit Profile Information
 export async function updateUserInfo(updatedData: {
@@ -225,9 +233,8 @@ export async function getCharacter(characterId: string) {
                     )
                 }
 
-                
-                visitingUser = await User.findOne({ 
-                    _id: decoded.userId 
+                visitingUser = await User.findOne({
+                    _id: decoded.userId,
                 }).select("username")
 
                 if (!visitingUser)
@@ -252,7 +259,6 @@ export async function getCharacter(characterId: string) {
         handleError(error)
     }
 }
-
 
 //Fetches The Categories For The Forum
 export async function fetchFrontForum() {
@@ -357,26 +363,17 @@ export async function loadReplies(postId: string) {
             })
             .lean()
 
-        if (replies.length === 0)
-            throw new Error("No replies found for this post")
-
         const filteredReplies = replies.filter(
-            (reply) =>
-                reply.userId && reply.userId.username
+            (reply) => reply.userId && reply.userId.username,
         )
-        console.log("Filtered Replies:", filteredReplies);
-
-        if (filteredReplies.length === 0) {
-            throw new Error("Replies without valid user data")
-        }
 
         const formattedReplies: IReply[] = filteredReplies.map((reply) => ({
             _id: (reply._id as ObjectId).toString(),
             commentContent: reply.commentContent,
             commentUsername: reply.userId.username,
-            commentImg: reply.userId?.imgPath || "/images/profilepic/default.webp"
-        }));
-        
+            commentImg:
+                reply.userId?.imgPath || "/images/profilepic/default.webp",
+        }))
 
         return formattedReplies
     } catch (error) {

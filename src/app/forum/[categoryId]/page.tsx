@@ -45,7 +45,7 @@ export default async function SpecificForum({
                         >
                             <Link href={`/forum/${forum._id}/${forum._id}`}>
                                 <div className="flex h-[50%] w-full flex-col justify-start p-2">
-                                    <h2 className="text-stroke-p text-md  font-notojp font-bold text-white text-shadow-xl sm:text-sm md:text-xl lg:text-3xl xl:text-2xl">
+                                    <h2 className="text-stroke-p text-md font-notojp font-bold text-white text-shadow-xl sm:text-sm md:text-xl lg:text-3xl xl:text-2xl">
                                         {forum.title}
                                     </h2>
                                     <p className="text-stroke md:text-md font-notojp text-xs text-white text-shadow-xl sm:text-xs lg:text-xl">
@@ -57,7 +57,7 @@ export default async function SpecificForum({
                                 </div>
                             </Link>
 
-                            <div className="flex h-[50%] w-full flex-row items-center justify-evenly mt-2">
+                            <div className="mt-2 flex h-[50%] w-full flex-row items-center justify-evenly">
                                 <p className="text-stroke md:text-md font-notojp text-xxs text-white text-shadow-xl sm:text-xs lg:text-lg">
                                     By: {forum.by}
                                 </p>

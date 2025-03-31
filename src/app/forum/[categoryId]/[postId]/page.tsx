@@ -44,8 +44,7 @@ export default async function Post({
                                 src={post.userId.imgPath}
                                 alt="Profile picture"
                                 fill
-                                priority
-                                sizes="(max-width: 640px) 20vh, (max-width: 1024px) 10vh, (min-width: 1280px) 20vh"
+                                sizes="(max-width: 640px) 30vh, 20vh"
                             />
                         </div>
                     </Link>

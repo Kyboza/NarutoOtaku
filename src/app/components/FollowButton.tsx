@@ -35,10 +35,17 @@ export default function FollowButton({
         fetchData()
     }, [dispatch, userProp, visitingProp])
 
-
     const displayedFollowers = followers ?? 0
-    const buttonText = following.some(name => name.toLowerCase() === visitingProp.toLowerCase()) ? "Unfollow -" : "Follow +"
-    const initialText = initialFollowing.some(name => name.toLowerCase() === visitingProp.toLowerCase()) ? "Unfollow -" : "Follow +"
+    const buttonText = following.some(
+        (name) => name.toLowerCase() === visitingProp.toLowerCase(),
+    )
+        ? "Unfollow -"
+        : "Follow +"
+    const initialText = initialFollowing.some(
+        (name) => name.toLowerCase() === visitingProp.toLowerCase(),
+    )
+        ? "Unfollow -"
+        : "Follow +"
 
     if (!userProp || !visitingProp) return <p>Correct Props not provided</p>
     if (loading) {

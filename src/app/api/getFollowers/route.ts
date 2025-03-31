@@ -19,16 +19,16 @@ export async function POST(req: NextRequest) {
             )
 
         // Use a case-insensitive regex to search for the username
-        const user = await User.findOne({ 
-            username: { $regex: `^${userProp}$`, $options: "i" } 
+        const user = await User.findOne({
+            username: { $regex: `^${userProp}$`, $options: "i" },
         }).select("followers following")
-        
+
         if (!user)
             return NextResponse.json(
                 { message: "Could not find followers array for user" },
                 { status: 404 },
             )
-        
+
         const data = { following: user.following, followers: user.followers }
         return NextResponse.json(
             { message: "Successfully got followers array", data },

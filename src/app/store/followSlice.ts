@@ -69,31 +69,39 @@ const followSlice = createSlice({
         handleFollow: (state, action: PayloadAction<string>) => {
             const username = action.payload
             console.log(username)
-    
+
             if (!Array.isArray(state.following)) {
                 state.following = []
             }
-    
+
             if (typeof state.followers !== "number") {
                 state.followers = 0
             }
-    
-            const usernameLower = username.toLowerCase();
-    
-            if (state.following.some((name) => name.toLowerCase() === usernameLower)) {
+
+            const usernameLower = username.toLowerCase()
+
+            if (
+                state.following.some(
+                    (name) => name.toLowerCase() === usernameLower,
+                )
+            ) {
                 state.following = state.following.filter(
-                    (name) => name.toLowerCase() !== usernameLower
+                    (name) => name.toLowerCase() !== usernameLower,
                 )
                 state.followers -= 1
-                toast.success("Successfully Unfollowed User", { id: "follow-user" })
+                toast.success("Successfully Unfollowed User", {
+                    id: "follow-user",
+                })
             } else {
                 state.following.push(usernameLower)
                 state.followers += 1
-                toast.success("Successfully Followed User", { id: "follow-user" })
+                toast.success("Successfully Followed User", {
+                    id: "follow-user",
+                })
             }
-        }
+        },
     },
-    
+
     extraReducers: (builder) => {
         builder
             .addCase(updateFollowAmount.fulfilled, (state, action) => {

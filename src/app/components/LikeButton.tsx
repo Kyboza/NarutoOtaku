@@ -2,7 +2,11 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "../store/store"
-import { fetchLikeInfo, updateLikeInfo, handleLike } from "../store/characterSlice"
+import {
+    fetchLikeInfo,
+    updateLikeInfo,
+    handleLike,
+} from "../store/characterSlice"
 import { toast } from "sonner"
 
 type LikeProps = {
@@ -24,13 +28,11 @@ export default function LikeButton({
     )
     const { active } = useSelector((state: RootState) => state.status)
 
-
     useEffect(() => {
         if (characterName) {
             dispatch(fetchLikeInfo(characterName))
         }
     }, [dispatch, characterName])
-
 
     const updateLikes = async () => {
         if (visitingUser) {
@@ -40,7 +42,7 @@ export default function LikeButton({
             try {
                 await dispatch(updateLikeInfo(data))
             } catch (error) {
-                dispatch(handleLike(visitingUser)) 
+                dispatch(handleLike(visitingUser))
                 console.error(error)
             }
         } else {
@@ -67,8 +69,7 @@ export default function LikeButton({
 
     if (error) return <p>{error}</p>
 
-
-    const displayedLikes = likes ?? initialLikes 
+    const displayedLikes = likes ?? initialLikes
     const buttonText = userWhoLike.includes(visitingUser) ? "🖤" : "❤️"
 
     return (
