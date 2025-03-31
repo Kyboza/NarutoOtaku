@@ -362,19 +362,21 @@ export async function loadReplies(postId: string) {
 
         const filteredReplies = replies.filter(
             (reply) =>
-                reply.userId && reply.userId.username && reply.userId.imgPath,
+                reply.userId && reply.userId.username
         )
+        console.log("Filtered Replies:", filteredReplies);
 
         if (filteredReplies.length === 0) {
             throw new Error("Replies without valid user data")
         }
 
-        const formattedReplies: IReply[] = replies.map((reply) => ({
+        const formattedReplies: IReply[] = filteredReplies.map((reply) => ({
             _id: (reply._id as ObjectId).toString(),
             commentContent: reply.commentContent,
             commentUsername: reply.userId.username,
-            commentImg: reply.userId.imgPath || "/path/to/default/image.jpg",
-        }))
+            commentImg: reply.userId?.imgPath || "/images/profilepic/default.webp"
+        }));
+        
 
         return formattedReplies
     } catch (error) {

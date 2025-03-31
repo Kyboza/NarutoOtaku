@@ -16,7 +16,7 @@ type IComment = {
     _id: string
     commentContent: string
     commentUsername: string
-    commentImg: string
+    commentImg?: string
 }
 
 const Reply = ({ postId }: { postId: string }) => {
@@ -176,7 +176,7 @@ const Reply = ({ postId }: { postId: string }) => {
                                                 <div className="relative ml-2 aspect-square h-[8vh] w-[8vh] overflow-hidden rounded-full border border-[#505050]">
                                                     <Image
                                                         className="object-cover"
-                                                        src={comment.commentImg}
+                                                        src={comment.commentImg || '/images/profilepic/default.webp'}
                                                         alt="Profile picture"
                                                         fill
                                                         priority

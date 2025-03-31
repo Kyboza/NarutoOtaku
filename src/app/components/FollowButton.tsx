@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "../store/store"
 import { loadFollowAmount, updateFollowAmount } from "../store/followSlice"
@@ -23,11 +23,11 @@ export default function FollowButton({
     const { following, followers, loading, error } = useSelector(
         (state: RootState) => state.follow,
     )
-    const [isAlreadyFollowing, setIsAlreadyFollowing] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchData = async () => {
             if (userProp && visitingProp) {
+                console.log(visitingProp)
                 await dispatch(loadFollowAmount(userProp))
             }
         }
@@ -35,18 +35,10 @@ export default function FollowButton({
         fetchData()
     }, [dispatch, userProp, visitingProp])
 
-    useEffect(() => {
-        if (Array.isArray(following)) {
-            const followingStatus = following.includes(visitingProp)
-            setIsAlreadyFollowing(followingStatus)
-        }
-    }, [following, visitingProp])
 
     const displayedFollowers = followers ?? 0
-    const buttonText = isAlreadyFollowing ? "Unfollow -" : "Follow +"
-    const initialText = initialFollowing.includes(visitingProp)
-        ? "Unfollow -"
-        : "Follow +"
+    const buttonText = following.some(name => name.toLowerCase() === visitingProp.toLowerCase()) ? "Unfollow -" : "Follow +"
+    const initialText = initialFollowing.some(name => name.toLowerCase() === visitingProp.toLowerCase()) ? "Unfollow -" : "Follow +"
 
     if (!userProp || !visitingProp) return <p>Correct Props not provided</p>
     if (loading) {
