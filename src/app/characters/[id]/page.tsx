@@ -35,7 +35,7 @@ export default async function CharacterAbout({
                                 alt={character.name}
                                 className="h-full w-full rounded-md object-cover object-center"
                                 fill
-                                sizes="(max-width: 640px) 20vw, (max-width: 768px) 25vw, 35vw"
+                                sizes="(max-width: 640px) 20vw, (max-width: 768px) 25vw, 40vw"
                             />
                         </div>
                     </div>
