@@ -24,7 +24,7 @@ export default async function HomePage() {
                             src="/images/website-standard/SasukeMain.webp"
                             alt="Visit Shop"
                             fill
-                            sizes="(max-width: 640px) 40vw, 30vw"
+                            sizes="40vw"
                             priority
                         />
                         <p className="text-stroke-2 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] font-rock text-2xl text-white md:text-4xl lg:text-5xl">
@@ -39,7 +39,7 @@ export default async function HomePage() {
                             src="/images/website-standard/NarutoMain.webp"
                             alt="Visit Forum"
                             fill
-                            sizes="(max-width: 640px) 40vw, 30vw"
+                            sizes="40vw"
                             priority
                         />
                         <p className="text-stroke-p absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] font-rock text-2xl text-white md:text-4xl lg:text-5xl">
@@ -54,7 +54,7 @@ export default async function HomePage() {
                             src="/images/website-standard/SakuraMain.webp"
                             alt="Visit Read About"
                             fill
-                            sizes="(max-width: 640px) 40vw, 30vw"
+                            sizes="40vw"
                             priority
                         />
                         <p className="text-stroke-2 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] font-rock text-2xl text-white drop-shadow-2xl md:text-4xl lg:text-5xl">
