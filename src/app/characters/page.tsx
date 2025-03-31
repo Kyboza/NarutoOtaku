@@ -43,7 +43,7 @@ export default async function CharactersPage() {
                                         alt={character.name}
                                         className="h-full w-full rounded-md object-cover object-center"
                                         fill
-                                        sizes="(max-width: 640px) 40vw, (max-width: 768px) 20vw, 35vw"
+                                        sizes="(max-width: 640px) 40vw, (max-width: 768px) 20vw, 40vw"
                                     />
                                 </div>
                             </div>
