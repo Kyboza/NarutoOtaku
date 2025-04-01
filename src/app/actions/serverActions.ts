@@ -264,45 +264,59 @@ export async function getCharacter(characterId: string) {
 export async function fetchFrontForum() {
     const connection = await connectToDatabase()
     if (!connection.success) throw new Error(connection.message)
+
     try {
         const forum = await Forum.find()
+
         if (!forum || forum.length === 0)
             throw new Error("No forum sections found in database")
-        await Promise.all(
+
+        const forumSectionsWithData = await Promise.all(
             forum.map(async (forumSection) => {
-                const specificForumPosts = await SpecificForum.find({
-                    $and: [
-                        { categoryId: forumSection._id },
-                        { createdAt: { $exists: true } },
-                    ],
-                })
+                const specificForumPosts = await SpecificForum.aggregate([
+                    { $match: { categoryId: forumSection._id } },
+                    {
+                        $group: {
+                            _id: "$categoryId",
+                            totalPosts: { $sum: 1 },
+                            latestPost: { $max: "$createdAt" },
+                            postsToday: {
+                                $sum: {
+                                    $cond: [
+                                        {
+                                            $gte: [
+                                                {
+                                                    $subtract: [
+                                                        new Date(),
+                                                        "$createdAt",
+                                                    ],
+                                                },
+                                                1000 * 60 * 60 * 24,
+                                            ],
+                                        },
+                                        1,
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                ])
 
-                const postCount = specificForumPosts.length
+                const postCount = specificForumPosts[0]?.totalPosts || 0
+                const latestPost = specificForumPosts[0]?.latestPost || null
+                const postsToday = specificForumPosts[0]?.postsToday || 0
 
-                const createdAtArray = specificForumPosts
-                    .map((post) => post.createdAt)
-                    .filter((date) => date !== undefined)
-                const latestPost = createdAtArray.sort(
-                    (a, b) => b.createdAt - a.createdAt,
-                )[0]
-
-                const todaysDate = new Date()
-                const postsToday = createdAtArray.filter((postDate) => {
-                    const postDateObj = new Date(postDate)
-                    const timeDiff = Number(todaysDate) - Number(postDateObj)
-                    const hourDiff = timeDiff / (1000 * 60 * 60)
-                    return hourDiff <= 24
-                })
-                const postCountIn24 = postsToday.length
-
-                forumSection.amount = postCount
-                forumSection.latest = latestPost
-                forumSection.perday = postCountIn24
-                await forumSection.save()
+                return {
+                    ...forumSection.toObject(),
+                    amount: postCount,
+                    latest: latestPost,
+                    perday: postsToday,
+                }
             }),
         )
 
-        return forum
+        return forumSectionsWithData
     } catch (error) {
         handleError(error)
     }
@@ -319,9 +333,11 @@ export async function fetchSpecificForum(categoryId: string) {
 
     try {
         const response = await SpecificForum.find({ categoryId })
+
         if (!response || response.length === 0) {
             throw new Error("Inga forum hittades")
         }
+
         return response
     } catch (error) {
         handleError(error)
@@ -331,16 +347,19 @@ export async function fetchSpecificForum(categoryId: string) {
 //Fetches The Specific Post In Forum
 export async function fetchSpecificPost(postId: string) {
     if (!postId || !mongoose.Types.ObjectId.isValid(postId))
-        throw new Error("Did not recieve an id for post or its not a valid id")
+        throw new Error("Did not receive an id for post or it's not a valid id")
 
     const connection = await connectToDatabase()
     if (!connection.success) throw new Error(connection.message)
 
     try {
-        const actualPost = await SpecificForum.findById(postId).populate({
-            path: "userId",
-            select: "username imgPath",
-        })
+        const actualPost = await SpecificForum.findById(postId)
+            .populate({
+                path: "userId",
+                select: "username imgPath",
+            })
+            .select("title content createdAt userId categoryId")
+
         if (!actualPost) throw new Error("Post with that id not found")
         return actualPost
     } catch (error) {
