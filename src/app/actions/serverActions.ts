@@ -284,12 +284,9 @@ export async function fetchFrontForum() {
                                 $sum: {
                                     $cond: [
                                         {
-                                            $gte: [
+                                            $lt: [
                                                 {
-                                                    $subtract: [
-                                                        new Date(),
-                                                        "$createdAt",
-                                                    ],
+                                                    $subtract: [new Date(), "$createdAt"],
                                                 },
                                                 1000 * 60 * 60 * 24,
                                             ],
