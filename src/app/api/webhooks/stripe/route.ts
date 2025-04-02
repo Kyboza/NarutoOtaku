@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server"
-import Stripe from "stripe"
-import axiosAPI from "@/app/lib/axios"
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import axiosAPI from "@/app/lib/axios";
 
 export async function POST(req: NextRequest) {
     const STRIPE_SECRET = process.env.STRIPE_SECRET?.trim();
     const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET?.trim();
-    
+
     if (!STRIPE_SECRET || !STRIPE_WEBHOOK_SECRET) {
         return NextResponse.json({ error: "Missing Stripe secrets" }, { status: 500 });
     }
@@ -47,16 +47,39 @@ export async function POST(req: NextRequest) {
                 }
                 break;
 
+            case "payment_intent.created":
+                console.log("Payment Intent Created", event.data.object);
+                break;
+
+            case "payment_intent.succeeded":
+                const paymentIntent = event.data.object;
+                console.log("Payment Intent Succeeded", paymentIntent);
+                break;
+
+            case "charge.succeeded":
+                const charge = event.data.object;
+                console.log("Charge Succeeded", charge);
+                break;
+
+            case "charge.updated":
+                const updatedCharge = event.data.object;
+                console.log("Charge Updated", updatedCharge);
+                break;
+
             case "checkout.session.async_payment_succeeded":
                 console.log("Async payment succeeded");
                 break;
 
-            case "checkout.session.expired":
-                console.log("Payment expired");
+            case "checkout.session.async_payment_failed":
+                console.error("Payment failed");
                 break;
 
-            case "checkout.session.async_payment_failed":
-                console.error("payment failed");
+            case "checkout.session.expired":
+                console.log("Session expired");
+                break;
+
+            case "payment_intent.canceled":
+                console.log("Payment Intent Canceled");
                 break;
 
             default:
