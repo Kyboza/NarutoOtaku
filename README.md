@@ -1,7 +1,5 @@
 NarutoOtaku
-This is a project still in progress but currently on pause for the moment.
+This is a project still in progress but mostly done. It is currently missing metadata and some npm packages for structure such as zod.
+Spinning loading icons for sections that load a little longer such as the forum is also planned to be implemented.
 
-Conscious Decisions
-Right now, I have not implemented metadata consciously. I plan to add that at a later stage, as well as more plugins for structure, such as Zod.
-
-THIS SITE IS A NON-PROFIT TEST PROJECT WITH THE PURPOSE OF DEVELOPING MY KNOWLEDGE ABOUT WEBDEVELOPMENT!
+THIS SITE IS A NON-PROFIT TEST PROJECT WITH THE PURPOSE OF DEVELOPING MY KNOWLEDGE!
