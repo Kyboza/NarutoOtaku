@@ -128,7 +128,7 @@ export default function Header() {
 
             <ul
                 ref={listRef}
-                className={`min-h[25vh] absolute left-0 top-[100%] flex h-auto w-screen flex-col items-center justify-evenly rounded-md rounded-tl-none rounded-tr-none border border-black bg-[#A5A5A5] bg-opacity-90 transition-all duration-300 ease-in-out ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
+                className={`min-h[25vh] absolute left-0 top-[100%] flex h-auto w-screen flex-col items-center justify-evenly rounded-md rounded-tl-none rounded-tr-none border border-black last-of-type:border-b-0 bg-[#A5A5A5] bg-opacity-90 transition-all duration-300 ease-in-out ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
             >
                 <Link className="w-full border-b border-b-black" href="/forum">
                     <li className="text-stroke flex justify-center p-2 font-notojp leading-5 text-white text-shadow-xl md:text-lg lg:text-xl">

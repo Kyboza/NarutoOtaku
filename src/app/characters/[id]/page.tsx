@@ -44,17 +44,17 @@ export default async function CharacterAbout({
                         <h2 className="landscape-sm:text-lg landscape-md:text-3xl self-start font-notojp text-xl font-bold text-white text-shadow-xl sm:text-2xl md:text-4xl lg:text-4xl">
                             {character.name}
                         </h2>
-                        <p className="text-stroke font-notojp text-xs text-white text-shadow-lg sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
-                            Gender: {character.gender}
+                        <p className="text-stroke font-notojp text-xs text-white text-shadow-xl font-bold sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
+                            Gender: <span className="font-normal">{character.gender}</span>
                         </p>
-                        <p className="text-stroke font-notojp text-xs text-white text-shadow-lg sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
-                            Age: {character.age}
+                        <p className="text-stroke font-notojp text-xs text-white text-shadow-xl font-bold sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
+                            Age: <span className="font-normal">{character.age}</span>
                         </p>
-                        <p className="text-stroke font-notojp text-xs text-white text-shadow-lg sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
-                            Weight: {character.weight}
+                        <p className="text-stroke font-notojp text-xs text-white text-shadow-xl font-bold sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
+                            Weight: <span className="font-normal">{character.weight} Kg</span>
                         </p>
-                        <p className="text-stroke font-notojp text-xs text-white text-shadow-lg sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
-                            Fighting Style: {character.style}
+                        <p className="text-stroke font-notojp text-xs text-white text-shadow-xl font-bold sm:text-sm md:text-2xl lg:text-3xl xl:text-xl">
+                            Fighting Style: <span className="font-normal">{character.style}</span>
                         </p>
                     </div>
 
