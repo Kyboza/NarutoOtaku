@@ -21,13 +21,13 @@ export async function middleware(req: NextRequest) {
 
     const res = NextResponse.next()
 
-    if (!accessToken && !refreshToken) {
+    if (!accessToken && !refreshToken && req.nextUrl.pathname !== "/") {
         const cooldownCookie = (await storedCookies).get("lastChecked")
         const now = Date.now()
         const lastChecked = cooldownCookie ? parseInt(cooldownCookie.value) : 0
         const timeSinceLastCheck = now - lastChecked
 
-        if (timeSinceLastCheck > 60_000) {
+        if (timeSinceLastCheck > 600_000) {
             console.log(
                 "No tokens found. Calling the API to check for expired sessions...",
             )
@@ -50,7 +50,7 @@ export async function middleware(req: NextRequest) {
                 res.cookies.set("lastChecked", now.toString(), {
                     httpOnly: true,
                     path: "/",
-                    maxAge: 60,
+                    maxAge: 600,
                 })
             } catch (error) {
                 console.error("Error calling the expired sessions API:", error)
@@ -105,7 +105,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-       //Tog Bort home path
+        "/",
         "/users:path*",
         "/createpost",
         "/edit",

@@ -10,7 +10,7 @@ export const ratelimit = new Ratelimit({
 
 export const inactivelimit = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(1, "60 s"),
+    limiter: Ratelimit.slidingWindow(1, "10 m"),
     analytics: true,
     timeout: 10000,
 })
