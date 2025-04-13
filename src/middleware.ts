@@ -105,7 +105,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-        "/",
+       //Tog Bort home path
         "/users:path*",
         "/createpost",
         "/edit",
