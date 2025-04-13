@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/app/lib/mongodb"
 import User from "@/app/models/User"
 import { inactivelimit } from "@/app/utils/ratelimiter"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1"
     const ipLimit = await inactivelimit.limit(`checkExpired:ip:${ip}`)
