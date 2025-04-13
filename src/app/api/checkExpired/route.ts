@@ -4,8 +4,20 @@ import User from "@/app/models/User"
 import { inactivelimit } from "@/app/utils/ratelimiter"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
-    const { success } = await inactivelimit.limit("checkExpired:global")
-    if (!success)
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1"
+    const ipLimit = await inactivelimit.limit(`checkExpired:ip:${ip}`)
+    if (!ipLimit.success) {
+        return NextResponse.json(
+            {
+                message:
+                    "Too many requests from this IP, please try again later.",
+            },
+            { status: 429 },
+        )
+    }
+
+    const globalLimit = await inactivelimit.limit("checkExpired:global")
+    if (!globalLimit.success) {
         return NextResponse.json(
             {
                 message:
@@ -13,6 +25,8 @@ export async function GET(req: NextRequest) {
             },
             { status: 429 },
         )
+    }
+
     try {
         const connection = await connectToDatabase()
         if (!connection.success) {
